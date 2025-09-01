@@ -1,0 +1,447 @@
+@import "tailwindcss";
+
+html {
+	overflow: hidden;
+}
+body,
+#root {
+	color: #fff;
+	height: 100%;
+}
+
+input,
+select {
+	border: 1px solid;
+	border-radius: 5px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	padding-top: 5px;
+}
+
+/*********** backgrounds **************/
+
+.bg-gray-custom {
+	background-color: rgb(33, 37, 41);
+}
+
+.body-container {
+	/* Setting height to 100% here won't allow the content to be fully visible when scrolling to the bottom of the page.
+	   I believe this is because overflow is set to hidden on the <html> tag which permanently fixes the height of the display
+	   to a pixel value. Then setting the body container to the same height (100%) means that the body should take up the
+	   full screen including the navbar. Then with overflow auto/scroll on the content container this seems to cause the body
+	   container to cut off the bottom of the element. I believe another way to look at this is, once scrolling the content
+	   container to the bottom, if the height is (100% - the navbar height), then the full element will fit in the viewport WITH the navbar.
+	   If the height is 100% (full viewport size), then both the content container and navbar cannot fully be visible on the screen with a fixed html height.*/
+	height: calc(100% - 64px);
+	/* Not currently using any absolute positioning, so I don't believe we need position relative here */
+	/* position: relative; */
+}
+
+/* Landing Page ************************************************************/
+
+@keyframes mymove {
+	from {
+		top: -50%;
+	}
+	to {
+		top: 0;
+	}
+}
+
+.landing-page {
+	align-items: center;
+	display: flex;
+	height: 100%;
+	justify-content: center;
+	text-align: center;
+
+	background-image: url("/bgs/wawrinka.jpg");
+	background-position: center;
+	background-size: cover;
+
+	div {
+		animation: mymove 2s;
+		animation-fill-mode: forwards;
+		position: relative;
+
+		h1 {
+			font-size: 32px;
+			font-weight: 800;
+			margin-bottom: 30px;
+		}
+
+		p {
+			margin-bottom: 50px;
+		}
+
+		.archive-link {
+			color: #000;
+			background-color: #f9f9f9;
+			border: 1px solid transparent;
+			border-radius: 8px;
+			padding: 10px 20px;
+			text-decoration: none;
+		}
+
+		.archive-link:hover {
+			font-weight: 700;
+		}
+	}
+}
+
+@media (min-width: 768px) {
+	.landing-page h1 {
+		font-size: 52px;
+	}
+}
+
+/* Archives Section ************************************************************/
+
+/*********** Sidebar filters **************/
+aside.sidebar {
+	border-right: 1px solid;
+
+	display: none;
+	flex-direction: column;
+	align-items: center;
+
+	padding: 15px 15px;
+	height: 100%;
+	width: 245px;
+	max-width: 245px;
+	min-width: 245px;
+
+	ul.filter {
+		padding: 10px 0;
+
+		font-weight: 700;
+		li {
+			font-weight: 400;
+			padding: 5px;
+			label {
+				padding-left: 10px;
+			}
+		}
+	}
+
+	.accordion-rjs {
+		max-width: 180px;
+		min-width: 180px;
+		padding-top: 10px;
+
+		.accordion-item-rjs {
+			.accordion-title-rjs {
+				border-top: 1px solid;
+				cursor: pointer;
+				display: flex;
+				font-weight: 700;
+				justify-content: space-between;
+				padding-top: 10px;
+			}
+			.accordion-title-rjs:hover h6 {
+				text-decoration: underline;
+			}
+			.accordion-title-rjs:active h6,
+			.accordion-title-rjs:active div.expand {
+				scale: 0.95;
+			}
+		}
+	}
+}
+
+@media (min-width: 768px) {
+	aside.sidebar {
+		display: flex;
+		overflow-y: scroll;
+	}
+}
+
+.content-container {
+	height: 100%;
+	overflow: auto;
+}
+
+/*********** Thumbnail cards **************/
+
+main.content-container {
+	width: 100%;
+	.header-container {
+		align-items: center;
+		display: flex;
+		flex-direction: column;
+		gap: 50px;
+
+		h1 {
+			font-size: 40px;
+			text-align: center;
+		}
+		.search-bar {
+			background-color: #fff;
+			color: #000;
+			height: 50px;
+			min-width: 70%;
+		}
+	}
+	.video-container {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(300px, 370px));
+		gap: 25px;
+		justify-content: center;
+	}
+}
+.card-cover {
+	cursor: pointer;
+	height: 235px;
+	margin-bottom: 40px;
+	max-width: 370px;
+	position: relative;
+	transition: all 0.5s ease-in-out;
+	width: 100%;
+
+	.header-background {
+		background-position: center;
+		background-size: cover;
+		border-radius: 10px;
+		height: 235px;
+	}
+
+	.dropstart {
+		cursor: pointer;
+		position: absolute;
+		top: 10px;
+		right: 10px;
+
+		a.dropdown-item:hover {
+			font-weight: 700;
+		}
+	}
+
+	.card-add-new {
+		align-items: center;
+		background-color: #ccc;
+		border: 1px solid #ccc;
+		display: flex;
+		justify-content: center;
+	}
+
+	.card-title {
+		/* color: #000; */
+		font-size: 16px;
+		font-weight: 600;
+	}
+}
+
+.card-cover:hover {
+	transition: all 0.5s ease-in-out;
+	transform: scale(1.05);
+}
+
+.card-cover:hover .card-title {
+	/* color: #fff;
+	text-shadow:
+		-1px -1px 0 #000,
+		1px -1px 0 #000,
+		-1px 1px 0 #000,
+		1px 1px 0 #000; */
+}
+/*********** Modals **************/
+
+.modal-30w {
+	max-width: none !important;
+	width: 30% !important;
+}
+
+.modal-50w {
+	max-width: none !important;
+	width: 50% !important;
+}
+
+.modal-75w {
+	max-width: none !important;
+	width: 75% !important;
+}
+
+.modal-90w {
+	max-width: none !important;
+	width: 90% !important;
+}
+
+@media (min-width: 992px) {
+	.modal-30w {
+		max-width: none !important;
+		width: 30% !important;
+	}
+
+	.modal-50w {
+		max-width: none !important;
+		width: 50% !important;
+	}
+
+	.modal-75w {
+		max-width: none !important;
+		width: 75% !important;
+	}
+
+	.modal-90w {
+		max-width: none !important;
+		width: 90% !important;
+	}
+}
+
+/*********** Form Add **************/
+
+form.add-video {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	gap: 20px;
+
+	div {
+		/* display: flex;
+		gap: 20px;
+		justify-content: end; */
+		width: 100%;
+
+		label {
+			font-weight: 700;
+			margin-bottom: 5px;
+			padding-left: 10px;
+		}
+		input,
+		select {
+			flex-basis: 80%;
+		}
+		div.invalid-feedback {
+			padding-left: 10px;
+		}
+		div.duplicate-id-feedback {
+			color: #dc3545;
+			font-size: 0.875em;
+			margin-top: 0.25rem;
+			padding-left: 10px;
+		}
+	}
+}
+
+/* Archives section media queries */
+
+@media (min-width: 768px) {
+	main.archives {
+		width: calc(100% - 245px);
+	}
+}
+
+@media (min-width: 1505px) {
+	main.content-container {
+		.header-container {
+			flex-direction: row;
+			gap: 100px;
+			justify-content: center;
+
+			.search-bar {
+				flex-basis: 500px;
+				min-width: 0;
+			}
+		}
+	}
+}
+
+@media (min-width: 1900px) {
+	main.content-container {
+		.header-container {
+			justify-content: start;
+		}
+	}
+}
+
+/* Learn From the Pros Section ************************************************************/
+
+.hero-container {
+	height: 705px;
+
+	.herolist {
+		padding: 0;
+		position: relative;
+
+		.carousel-item {
+			display: flex;
+			height: 100%;
+			justify-content: center;
+			img {
+				height: 100%;
+				max-width: fit-content;
+			}
+		}
+	}
+}
+
+#billboard-gradient {
+	position: absolute;
+	bottom: -1;
+	width: 100%;
+	aspect-ratio: 1920 / 768;
+	background: transparent url("/bgs/header-gradient-overlay.png") top center;
+	background-size: cover;
+	z-index: 1;
+}
+
+.player-videoContainer {
+	margin-left: auto;
+	margin-right: auto;
+	padding-top: 50px;
+	width: 80%;
+
+	.player-videoContainer-mobile {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 30px;
+		justify-content: center;
+
+		margin-left: auto;
+		margin-right: auto;
+		margin-top: 50px;
+		width: 80%;
+	}
+
+	.carousel {
+		display: none;
+		a.carousel-control-prev {
+			left: -10%;
+		}
+		a.carousel-control-next {
+			right: -10%;
+		}
+	}
+}
+
+@media (min-width: 992px) {
+	.player-videoContainer {
+		.player-videoContainer-mobile {
+			display: none;
+		}
+		.carousel {
+			display: block;
+		}
+	}
+}
+
+.carousel-item {
+	h2 {
+		padding-left: 100px;
+		padding-top: 50px;
+	}
+
+	.carousel-item-container {
+		display: flex;
+		gap: 30px;
+		justify-content: center;
+		padding-top: 30px;
+		padding-bottom: 30px;
+	}
+}
+
+.player-sections {
+	font-size: 50px;
+	padding: 50px 0;
+	text-align: center;
+}

@@ -27,3 +27,9 @@ target/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Client side files
+/client/node_modules/
+/client/dist
+/client/build/
+/client/.env
