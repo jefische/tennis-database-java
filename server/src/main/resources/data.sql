@@ -13,10 +13,10 @@
 -- );
 
 -- Starting test values with ids of 9999 to avoid test issues
-insert into video (videoId, url) values (9999, 'testurl-1');
-insert into video (videoId, url) values (9998, 'testurl-2');
-insert into video (videoId, url) values (9997, 'testurl-3');
-insert into video (videoId, url) values (9996, 'testurl-4');
+insert into video (videoId, youtubeId) values (9999, 'testurl-1');
+insert into video (videoId, youtubeId) values (9998, 'testurl-2');
+insert into video (videoId, youtubeId) values (9997, 'testurl-3');
+insert into video (videoId, youtubeId) values (9996, 'testurl-4');
 
 -- insert into message (messageId, postedBy, messageText, timePostedEpoch) values (9999, 9999, 'test message 1', 1669947792);
 -- insert into message (messageId, postedBy, messageText, timePostedEpoch) values (9997, 9997, 'test message 2', 1669947792);
