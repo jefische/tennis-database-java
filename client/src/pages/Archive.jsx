@@ -52,7 +52,7 @@ export function Archive() {
 	console.log(initFilters);
 
 	useEffect(() => {
-		fetch(`${baseURL}/api/items`)
+		fetch(`${baseURL}/videos`)
 			.then((response) => response.json())
 			.then((data) => {
 				setVideos(data);
