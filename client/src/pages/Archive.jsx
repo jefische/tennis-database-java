@@ -15,13 +15,13 @@ export function Archive() {
 	const isProduction = import.meta.env.PROD;
 	const baseURL = isProduction ? "https://tennis-database.fly.dev" : "http://localhost:8080";
 
-	const initialFilterData = allVideos.reduce(setFilterData, {});
+	const filterData = allVideos.reduce(setFilterData, {});
 
 	// Sort the initial data object by keys
-	const keys = Object.keys(initialFilterData).sort();
-	const filterData = {};
+	const keys = Object.keys(filterData).sort();
+	const filterDataSorted = {};
 	keys.forEach((key) => {
-		filterData[key] = initialFilterData[key];
+		filterDataSorted[key] = filterData[key];
 	});
 
 	const requestOptions = {
@@ -51,7 +51,7 @@ export function Archive() {
 
 			<div className="body-container">
 				<section className="flex bg-gray-custom" style={{ height: "100%" }}>
-					<Sidebar allVideos={allVideos} setVideos={setVideos} initFilters={filterData} />
+					<Sidebar allVideos={allVideos} setVideos={setVideos} initFilters={filterDataSorted} />
 					<main className="archives content-container px-[50px]">
 						<div className="header-container py-[50px]">
 							<h1>Welcome to the Match Archive</h1>

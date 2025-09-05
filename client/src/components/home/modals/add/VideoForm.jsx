@@ -3,7 +3,7 @@ import { useState, useRef, forwardRef } from "react";
 const fData = {
 	tournament: "US Open",
 	year: 2024,
-	youtube_id: "JFwsha7u1IE",
+	youtubeId: "JFwsha7u1IE",
 	round: "1st",
 	player1: "Caroline Wozniacki",
 	player2: "Nao Hibino",
@@ -26,7 +26,7 @@ export default function VideoForm({ onFormSubmit }) {
 			setURLValidation(true);
 			setValidation(true);
 		} else {
-			fetch(`http://localhost:8080/api/add`, {
+			fetch(`http://localhost:8080/videos/add`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -120,10 +120,10 @@ export default function VideoForm({ onFormSubmit }) {
 					<input
 						className="form-control"
 						type="text"
-						name="youtube_id"
+						name="youtubeId"
 						required
 						placeholder="e.g. https://www.youtube.com/embed/{id}"
-						value={formData.youtube_id}
+						value={formData.youtubeId}
 						onChange={handleChange}
 					/>
 					{urlValidated ? (
@@ -136,7 +136,14 @@ export default function VideoForm({ onFormSubmit }) {
 					<label className="form-label" htmlFor="round">
 						Round
 					</label>
-					<select className="form-select" name="round" id="round" value={formData.round} onChange={handleChange} required>
+					<select
+						className="form-select"
+						name="round"
+						id="round"
+						value={formData.round}
+						onChange={handleChange}
+						required
+					>
 						<option disabled value="">
 							Choose...
 						</option>

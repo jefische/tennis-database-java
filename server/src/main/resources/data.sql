@@ -21,11 +21,11 @@
 
 
 -- Starting test values with ids of 9999 to avoid test issues
-INSERT INTO video (videoId, tournament, video_year, youtubeId, player1, player2, title) VALUES 
-(9999, 'Australian Open', 2025, '9_3APf0X_-8', 'Jannik Sinner', 'Alexander Zverev', 'Jannik Sinner v Alexander Zverev | Australian Open 2025 Final (2hr 36min)'),
-(9998, 'Wimbledon', 2019, 'wZnCcqm_g-E', 'Roger Federer', 'Rafael Nadal', 'Roger Federer vs Rafael Nadal | Wimbledon 2019 Semifinals (3hr 05min)'),
-(9997, 'US Open', 2023, 'qwg_pIJlNtI', 'Ben Shelton', 'Frances Tiafoe', 'Ben Shelton vs. Frances Tiafoe | 2023 US Open Quarterfinal (2hr 19min)'),
-(9996, 'French Open', 2025, 'ckbX699wngs', 'Carlos Alcaraz', 'Jannik Sinner', 'Carlos Alcaraz vs Jannik Sinner | Roland-Garros 2025 Final (5hr 53min)');
+INSERT INTO video (videoId, tournament, video_year, youtubeId, player1, player2, title, round) VALUES 
+(9999, 'Australian Open', 2025, '9_3APf0X_-8', 'Jannik Sinner', 'Alexander Zverev', 'Jannik Sinner v Alexander Zverev | Australian Open 2025 Final (2hr 36min)', 'Finals'),
+(9998, 'Wimbledon', 2019, 'wZnCcqm_g-E', 'Roger Federer', 'Rafael Nadal', 'Roger Federer vs Rafael Nadal | Wimbledon 2019 Semifinals (3hr 05min)', 'Semifinals'),
+(9997, 'US Open', 2023, 'qwg_pIJlNtI', 'Ben Shelton', 'Frances Tiafoe', 'Ben Shelton vs. Frances Tiafoe | 2023 US Open Quarterfinal (2hr 19min)', 'Quarterfinals'),
+(9996, 'French Open', 2025, 'ckbX699wngs', 'Carlos Alcaraz', 'Jannik Sinner', 'Carlos Alcaraz vs Jannik Sinner | Roland-Garros 2025 Final (5hr 53min)', 'Finals');
 
 
 -- insert into message (messageId, postedBy, messageText, timePostedEpoch) values (9999, 9999, 'test message 1', 1669947792);

@@ -2,6 +2,7 @@ package com.tennisdb.server.Service;
 
 // import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -24,5 +25,13 @@ public class VideoService {
 		// List<Video> result = Arrays.asList(video1, video2, video3);
 		// return result;
 		return videoRepository.findAll();
+	}
+
+	public Video addNewVideo(Video video) {
+		return videoRepository.save(video);
+	}
+
+	public Optional<Video> getVideoByYoutubeId(String id) {
+		return videoRepository.findByYoutubeId(id);
 	}
 }

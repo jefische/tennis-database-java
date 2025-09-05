@@ -111,10 +111,10 @@ export default function VideoEditForm({ onFormSubmit, editData }) {
 					<input
 						className="form-control"
 						type="text"
-						name="youtube_id"
+						name="youtubeId"
 						required
 						placeholder="e.g. https://www.youtube.com/embed/{id}"
-						value={formData.youtube_id}
+						value={formData.youtubeId}
 						onChange={handleChange}
 					/>
 					{urlValidated ? (
@@ -127,7 +127,14 @@ export default function VideoEditForm({ onFormSubmit, editData }) {
 					<label className="form-label" htmlFor="round">
 						Round
 					</label>
-					<select className="form-select" name="round" id="round" value={formData.round} onChange={handleChange} required>
+					<select
+						className="form-select"
+						name="round"
+						id="round"
+						value={formData.round}
+						onChange={handleChange}
+						required
+					>
 						<option disabled value="">
 							Choose...
 						</option>

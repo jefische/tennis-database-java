@@ -29,8 +29,8 @@ public class VideoServiceTest {
 	@Test
 	public void testGetVideo(){
 		// Arrange - Create test data
-		Video video1 = new Video(1, "Wimbledon", 2025, "http://example.com/video1", "Alcaraz", "Sinner", "Finals match");
-		Video video2 = new Video(2, "US Open", 2024, "http://example.com/video2", "Djokovic", "Shelton", "Semifinals match");
+		Video video1 = new Video(1, "Wimbledon", 2025, "http://example.com/video1", "Alcaraz", "Sinner", "Finals match", "Finals");
+		Video video2 = new Video(2, "US Open", 2024, "http://example.com/video2", "Djokovic", "Shelton", "Quarterfinals match", "Quarterfinals");
 		List<Video> expectedVideos = Arrays.asList(video1, video2);
 
 
