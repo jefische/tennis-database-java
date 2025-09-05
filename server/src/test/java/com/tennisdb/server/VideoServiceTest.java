@@ -24,13 +24,13 @@ public class VideoServiceTest {
 	private VideoRepository videoRepository; // Fake repository
 
 	@InjectMocks
-	private VideoService videoService; // Real service with fake repository injected
+	private VideoService videoService; // Real service with fake repository injected. Mockito injects the fake repository into the real service (the @InjectMocks)
 
 	@Test
 	public void testGetVideo(){
 		// Arrange - Create test data
-		Video video1 = new Video(1, "http://example.com/video1");
-		Video video2 = new Video(2, "http://example.com/video2");
+		Video video1 = new Video(1, "Wimbledon", 2025, "http://example.com/video1", "Alcaraz", "Sinner", "Finals match");
+		Video video2 = new Video(2, "US Open", 2024, "http://example.com/video2", "Djokovic", "Shelton", "Semifinals match");
 		List<Video> expectedVideos = Arrays.asList(video1, video2);
 
 
@@ -39,7 +39,7 @@ public class VideoServiceTest {
 
 		// Act - Call the service method
 		// Test the real service (which uses the mocked repository)
-		List<Video> actualVideos = videoService.getVideos();
+		List<Video> actualVideos = videoService.getVideos(); //When you call videoService.getVideos(), it uses the mocked repository
 
 		// Assert - Verify the result
 		assertEquals(expectedVideos.size(), actualVideos.size());

@@ -1,5 +1,5 @@
 import Carousel from "react-bootstrap/Carousel";
-import PlayerVideoCard from "../components/PlayerVideoCard";
+import PlayerVideoCard from "../components/players/PlayerVideoCard";
 import Navbar from "../components/Navbar";
 
 export default function Players() {

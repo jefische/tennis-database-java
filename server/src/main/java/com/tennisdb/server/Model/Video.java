@@ -24,7 +24,9 @@ public class Video {
 	@Column(name="tournament")
 	private String tournament;
 
-	@Column(name="year")
+	//year is a reserved keyword in H2 database. 
+	// When Hibernate tries to create the table, H2 doesn't allow year as a column name without proper escaping.
+	@Column(name="video_year") // Escape the year column name
 	private Integer year;
 
 	@Column(name="youtubeId")
@@ -35,6 +37,9 @@ public class Video {
 
 	@Column(name="player2")
 	private String player2;
+
+	@Column(name="title")
+	private String title;
 
 
 	/**

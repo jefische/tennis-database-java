@@ -1,6 +1,6 @@
-import CustomVideos from "../components/CustomVideos";
+import CustomVideos from "../components/profile/CustomVideos";
 import Navbar from "../components/Navbar";
-import ModalTest from "../components/ModalTest";
+import ModalTest from "../components/profile/ModalTest";
 
 export default function Profile() {
 	const isProduction = import.meta.env.PROD;

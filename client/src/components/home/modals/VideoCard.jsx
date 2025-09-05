@@ -3,7 +3,7 @@ import Modal from "react-bootstrap/Modal";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { Fragment, useState } from "react";
-import EditModal from "./EditModal";
+import EditModal from "./edit/EditModal";
 
 export default function VideoCard({ id, title, maxWidth, setAllVideos, setVideos }) {
 	const [modalIsOpen, setIsOpen] = useState(false);

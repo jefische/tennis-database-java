@@ -29,7 +29,7 @@ class ServerApplicationTests {
 
 	@Test
 	public void test_returnsNull() {
-		String actual = video.getVideoUrl(); // stub method is null?
+		String actual = video.getYoutubeId(); // stub method is null?
 		String expected = null;
 
 		assertEquals(expected, actual); // test passes
@@ -37,12 +37,12 @@ class ServerApplicationTests {
 
 	@Test
 	public void test_returnsSomethingDifferent() {
-		when(video.getVideoUrl()).thenReturn("this other String!");
+		when(video.getYoutubeId()).thenReturn("this other String!");
 	}
 
 	@Test
     public void getUrl_throwExceptionJustBecause() {
-        when(video.getVideoUrl()).thenThrow(Exception.class);
+        when(video.getYoutubeId()).thenThrow(Exception.class);
 	}
     
 }
