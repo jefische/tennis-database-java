@@ -17,7 +17,7 @@ export function sortVideos(a, b) {
 }
 
 export function setFilterData(acc, x) {
-	console.log(x);
+	// console.log(x);
 	const key = x.tournament.replace(/\s/g, "");
 	if (!acc[key]) {
 		acc[key] = {
@@ -44,4 +44,28 @@ export function setFilterData(acc, x) {
 	}
 
 	return acc;
+}
+
+export function checkThumbnail(url) {
+	return new Promise((resolve, reject) => {
+		const img = new Image();
+		img.onload = () => {
+			// YouTube returns a 120x90 "Video not found" placeholder for invalid IDs
+			if (img.naturalWidth === 120 && img.naturalHeight === 90) {
+				reject(new Error("Invalid YouTube video ID - placeholder image detected"));
+			} else {
+				resolve(true);
+			}
+		};
+		img.onerror = () => {
+			reject(new Error("Thumbnail not found"));
+		};
+
+		// Set a timeout to handle hanging requests
+		setTimeout(() => {
+			reject(new Error("Thumbnail check timeout"));
+		}, 5000);
+
+		img.src = url;
+	});
 }
