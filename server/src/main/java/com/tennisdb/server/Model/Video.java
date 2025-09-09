@@ -2,6 +2,7 @@ package com.tennisdb.server.Model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ public class Video {
 	
 	@Column(name="videoId")
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer videoId;
 
 	@Column(name="tournament")
@@ -29,7 +30,7 @@ public class Video {
 	@Column(name="video_year") // Escape the year column name
 	private Integer year;
 
-	@Column(name="youtubeId")
+	@Column(name="youtubeId", unique = true)
 	private String youtubeId;
 
 	@Column(name="player1")

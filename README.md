@@ -59,3 +59,15 @@ The REST API runs on `http://localhost:8080` with endpoints for:
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first.
+
+To run the Aiven MySQL db set to production:
+# Linux
+```bash
+mvn spring-boot:run -Dspring.profiles.active=production
+```
+
+# Windows
+```bash
+set SPRING_PROFILES_ACTIVE=production
+mvn spring-boot:run
+```
