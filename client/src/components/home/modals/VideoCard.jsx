@@ -14,11 +14,14 @@ export default function VideoCard({ id, title, maxWidth, setAllVideos, setVideos
 	const closeModal = () => setIsOpen(false);
 
 	const openEditModal = () => {
-		// Need to fetch data here
-		const params = new URLSearchParams(); // This class encodes the data before appending to URL query string
-		params.append("youtubeid", id);
+		// URLSearchParams
+		// Query string parameters: /videos?youtubeId=123
+		// Used for filtering, searching, or optional parameters
+		// Your current code creates URLs like /videos/youtubeId%3D123 (encoded)
+		// const params = new URLSearchParams(); // This class encodes the data before appending to URL query string
+		// params.append("youtubeId", id);
 
-		fetch(`http://localhost:8080/api/edit/${params}`)
+		fetch(`http://localhost:8080/videos/${id}`)
 			.then((res) => {
 				if (!res.ok) {
 					throw new Error(`HTTP error! status: ${res.status}`);
@@ -30,7 +33,7 @@ export default function VideoCard({ id, title, maxWidth, setAllVideos, setVideos
 				setEditData(data);
 			})
 			.catch((error) => {
-				console.error("There was a problem with the fetch operation: ", error);
+				console.error("There was a problem with the fetch operation:\n", error);
 			});
 	};
 	const closeEditModal = () => setEditModal(false);
@@ -38,10 +41,9 @@ export default function VideoCard({ id, title, maxWidth, setAllVideos, setVideos
 	const isProduction = import.meta.env.PROD;
 
 	function handleDelete() {
-		const params = new URLSearchParams(); // This class encodes the data before appending to URL query string
-		params.append("youtubeid", id);
-
-		fetch(`http://localhost:8080/api/delete/${params}`)
+		fetch(`http://localhost:8080/videos/${id}`, {
+			method: "DELETE",
+		})
 			.then((res) => {
 				if (!res.ok) {
 					throw new Error(`HTTP error! status: ${res.status}`);
@@ -53,7 +55,7 @@ export default function VideoCard({ id, title, maxWidth, setAllVideos, setVideos
 				setVideos(data);
 			})
 			.catch((error) => {
-				console.error("There was a problem with the fetch operation: ", error);
+				console.error("There was a problem with the fetch operation:\n", error);
 			});
 	}
 

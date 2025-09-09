@@ -1,45 +1,56 @@
 import { useState, useRef } from "react";
+import { checkThumbnail } from "../../../../assets/js/helpers";
 
 export default function VideoEditForm({ onFormSubmit, editData }) {
 	const [formData, setFormData] = useState(editData);
 	const [formValidated, setValidation] = useState(false);
-	const [urlValidated, setURLValidation] = useState(true);
 	const formRef = useRef(null);
-
-	// console.log("printing formData from Video Edit Modal");
-	// console.log(formData);
+	const urlRef = useRef(null);
+	const urlFeedback = useRef(null);
 
 	async function saveVideo(e) {
 		e.preventDefault();
+
+		// Check for valid youtube id:
+		const thumbUrl = `https://img.youtube.com/vi/${formData.youtubeId}/0.jpg`;
+
+		try {
+			await checkThumbnail(thumbUrl);
+			urlRef.current.setCustomValidity(""); //if an input element has a non-empty validationMessage, its checkValidity() method will return false
+		} catch (err) {
+			console.error(err);
+			urlRef.current.setCustomValidity("Not a valid youtube URL Id.");
+			urlFeedback.current.textContent = urlRef.current.validationMessage;
+			setValidation(true);
+			return; // exit saveVideo
+		}
+
 		if (formRef.current.checkValidity() == false) {
-			// checkValidity() is a brower API that's auto executed on form submit. preventDefault() will stop this behavior.
-			// you still want to include preventDefault() if checkValidity() is false to block submission. checkValidity() only checks constraints.
-			setURLValidation(true);
 			setValidation(true);
 		} else {
-			fetch(`http://localhost:8080/api/edit`, {
-				method: "POST",
+			fetch(`http://localhost:8080/videos/edit`, {
+				method: "PUT",
 				headers: {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify(formData),
 			})
-				.then(async (response) => {
+				.then((response) => {
 					if (!response.ok) {
-						const errorData = await response.json();
-						if (errorData.status == 400) {
-							setURLValidation(false);
-							throw errorData;
-						} else {
-							throw errorData;
+						if (response.status === 400) {
+							urlRef.current.setCustomValidity("Duplicate youtube URL Id found.");
+							urlFeedback.current.textContent = urlRef.current.validationMessage;
+							setValidation(true);
 						}
-					} else {
-						const newData = await response.json();
-						setValidation(true);
-						onFormSubmit(newData); // Calls parent function to reload video state
+						throw new Error(`${response.status} — Network response was not ok`);
 					}
+					return response.json();
 				})
-				.catch((error) => console.error("Error:", error)); // Note this will only catch like server timeout errors,
+				.then((data) => {
+					urlRef.current.setCustomValidity("");
+					onFormSubmit(data); // Calls parent function to reload video state
+				})
+				.catch((error) => console.error(error)); // Note this will only catch like server timeout errors,
 			// a response status of 400 or 500 even though an error code, fetch doesn't consider these as errors in terms of the promise being rejected.
 		}
 	}
@@ -105,7 +116,7 @@ export default function VideoEditForm({ onFormSubmit, editData }) {
 
 			<div className="row">
 				<div className="col">
-					<label className="form-label" htmlFor="youtube_id">
+					<label className="form-label" htmlFor="youtubeId">
 						Youtube ID
 					</label>
 					<input
@@ -116,12 +127,9 @@ export default function VideoEditForm({ onFormSubmit, editData }) {
 						placeholder="e.g. https://www.youtube.com/embed/{id}"
 						value={formData.youtubeId}
 						onChange={handleChange}
+						ref={urlRef}
 					/>
-					{urlValidated ? (
-						<div className="invalid-feedback">Please enter a valid Youtube URL id.</div>
-					) : (
-						<div className="duplicate-id-feedback">Youtube URL id already exists.</div>
-					)}
+					<div className="invalid-feedback" ref={urlFeedback}></div>
 				</div>
 				<div className="col">
 					<label className="form-label" htmlFor="round">
@@ -163,8 +171,9 @@ export default function VideoEditForm({ onFormSubmit, editData }) {
 						placeholder="e.g. Carlos Alcaraz"
 						value={formData.player1}
 						onChange={handleChange}
+						pattern="^[a-zA-Z\s]+$"
 					/>
-					<div className="invalid-feedback">Please enter a player name.</div>
+					<div className="invalid-feedback">Please enter a player name (characters only).</div>
 				</div>
 				<div className="col">
 					<label className="form-label" htmlFor="player2">
@@ -178,8 +187,9 @@ export default function VideoEditForm({ onFormSubmit, editData }) {
 						placeholder="e.g. Tommy Paul"
 						value={formData.player2}
 						onChange={handleChange}
+						pattern="^[a-zA-Z\s]+$"
 					/>
-					<div className="invalid-feedback">Please enter a player name.</div>
+					<div className="invalid-feedback">Please enter a player name (characters only).</div>
 				</div>
 			</div>
 

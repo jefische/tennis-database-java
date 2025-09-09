@@ -58,6 +58,8 @@ export function checkThumbnail(url) {
 			}
 		};
 		img.onerror = () => {
+			// YouTube returns a small placeholder image (120x90 pixels) for invalid video IDs instead of a
+			// proper 404, which triggers onload instead of onerror. This is a common issue with YouTube thumbnail validation.
 			reject(new Error("Thumbnail not found"));
 		};
 

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.Column;
 
 @Entity
-@Table(name="video")
+@Table(name="videos")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

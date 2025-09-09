@@ -34,4 +34,28 @@ public class VideoService {
 	public Optional<Video> getVideoByYoutubeId(String id) {
 		return videoRepository.findByYoutubeId(id);
 	}
+
+	public boolean updateVideoByYoutubeId(Video video) {
+		Video toEdit = videoRepository.findByYoutubeId(video.getYoutubeId()).orElse(null);
+		if (toEdit == null) return false;
+		else {
+			toEdit.setPlayer1(video.getPlayer1());
+			toEdit.setPlayer2(video.getPlayer2());	
+			toEdit.setRound(video.getRound());
+			toEdit.setTitle(video.getTitle());
+			toEdit.setTournament(video.getTournament());
+			toEdit.setYear(video.getYear());
+			videoRepository.save(toEdit);
+			return true;
+		}
+	}
+
+	public boolean deleteVideoByYoutubeId(String id) {
+		Video toDelete = videoRepository.findByYoutubeId(id).orElse(null);
+		if (toDelete != null) {
+			videoRepository.delete(toDelete);
+			return true;
+		}
+		return false;
+	}
 }

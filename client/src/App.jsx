@@ -1,4 +1,3 @@
-import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Archive } from "./pages/Archive";
@@ -7,6 +6,7 @@ import Players from "./pages/Players";
 import Draws from "./pages/Draws";
 import FAQ from "./pages/FAQ";
 import Profile from "./pages/Profile";
+// import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const App = () => {
