@@ -36,4 +36,4 @@ Thumbs.db
 
 # Server side files
 /server/.env
-/server/ca.pem
+ca.pem
