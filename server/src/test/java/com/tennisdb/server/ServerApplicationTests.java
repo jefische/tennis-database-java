@@ -17,8 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-import com.tennisdb.server.Model.Video;
-import com.tennisdb.server.Repository.VideoRepository;
+import com.tennisdb.server.model.Video;
+import com.tennisdb.server.repository.VideoRepository;
 
 import java.util.List;
 

@@ -18,9 +18,9 @@ import org.mockito.Mock;
 // import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.tennisdb.server.Model.Video;
-import com.tennisdb.server.Repository.VideoRepository;
-import com.tennisdb.server.Service.VideoService;
+import com.tennisdb.server.model.Video;
+import com.tennisdb.server.repository.VideoRepository;
+import com.tennisdb.server.service.VideoService;
 
 // The @ExtendWith(MockitoExtension.class) annotation registers Mockito with JUnit 5, allowing automatic mock 
 // initialization and injection without manually calling MockitoAnnotations.openMocks()

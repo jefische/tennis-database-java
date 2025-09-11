@@ -1,4 +1,4 @@
-package com.tennisdb.server.Model;
+package com.tennisdb.server.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

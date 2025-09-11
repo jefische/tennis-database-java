@@ -2,9 +2,9 @@ package com.tennisdb.server.controller;
 
 import java.util.List;
 
-import com.tennisdb.server.model.Video;
 import com.tennisdb.server.service.VideoService;
 import com.tennisdb.server.dto.ErrorResponse;
+import com.tennisdb.server.model.Video;
 
 import org.springframework.http.ResponseEntity;
 
