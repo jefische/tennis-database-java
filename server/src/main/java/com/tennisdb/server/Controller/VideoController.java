@@ -1,10 +1,10 @@
-package com.tennisdb.server.Controller;
+package com.tennisdb.server.controller;
 
 import java.util.List;
 
-import com.tennisdb.server.DTO.ErrorResponse;
-import com.tennisdb.server.Model.Video;
-import com.tennisdb.server.Service.VideoService;
+import com.tennisdb.server.model.Video;
+import com.tennisdb.server.service.VideoService;
+import com.tennisdb.server.dto.ErrorResponse;
 
 import org.springframework.http.ResponseEntity;
 

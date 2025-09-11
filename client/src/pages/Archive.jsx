@@ -13,7 +13,7 @@ export function Archive() {
 
 	// const isProduction = import.meta.env.VITE_NODE_ENV === "production";
 	const isProduction = import.meta.env.PROD;
-	const baseURL = isProduction ? "https://tennis-database.fly.dev" : "http://localhost:8080";
+	const baseURL = isProduction ? "https://tennis-database-java.fly.dev" : "http://localhost:8080";
 
 	const filterData = allVideos.reduce(setFilterData, {});
 
@@ -27,10 +27,6 @@ export function Archive() {
 	const requestOptions = {
 		method: "GET",
 		mode: "cors",
-		headers: {
-			"Content-Type": "application/json",
-			"Access-Control-Allow-Origin": "*",
-		},
 	};
 
 	useEffect(() => {

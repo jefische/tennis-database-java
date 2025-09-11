@@ -1,4 +1,4 @@
-package com.tennisdb.server.DTO;
+package com.tennisdb.server.dto;
 
 public class ErrorResponse {
     private int status;

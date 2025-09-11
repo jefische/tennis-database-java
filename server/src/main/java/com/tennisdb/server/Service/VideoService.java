@@ -1,4 +1,4 @@
-package com.tennisdb.server.Service;
+package com.tennisdb.server.service;
 
 // import java.util.Arrays;
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.tennisdb.server.Repository.VideoRepository;
-import com.tennisdb.server.Model.Video;
+import com.tennisdb.server.model.Video;
+import com.tennisdb.server.repository.VideoRepository;
 
 @Service
 public class VideoService {
