@@ -31,8 +31,10 @@ public class ServerApplicationTests {
 	@Autowired
 	private TestRestTemplate restTemplate;
 
+	// Injects real Spring beans from the application context, rather than mocked object.
+	// Used in integration tests to wire up actual components (e.g., repositories, services, controllers).
 	@Autowired
-	private VideoRepository videoRepository;
+	private VideoRepository videoRepository; //This injects the real VideoRepository bean, connected to the test database.
 
 	@Test
 	void contextLoads() {
@@ -49,6 +51,20 @@ public class ServerApplicationTests {
 			new ParameterizedTypeReference<List<Video>>(){}
 		);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
+
+	}
+
+	@Test
+	void testGetVideo_ByYoutubeId_Endpoint(){
+		Video testVideo = new Video(4,"French Open", 2025, "ckbX699wngs", "Carlos Alcaraz", "Jannik Sinner", "Carlos Alcaraz vs Jannik Sinner | Roland-Garros 2025 Final (5hr 53min)", "Finals");
+		ResponseEntity<Video> response = restTemplate.exchange(
+			"/videos/ckbX699wngs",
+			HttpMethod.GET,
+			null,
+			Video.class
+		);
+		Video responseVideo = response.getBody();
+		assertEquals(responseVideo, testVideo);
 
 	}
 

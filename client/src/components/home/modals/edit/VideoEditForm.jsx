@@ -37,14 +37,16 @@ export default function VideoEditForm({ onFormSubmit, editData }) {
 			})
 				.then((response) => {
 					if (!response.ok) {
-						if (response.status === 400) {
+						if (response.status === 409) {
 							urlRef.current.setCustomValidity("Duplicate youtube URL Id found.");
 							urlFeedback.current.textContent = urlRef.current.validationMessage;
 							setValidation(true);
+							throw new Error(`${response.status} — Duplicate youtube URL Id found`);
 						}
 						throw new Error(`${response.status} — Network response was not ok`);
+					} else {
+						return response.json();
 					}
-					return response.json();
 				})
 				.then((data) => {
 					urlRef.current.setCustomValidity("");

@@ -63,8 +63,7 @@ public class VideoController {
 			List<Video> allVideos = videoService.getVideos();
 			return ResponseEntity.status(200).body(allVideos);
 		} else {
-			ErrorResponse error = new ErrorResponse(400, "This id is already registered");
-			return ResponseEntity.status(400).body(error);
+			return ResponseEntity.status(409).build();
 		}
 	}
 

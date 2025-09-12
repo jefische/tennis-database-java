@@ -38,13 +38,13 @@ cd tennis-database-java
 
 2. Start the backend
 ```bash
-cd backend
+cd server
 mvn spring-boot:run
 ```
 
 3. Start the frontend
 ```bash
-cd frontend
+cd client
 npm install
 npm start
 ```

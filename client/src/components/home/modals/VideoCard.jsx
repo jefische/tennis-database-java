@@ -21,7 +21,9 @@ export default function VideoCard({ id, title, maxWidth, setAllVideos, setVideos
 		// const params = new URLSearchParams(); // This class encodes the data before appending to URL query string
 		// params.append("youtubeId", id);
 
-		fetch(`http://localhost:8080/videos/${id}`)
+		fetch(`http://localhost:8080/videos/${id}`, {
+			method: "GET",
+		})
 			.then((res) => {
 				if (!res.ok) {
 					throw new Error(`HTTP error! status: ${res.status}`);
