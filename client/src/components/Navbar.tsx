@@ -4,7 +4,7 @@ import { NavLink, Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 
 const navigation = [
-	{ name: "Full Matches", href: "/archive", current: true },
+	{ name: "Full Matches", href: "/home", current: true },
 	{ name: "Learn From the Pros", href: "/players", current: false },
 	{ name: "Draws", href: "/draws", current: false },
 	{ name: "FAQ", href: "/faq", current: false },

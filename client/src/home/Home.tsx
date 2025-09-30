@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 
 import { sortVideos, setFilterData } from "../assets/js/helpers";
 
-export function Archive() {
+export default function Home() {
 	const [activeVideos, setVideos] = useState([]);
 	const [allVideos, setAllVideos] = useState([]);
 
