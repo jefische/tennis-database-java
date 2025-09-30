@@ -20,7 +20,7 @@ export function sortVideos(a : Video, b: Video) {
 
 export function setFilterData(acc: VideoFilters, x: Video): VideoFilters {
 	// console.log(x);
-	const key = x.tournament.replace(/\s/g, "");
+	const key: string = x.tournament.replace(/\s/g, "");
 	if (!acc[key]) {
 		acc[key] = {
 			title: x.tournament,
@@ -29,8 +29,8 @@ export function setFilterData(acc: VideoFilters, x: Video): VideoFilters {
 			include: true,
 		};
 	} else {
-		if (!acc[key].year.includes(x.year)) {
-			acc[key].year.push(x.year);
+		if (!acc[key].year?.includes(x.year)) {
+			acc[key].year?.push(x.year);
 		}
 		acc[key].count++;
 	}
@@ -48,7 +48,7 @@ export function setFilterData(acc: VideoFilters, x: Video): VideoFilters {
 	return acc;
 }
 
-export function checkThumbnail(url: string) {
+export function checkThumbnail(url: string): Promise<boolean> {
 	return new Promise((resolve, reject) => {
 		const img = new Image();
 		img.onload = () => {
