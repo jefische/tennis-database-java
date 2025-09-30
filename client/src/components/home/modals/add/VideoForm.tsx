@@ -1,5 +1,5 @@
 import { useState, useRef, forwardRef } from "react";
-import { checkThumbnail } from "../../../../assets/js/helpers";
+import { checkThumbnail } from "../../../../assets/types/helpers";
 
 const fData = {
 	tournament: "US Open",

@@ -1,9 +1,11 @@
-export function sortVideos(a, b) {
-	const nameA = a.tournament.toUpperCase();
-	const nameB = b.tournament.toUpperCase();
+import { Video, VideoFilters } from "@/types"
 
-	const yearA = a.year;
-	const yearB = b.year;
+export function sortVideos(a : Video, b: Video) {
+	const nameA: string = a.tournament.toUpperCase();
+	const nameB: string = b.tournament.toUpperCase();
+
+	const yearA: number = a.year;
+	const yearB: number = b.year;
 
 	if (nameA < nameB) {
 		return -1;
@@ -16,7 +18,7 @@ export function sortVideos(a, b) {
 	}
 }
 
-export function setFilterData(acc, x) {
+export function setFilterData(acc: VideoFilters, x: Video): VideoFilters {
 	// console.log(x);
 	const key = x.tournament.replace(/\s/g, "");
 	if (!acc[key]) {
@@ -46,7 +48,7 @@ export function setFilterData(acc, x) {
 	return acc;
 }
 
-export function checkThumbnail(url) {
+export function checkThumbnail(url: string) {
 	return new Promise((resolve, reject) => {
 		const img = new Image();
 		img.onload = () => {

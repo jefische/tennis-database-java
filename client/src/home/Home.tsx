@@ -5,7 +5,7 @@ import Navbar from "../components/Navbar";
 import { SearchBar } from "../components/SearchBar";
 import { useState, useEffect } from "react";
 
-import { sortVideos, setFilterData } from "../assets/js/helpers";
+import { sortVideos, setFilterData } from "../assets/types/helpers";
 
 export default function Home() {
 	const [activeVideos, setVideos] = useState([]);
@@ -24,7 +24,7 @@ export default function Home() {
 		filterDataSorted[key] = filterData[key];
 	});
 
-	const requestOptions = {
+	const requestOptions: RequestInit = {
 		method: "GET",
 		mode: "cors",
 	};

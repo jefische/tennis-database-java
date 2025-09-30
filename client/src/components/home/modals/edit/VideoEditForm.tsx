@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { checkThumbnail } from "../../../../assets/js/helpers";
+import { checkThumbnail } from "../../../../assets/types/helpers";
 
 export default function VideoEditForm({ onFormSubmit, editData }) {
 	const [formData, setFormData] = useState(editData);
