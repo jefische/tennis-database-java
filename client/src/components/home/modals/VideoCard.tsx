@@ -4,8 +4,9 @@ import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { Fragment, useState } from "react";
 import EditModal from "./edit/EditModal";
+import { VideoCards } from "@/types";
 
-export default function VideoCard({ id, title, maxWidth, setAllVideos, setVideos }) {
+export default function VideoCard({ id, title, maxWidth, setAllVideos, setVideos }: VideoCards ) {
 	const [modalIsOpen, setIsOpen] = useState(false);
 	const [editModal, setEditModal] = useState(false);
 	const [editData, setEditData] = useState({});

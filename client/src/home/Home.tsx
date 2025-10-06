@@ -4,13 +4,13 @@ import Sidebar from "../components/home/sidebar/Sidebar";
 import Navbar from "../components/Navbar";
 import { SearchBar } from "../components/SearchBar";
 import { useState, useEffect } from "react";
-import { VideoFilters } from "@/types";
+import { VideoFilters, Videos } from "@/types";
 
 import { sortVideos, setFilterData } from "../assets/types/helpers";
 
 export default function Home() {
-	const [activeVideos, setVideos] = useState([]);
-	const [allVideos, setAllVideos] = useState([]);
+	const [activeVideos, setVideos] = useState<Videos[]>([]);
+	const [allVideos, setAllVideos] = useState<Videos[]>([]);
 
 	// import.meta is a runtime metadata object available in ES modules
 	// Vite injects an env object on import.meta
@@ -56,7 +56,7 @@ export default function Home() {
 							<SearchBar allVideos={allVideos} setVideos={setVideos} />
 						</div>
 						<div className="video-container mb-[50px]">
-							{activeVideos.sort(sortVideos).map((x) => {
+							{activeVideos.sort(sortVideos).map((x: Videos) => {
 								return (
 									<VideoCard
 										key={x.videoId}

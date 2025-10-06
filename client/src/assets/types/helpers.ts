@@ -1,6 +1,6 @@
-import { Video, VideoFilters } from "@/types"
+import { Videos, VideoFilters } from "@/types"
 
-export function sortVideos(a : Video, b: Video): number {
+export function sortVideos(a : Videos, b: Videos): number {
 	const nameA: string = a.tournament.toUpperCase();
 	const nameB: string = b.tournament.toUpperCase();
 
@@ -19,7 +19,7 @@ export function sortVideos(a : Video, b: Video): number {
 	
 }
 
-export function setFilterData(acc: VideoFilters, x: Video): VideoFilters {
+export function setFilterData(acc: VideoFilters, x: Videos): VideoFilters {
 	// console.log(x);
 	const key: string = x.tournament.replace(/\s/g, "");
 	if (!acc[key]) {
