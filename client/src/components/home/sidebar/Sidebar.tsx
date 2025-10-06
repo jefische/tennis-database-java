@@ -2,37 +2,6 @@ import { useEffect, useState } from "react";
 import TournamentFilters from "./TournamentFilters";
 import YearFilters from "./YearFilters";
 
-// Initial Filters data structure for reference
-/*
-let initFilters = {
-	AustralianOpen: {
-		title: "Aussy Open",
-		year: [2025, 2024],
-		count: 3,
-		include: true,
-	},
-	2025: { title: "year", include: true, count: 1 },
-	2024: { title: "year", include: false, count: 3 },
-}; 
-*/
-// allVideos data structure for reference
-/*
-let allVideos = [
-	{
-		player1: "Jannik Sinner",
-		player2: "Alexander Zverev",
-		round: "Finals",
-		title: "Jannik Sinner v Alexander Zverev Full Match | Australian Open 2025 (2hr 36min)"
-		tournament: 'Australian Open',
-		year: 2025,
-		youtube_id: "9_3APf0X_-8",
-		__v: 0,
-		_id: '676...338e',
-
-	}
-]; 
-*/
-
 export default function Sidebar({ allVideos, setVideos, initFilters }) {
 	// formData is used to manage the checkboxes and pass them to form submit for ytVideo filtering and rendering in Home.jsx
 	const [formData, setFormData] = useState(initFilters);

@@ -37,3 +37,6 @@ Thumbs.db
 # Server side files
 /server/.env
 ca.pem
+
+# typescript
+.env.production

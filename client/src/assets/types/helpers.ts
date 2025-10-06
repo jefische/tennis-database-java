@@ -1,6 +1,6 @@
 import { Video, VideoFilters } from "@/types"
 
-export function sortVideos(a : Video, b: Video) {
+export function sortVideos(a : Video, b: Video): number {
 	const nameA: string = a.tournament.toUpperCase();
 	const nameB: string = b.tournament.toUpperCase();
 
@@ -13,9 +13,10 @@ export function sortVideos(a : Video, b: Video) {
 	if (nameA > nameB) {
 		return 1;
 	}
-	if (nameA === nameB) {
-		return yearB - yearA;
-	}
+	
+	// If it's the same tournament, sort by year
+	return yearB - yearA;
+	
 }
 
 export function setFilterData(acc: VideoFilters, x: Video): VideoFilters {

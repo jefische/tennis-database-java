@@ -4,6 +4,7 @@ import Sidebar from "../components/home/sidebar/Sidebar";
 import Navbar from "../components/Navbar";
 import { SearchBar } from "../components/SearchBar";
 import { useState, useEffect } from "react";
+import { VideoFilters } from "@/types";
 
 import { sortVideos, setFilterData } from "../assets/types/helpers";
 
@@ -11,15 +12,16 @@ export default function Home() {
 	const [activeVideos, setVideos] = useState([]);
 	const [allVideos, setAllVideos] = useState([]);
 
-	// const isProduction = import.meta.env.VITE_NODE_ENV === "production";
+	// import.meta is a runtime metadata object available in ES modules
+	// Vite injects an env object on import.meta
 	const isProduction = import.meta.env.PROD;
-	const baseURL = isProduction ? "https://tennis-database-java.fly.dev" : "http://localhost:8080";
+	const baseURL: string = import.meta.env.VITE_API_URL;
 
-	const filterData = allVideos.reduce(setFilterData, {});
+	const filterData: VideoFilters = allVideos.reduce(setFilterData, {});
 
 	// Sort the initial data object by keys
-	const keys = Object.keys(filterData).sort();
-	const filterDataSorted = {};
+	const keys: string[] = Object.keys(filterData).sort();
+	const filterDataSorted: VideoFilters = {};
 	keys.forEach((key) => {
 		filterDataSorted[key] = filterData[key];
 	});
@@ -39,7 +41,7 @@ export default function Home() {
 			.catch((error) => {
 				console.error("Error fetching data:", error);
 			});
-	}, []);
+	}, [baseURL]);
 
 	return (
 		<>

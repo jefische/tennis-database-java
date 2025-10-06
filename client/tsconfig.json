@@ -18,7 +18,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@/types": ["./src/assets/types/index.ts"]
-    }
+    },
+    "types": ["vite/client"],
   },
   "include": ["src"],
 }
