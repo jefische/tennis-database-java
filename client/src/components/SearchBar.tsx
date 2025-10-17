@@ -1,9 +1,27 @@
 import { useState } from "react";
+import { setVideosFunction, Videos } from "@/types";
 
-export function SearchBar({ allVideos, setVideos }) {
-	const [query, setQuery] = useState("");
+interface SearchBarProps {
+	allVideos: Videos[],
+	setVideos: setVideosFunction,
+}
 
-	function handleSearchInput(e) {
+export function SearchBar({ allVideos, setVideos }: SearchBarProps ) {
+	const [query, setQuery] = useState<string>("");
+
+	const results: Videos[] = filterItems(allVideos, query);
+	
+	// Search filter is run against the video title/description field
+	function filterItems(items: Videos[], query: string) {
+		query = query.toLowerCase();
+		
+		return items.filter((item) => {
+			// return item.player1.split(" ").some((name) => name.toLowerCase().startsWith(query));
+			return item.title.toLowerCase().includes(query);
+		});
+	}
+	
+	function handleSearchInput(e: React.ChangeEvent<HTMLInputElement>): void {
 		setQuery(e.target.value);
 		if (e.target.value == "") {
 			setVideos(allVideos);
@@ -11,18 +29,6 @@ export function SearchBar({ allVideos, setVideos }) {
 			setVideos(results);
 		}
 	}
-
-	// Search filter is run against the video title/description field
-	function filterItems(items, query) {
-		query = query.toLowerCase();
-
-		return items.filter((item) => {
-			// return item.player1.split(" ").some((name) => name.toLowerCase().startsWith(query));
-			return item.title.toLowerCase().includes(query);
-		});
-	}
-
-	const results = filterItems(allVideos, query);
 
 	return (
 		<>
