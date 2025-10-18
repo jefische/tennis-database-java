@@ -11,6 +11,27 @@ let initFilters = {
 	2024: { title: "year", include: false, count: 3 },
 };
 
+let initFilters = {
+	tournament: {
+		AustralianOpen: {
+			title: "Aussy Open",
+			year: [2025, 2024],
+			count: 3,
+			include: true,
+		},
+		USOpen: {
+			title: "US Open",
+			year: [2025, 2024],
+			count: 3,
+			include: true,
+		},
+	},
+	year: {
+		2025: { title: 2025, include: true, count: 1 },
+		2024: { title: 2024, include: false, count: 3 },
+	}
+};
+
 let allVideos = [
 	{
 		player1: "Jannik Sinner",
@@ -40,16 +61,44 @@ export interface Videos {
     round: "1st" | "2nd" | "3rd" | "4th" | "Quarterfinals" | "Semifinals" |"Finals",
 }
 
-export interface VideoFilters {
-    [key: string]: { // index signatures for unknown property names
-        title: string,
-        year?: number[],
-        count: number,
-        include: boolean
-    }
+// export interface VideoFilters {
+//     [key: string]: { // index signatures for unknown property names
+//         title: string,
+//         year?: number[],
+//         count: number,
+//         include: boolean
+//     }
+// }
+
+type VideoFilterKey = "tournament" | "year";
+
+export interface VideoFilterItem {
+	title: string | number,
+	year?: number[],
+	count: number,
+	include: boolean
 }
 
+export type VideoFilters = {
+	tournament: {
+		[name: string]: VideoFilterItem
+	},
+	year: {
+		[year: string]: VideoFilterItem
+	}
+}
+
+// export type VideoFilters = {
+// 	[key in VideoFilterKey]: {
+//         title: string,
+//         year?: number[],
+//         count: number,
+//         include: boolean
+//     }
+// }
+
 export type setVideosFunction = Dispatch<SetStateAction<Videos[]>>;
+export type setFiltersFunction = Dispatch<SetStateAction<VideoFilters>>;
 
 export interface VideoCards {
 	id: string,

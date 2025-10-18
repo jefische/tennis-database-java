@@ -22,28 +22,28 @@ export function sortVideos(a : Videos, b: Videos): number {
 export function setFilterData(acc: VideoFilters, x: Videos): VideoFilters {
 	// console.log(x);
 	const key: string = x.tournament.replace(/\s/g, "");
-	if (!acc[key]) {
-		acc[key] = {
+	if (!acc.tournament[key]) {
+		acc.tournament[key] = {
 			title: x.tournament,
 			year: [x.year],
 			count: 1,
 			include: true,
 		};
 	} else {
-		if (!acc[key].year?.includes(x.year)) {
-			acc[key].year?.push(x.year);
+		if (!acc.tournament[key].year?.includes(x.year)) {
+			acc.tournament[key].year?.push(x.year);
 		}
-		acc[key].count++;
+		acc.tournament[key].count++;
 	}
 
-	if (!acc[x.year]) {
-		acc[x.year] = {
-			title: "year",
+	if (!acc.year[x.year]) {
+		acc.year[x.year] = {
+			title: x.year,
 			include: true,
 			count: 1,
 		};
 	} else {
-		acc[x.year].count++;
+		acc.year[x.year].count++;
 	}
 
 	return acc;

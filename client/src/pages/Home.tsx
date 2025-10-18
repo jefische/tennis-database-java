@@ -17,13 +17,21 @@ export default function Home() {
 	const isProduction = import.meta.env.PROD;
 	const baseURL: string = import.meta.env.VITE_API_URL;
 
-	const filterData: VideoFilters = allVideos.reduce(setFilterData, {});
+	const filterData: VideoFilters = allVideos.reduce(setFilterData, {tournament: {}, year: {}});
+	// console.log("filter data...")
+	// console.log(filterData)
 
 	// Sort the initial data object by keys
-	const keys: string[] = Object.keys(filterData).sort();
-	const filterDataSorted: VideoFilters = {};
-	keys.forEach((key) => {
-		filterDataSorted[key] = filterData[key];
+	const filterDataSorted: VideoFilters = {tournament: {}, year: {}};
+
+	const tournamentKeys: string[] = Object.keys(filterData.tournament).sort();
+	const yearKeys: string[] = Object.keys(filterData.year).sort();
+
+	tournamentKeys.forEach((key) => {
+		filterDataSorted.tournament[key] = filterData.tournament[key];
+	});
+	yearKeys.forEach((key) => {
+		filterDataSorted.year[key] = filterData.year[key];
 	});
 
 	const requestOptions: RequestInit = {

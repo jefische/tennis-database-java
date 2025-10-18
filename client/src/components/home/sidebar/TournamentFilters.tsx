@@ -1,12 +1,18 @@
+import { setFiltersFunction, VideoFilters } from "@/assets/types";
 import { useState } from "react";
 
-export default function TournamentFilters({ formData, setFormData }) {
+interface TournamentFilterProps {
+	formData: VideoFilters,
+	setFormData: setFiltersFunction
+}
+
+export default function TournamentFilters({ formData, setFormData }: TournamentFilterProps) {
 	// isActive state is used to manage the accordion dropdown filters in the sidebar
 	const [isActive, setIsActive] = useState(true);
 	const [select, setSelect] = useState(true);
 
 	let numTournaments = 0;
-	const tournaments = Object.entries(formData).filter(([key, val]) => {
+	const tournaments = Object.entries(formData.tournament).filter(([key, val]) => {
 		if (val.title != "year") {
 			numTournaments += val.count;
 		}

@@ -1,12 +1,18 @@
+import { setFiltersFunction, VideoFilters } from "@/assets/types";
 import { useState } from "react";
 
-export default function YearFilters({ formData, setFormData }) {
+interface YearFilterProps {
+	formData: VideoFilters,
+	setFormData: setFiltersFunction
+}
+
+export default function YearFilters({ formData, setFormData }: YearFilterProps) {
 	// isActive state is used to manage the accordion dropdown filters in the sidebar
 	const [isActive, setIsActive] = useState(true);
 	const [select, setSelect] = useState(true);
 
 	let numYears = 0;
-	const years = Object.entries(formData).filter(([key, val]) => {
+	const years = Object.entries(formData.year).filter(([key, val]) => {
 		if (val.title == "year") {
 			numYears += val.count;
 		}

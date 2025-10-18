@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Landing from "./landing/Landing";
-import Home from "./home/Home";
-import Players from "./players/Players";
+import Landing from "./pages/Landing";
+import Home from "./pages/Home";
+import Players from "./pages/Players";
 import Draws from "./pages/Draws";
 import FAQ from "./pages/FAQ";
-import Profile from "./profile/Profile";
+import Profile from "./pages/Profile";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function App() {
