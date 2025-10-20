@@ -1,4 +1,4 @@
-import { setFiltersFunction, VideoFilters } from "@/assets/types";
+import { setFiltersFunction, VideoFilterItem, VideoFilters } from "@/assets/types";
 import { useState } from "react";
 
 interface YearFilterProps {
@@ -11,38 +11,37 @@ export default function YearFilters({ formData, setFormData }: YearFilterProps) 
 	const [isActive, setIsActive] = useState(true);
 	const [select, setSelect] = useState(true);
 
-	let numYears = 0;
-	const years = Object.entries(formData.year).filter(([key, val]) => {
-		if (val.title == "year") {
-			numYears += val.count;
-		}
-		return val.title == "year";
+	let numYears: number = 0; // for Select All count
+	const years: [string, VideoFilterItem][] = Object.entries(formData.year).filter(([key, val]) => {
+		numYears += val.count;
+		return key;
 	});
 
-	function selectAll() {
+	function selectAll(): void {
 		setSelect(!select);
-		setFormData((prev) => {
-			const updated = Object.fromEntries(
-				Object.entries(prev).map(([key, val]) => {
-					if (val.title == "year") return [key, { ...val, include: !select }];
-					return [key, val];
-				}),
-			);
-			return updated;
-		});
+		setFormData({
+			...formData,
+			year: Object.fromEntries(
+				Object.entries(formData.year).map(([key,val]) => {
+					return [key, {...val, include: !select}]
+				}))
+		})
 	}
 
-	const handleChange = (e) => {
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
 		const { name, checked } = e.target;
 		setFormData({
 			...formData,
-			[name]: {
-				...formData[name],
-				include: checked,
+			year: {
+				...formData.year,
+				[name]: {
+					...formData.year[name],
+					include: checked,
+				} 
 			},
 		});
 		// If any individual year is unchecked, uncheck the select all input field
-		if (checked == false) setSelect(false);
+		if (checked === false) setSelect(false);
 	};
 
 	return (
@@ -66,7 +65,7 @@ export default function YearFilters({ formData, setFormData }: YearFilterProps) 
 									<input
 										type="checkbox"
 										name={name}
-										checked={formData[name] == undefined ? true : formData[name].include}
+										checked={formData.year[name] === undefined ? true : formData.year[name].include}
 										onChange={handleChange}
 									/>
 									<label htmlFor={name}>

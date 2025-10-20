@@ -1,4 +1,4 @@
-import { setFiltersFunction, VideoFilters } from "@/assets/types";
+import { setFiltersFunction, VideoFilters, VideoFilterItem } from "@/assets/types";
 import { useState } from "react";
 
 interface TournamentFilterProps {
@@ -11,38 +11,37 @@ export default function TournamentFilters({ formData, setFormData }: TournamentF
 	const [isActive, setIsActive] = useState(true);
 	const [select, setSelect] = useState(true);
 
-	let numTournaments = 0;
-	const tournaments = Object.entries(formData.tournament).filter(([key, val]) => {
-		if (val.title != "year") {
-			numTournaments += val.count;
-		}
-		return val.title != "year";
+	let numTournaments: number = 0; // for Select All count
+	const tournaments: [string, VideoFilterItem][] = Object.entries(formData.tournament).filter(([key, val]) => {
+		numTournaments += val.count;
+		return key;
 	});
 
-	function selectAll() {
+	function selectAll(): void {
 		setSelect(!select);
-		setFormData((prev) => {
-			const updated = Object.fromEntries(
-				Object.entries(prev).map(([key, val]) => {
-					if (val.title != "year") return [key, { ...val, include: !select }];
-					return [key, val];
-				}),
-			);
-			return updated;
-		});
+		setFormData({
+			...formData,
+			tournament: Object.fromEntries(
+				Object.entries(formData.tournament).map(([key,val]) => {
+					return [key, {...val, include: !select}]
+				}))
+		})
 	}
 
-	const handleChange = (e) => {
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
 		const { name, checked } = e.target;
 		setFormData({
 			...formData,
-			[name]: {
-				...formData[name],
-				include: checked,
+			tournament: {
+				...formData.tournament,
+				[name]: {
+					...formData.tournament[name],
+					include: checked,
+				} 
 			},
 		});
-		// If any tournament is unchecked, uncheck the select all input field
-		if (checked == false) setSelect(false);
+		// If any individual year is unchecked, uncheck the select all input field
+		if (checked === false) setSelect(false);
 	};
 
 	return (
@@ -59,18 +58,17 @@ export default function TournamentFilters({ formData, setFormData }: TournamentF
 							<label htmlFor="selectAll">Select All ({numTournaments})</label>
 						</li>
 						{tournaments.map(([key, val], idx) => {
-							let name = val.title.replace(/\s/g, "");
 							let title = val.title;
 							let count = val.count;
 							return (
 								<li key={idx}>
 									<input
 										type="checkbox"
-										name={name}
-										checked={formData[name] == undefined ? true : formData[name].include}
+										name={key}
+										checked={formData.tournament[key] == undefined ? true : formData.tournament[key].include}
 										onChange={handleChange}
 									/>
-									<label htmlFor={name}>
+									<label htmlFor={key}>
 										{title} ({count})
 									</label>
 								</li>
