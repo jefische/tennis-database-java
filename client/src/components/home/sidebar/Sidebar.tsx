@@ -28,7 +28,7 @@ export default function Sidebar({ allVideos, setVideos, initFilters }: SidebarPr
 		// Then, filter formData for tournaments to include by years selected from above.
 		for (var key in formData.tournament) {
 			if (formData.tournament[key].include == true) {
-				const temp: Videos[] = allVideos.filter((x) => x.tournament == formData.tournament[key].title && yearsToInclude.includes(x.year));
+				const temp: Videos[] = allVideos.filter((x) => formData.tournament[key].title === x.tournament && yearsToInclude.includes(x.year));
 
 				if (temp.length > 0) {filterVideos = filterVideos.concat(temp);}
 			}
