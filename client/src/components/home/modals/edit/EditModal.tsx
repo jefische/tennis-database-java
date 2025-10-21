@@ -2,11 +2,22 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import VideoEditForm from "./VideoEditForm";
 import { useState, useEffect } from "react";
+import { Videos, setVideosFunction } from "@/assets/types";
 
-export default function EditModal({ editModalOpen, closeEditModal, editData, setAllVideos, setVideos }) {
+interface EditModalProps {
+	editModalOpen: boolean,
+	closeEditModal: () => void,
+	editData: Videos,
+	setAllVideos: setVideosFunction,
+	setVideos: setVideosFunction
+}
+
+export default function EditModal(
+	{ editModalOpen, closeEditModal, editData, setAllVideos, setVideos }: EditModalProps) {
+		
 	const [isSubmitted, setIsSubmitted] = useState(false);
 
-	function handleSubmit(data) {
+	function handleSubmit(data: Videos[]): void {
 		setVideos(data);
 		setAllVideos(data);
 		setIsSubmitted(true);

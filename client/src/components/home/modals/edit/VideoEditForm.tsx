@@ -1,14 +1,20 @@
 import { useState, useRef } from "react";
 import { checkThumbnail } from "../../../../assets/types/helpers";
+import { Videos } from "@/assets/types";
 
-export default function VideoEditForm({ onFormSubmit, editData }) {
+interface VideoEditFormProps {
+	onFormSubmit: (data: Videos[]) => void,
+	editData: Videos
+}
+
+export default function VideoEditForm({ onFormSubmit, editData }: VideoEditFormProps) {
 	const [formData, setFormData] = useState(editData);
-	const [formValidated, setValidation] = useState(false);
-	const formRef = useRef(null);
-	const urlRef = useRef(null);
-	const urlFeedback = useRef(null);
+	const [formValidated, setValidation] = useState<boolean>(false);
+	const formRef = useRef<HTMLFormElement>(null);
+	const youtubeIdElement = useRef<HTMLInputElement>(null);
+	const urlFeedback = useRef<HTMLDivElement>(null);
 
-	async function saveVideo(e) {
+	async function saveVideo(e: React.FormEvent<HTMLFormElement>): Promise<void> {
 		e.preventDefault();
 
 		// Check for valid youtube id:
@@ -16,16 +22,19 @@ export default function VideoEditForm({ onFormSubmit, editData }) {
 
 		try {
 			await checkThumbnail(thumbUrl);
-			urlRef.current.setCustomValidity(""); //if an input element has a non-empty validationMessage, its checkValidity() method will return false
+			if (youtubeIdElement.current)
+				youtubeIdElement.current.setCustomValidity(""); //if an input element has a non-empty validationMessage, its checkValidity() method will return false
 		} catch (err) {
 			console.error(err);
-			urlRef.current.setCustomValidity("Not a valid youtube URL Id.");
-			urlFeedback.current.textContent = urlRef.current.validationMessage;
-			setValidation(true);
-			return; // exit saveVideo
+			if (youtubeIdElement.current && urlFeedback.current) {
+				youtubeIdElement.current.setCustomValidity("Not a valid youtube URL Id.");
+				urlFeedback.current.textContent = youtubeIdElement.current.validationMessage;
+				setValidation(true);
+				return; // exit saveVideo
+			}
 		}
 
-		if (formRef.current.checkValidity() == false) {
+		if (formRef.current && formRef.current.checkValidity() === false) {
 			setValidation(true);
 		} else {
 			fetch(`http://localhost:8080/videos/edit`, {
@@ -37,9 +46,9 @@ export default function VideoEditForm({ onFormSubmit, editData }) {
 			})
 				.then((response) => {
 					if (!response.ok) {
-						if (response.status === 409) {
-							urlRef.current.setCustomValidity("Duplicate youtube URL Id found.");
-							urlFeedback.current.textContent = urlRef.current.validationMessage;
+						if (response.status === 409 && youtubeIdElement.current && urlFeedback.current) {
+							youtubeIdElement.current.setCustomValidity("Duplicate youtube URL Id found.");
+							urlFeedback.current.textContent = youtubeIdElement.current.validationMessage;
 							setValidation(true);
 							throw new Error(`${response.status} — Duplicate youtube URL Id found`);
 						}
@@ -49,7 +58,8 @@ export default function VideoEditForm({ onFormSubmit, editData }) {
 					}
 				})
 				.then((data) => {
-					urlRef.current.setCustomValidity("");
+					if (youtubeIdElement.current)
+						youtubeIdElement.current.setCustomValidity("");
 					onFormSubmit(data); // Calls parent function to reload video state
 				})
 				.catch((error) => console.error(error)); // Note this will only catch like server timeout errors,
@@ -57,7 +67,7 @@ export default function VideoEditForm({ onFormSubmit, editData }) {
 		}
 	}
 
-	const handleChange = (e) => {
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
 		setFormData({
 			...formData,
 			[e.target.name]: e.target.value,
@@ -129,7 +139,7 @@ export default function VideoEditForm({ onFormSubmit, editData }) {
 						placeholder="e.g. https://www.youtube.com/embed/{id}"
 						value={formData.youtubeId}
 						onChange={handleChange}
-						ref={urlRef}
+						ref={youtubeIdElement}
 					/>
 					<div className="invalid-feedback" ref={urlFeedback}></div>
 				</div>
