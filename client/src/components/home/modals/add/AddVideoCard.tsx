@@ -2,18 +2,24 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import VideoForm from "./VideoForm";
 import { Fragment, useState, useEffect } from "react";
+import { setVideosFunction, Videos } from "@/assets/types";
 
-export default function AddVideo({ setAllVideos, setVideos }) {
-	const [modalIsOpen, setIsOpen] = useState(false);
+interface AddVideoTypes {
+	setAllVideos: setVideosFunction,
+	setVideos: setVideosFunction
+}
+
+export default function AddVideoCard({ setAllVideos, setVideos }: AddVideoTypes) {
+	const [modalIsOpen, setIsOpen] = useState<boolean>(false);
 	// The Parent (Modal Component) holds the isSubmitted state.
 	// The Child (Form Component) triggers setIsSubmitted(true) when the form is submitted.
 	// The Parent (Modal Component) updates and displays the submission message instead of the form.
-	const [isSubmitted, setIsSubmitted] = useState(false);
+	const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
 	const openModal = () => setIsOpen(true);
 	const closeModal = () => setIsOpen(false);
 
-	function handleSubmit(data) {
+	function handleSubmit(data: Videos[]): void {
 		setVideos(data);
 		setAllVideos(data);
 		setIsSubmitted(true);

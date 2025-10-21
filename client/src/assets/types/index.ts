@@ -1,20 +1,9 @@
 // Initial Filters data structure for reference
 /*
 let initFilters = {
-	AustralianOpen: {
-		title: "Aussy Open",
-		year: [2025, 2024],
-		count: 3,
-		include: true,
-	},
-	2025: { title: "year", include: true, count: 1 },
-	2024: { title: "year", include: false, count: 3 },
-};
-
-let initFilters = {
 	tournament: {
 		AustralianOpen: {
-			title: "Aussy Open",
+			title: "Australian Open",
 			year: [2025, 2024],
 			count: 3,
 			include: true,
@@ -70,8 +59,6 @@ export interface Videos {
 //     }
 // }
 
-type VideoFilterKey = "tournament" | "year";
-
 export interface VideoFilterItem {
 	title: string | number,
 	year?: number[],
@@ -87,15 +74,6 @@ export type VideoFilters = {
 		[year: string]: VideoFilterItem
 	}
 }
-
-// export type VideoFilters = {
-// 	[key in VideoFilterKey]: {
-//         title: string,
-//         year?: number[],
-//         count: number,
-//         include: boolean
-//     }
-// }
 
 export type setVideosFunction = Dispatch<SetStateAction<Videos[]>>;
 export type setFiltersFunction = Dispatch<SetStateAction<VideoFilters>>;

@@ -4,17 +4,17 @@ import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { Fragment, useState } from "react";
 import EditModal from "./edit/EditModal";
-import { VideoCards } from "@/types";
+import { VideoCards, Videos } from "@/types";
 
 export default function VideoCard({ id, title, maxWidth, setAllVideos, setVideos }: VideoCards ) {
-	const [modalIsOpen, setIsOpen] = useState(false);
-	const [editModal, setEditModal] = useState(false);
-	const [editData, setEditData] = useState({});
+	const [modalIsOpen, setIsOpen] = useState<boolean>(false);
+	const [editModal, setEditModal] = useState<boolean>(false);
+	const [editData, setEditData] = useState<Videos>({} as Videos);
 
 	const openModal = () => setIsOpen(true);
 	const closeModal = () => setIsOpen(false);
 
-	const openEditModal = () => {
+	const openEditModal = (): void => {
 		// URLSearchParams
 		// Query string parameters: /videos?youtubeId=123
 		// Used for filtering, searching, or optional parameters
@@ -43,7 +43,7 @@ export default function VideoCard({ id, title, maxWidth, setAllVideos, setVideos
 
 	const isProduction = import.meta.env.PROD;
 
-	function handleDelete() {
+	function handleDelete(): void {
 		fetch(`http://localhost:8080/videos/${id}`, {
 			method: "DELETE",
 		})
@@ -73,7 +73,7 @@ export default function VideoCard({ id, title, maxWidth, setAllVideos, setVideos
 					}}
 				></div>
 				{!isProduction && (
-					<DropdownButton drop="start">
+					<DropdownButton drop="start" title="Actions">
 						<Dropdown.Item href="#" onClick={handleDelete}>
 							Delete Record
 						</Dropdown.Item>
@@ -109,7 +109,6 @@ export default function VideoCard({ id, title, maxWidth, setAllVideos, setVideos
 							width="100%"
 							src={`https://www.youtube.com/embed/${id}`}
 							title={title}
-							frameBorder="0"
 							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 							referrerPolicy="strict-origin-when-cross-origin"
 							allowFullScreen

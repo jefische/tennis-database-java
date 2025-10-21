@@ -1,7 +1,8 @@
 import { useState, useRef, forwardRef } from "react";
 import { checkThumbnail } from "../../../../assets/types/helpers";
+import { Videos } from "@/assets/types";
 
-const fData = {
+const defaultData = {
 	tournament: "US Open",
 	year: 2024,
 	youtubeId: "JFwsha7u1IE",
@@ -11,31 +12,38 @@ const fData = {
 	title: "Caroline Wozniacki vs. Nao Hibino Full Match | 2024 US Open Round 1 (43 min)",
 };
 
-export default function VideoForm({ onFormSubmit }) {
-	const [formData, setFormData] = useState(fData);
-	const [formValidated, setValidation] = useState(false);
-	const formRef = useRef(null);
-	const urlRef = useRef(null);
-	const urlFeedback = useRef(null);
+interface VideoFormProps {
+	onFormSubmit: (data: Videos[]) => void
+}
 
-	async function saveVideo(e) {
+export default function VideoForm({ onFormSubmit }: VideoFormProps) {
+	const [formData, setFormData] = useState(defaultData);
+	const [formValidated, setValidation] = useState<boolean>(false);
+	const formRef = useRef<HTMLFormElement>(null);
+	const youtubeIdElement = useRef<HTMLInputElement>(null);
+	const urlFeedback = useRef<HTMLDivElement>(null);
+
+	async function saveVideo(e: React.FormEvent<HTMLFormElement>): Promise<void> {
 		e.preventDefault();
 
 		// Check for valid youtube id:
-		const thumbUrl = `https://img.youtube.com/vi/${formData.youtubeId}/0.jpg`;
+		const thumbUrl: string = `https://img.youtube.com/vi/${formData.youtubeId}/0.jpg`;
 
 		try {
 			await checkThumbnail(thumbUrl);
-			urlRef.current.setCustomValidity(""); //if an input element has a non-empty validationMessage, its checkValidity() method will return false
+			if (youtubeIdElement.current)
+				youtubeIdElement.current.setCustomValidity(""); //if an input element has a non-empty validationMessage, its checkValidity() method will return false
 		} catch (err) {
 			console.error(err);
-			urlRef.current.setCustomValidity("Not a valid youtube URL Id.");
-			urlFeedback.current.textContent = urlRef.current.validationMessage;
-			setValidation(true);
-			return; // exit saveVideo
+			if (youtubeIdElement.current && urlFeedback.current) {
+				youtubeIdElement.current.setCustomValidity("Not a valid youtube URL Id.");
+				urlFeedback.current.textContent = youtubeIdElement.current.validationMessage;
+				setValidation(true);
+				return; // exit saveVideo
+			}
 		}
 
-		if (formRef.current.checkValidity() === false) {
+		if (formRef.current && formRef.current.checkValidity() === false) {
 			// checkValidity() is a brower API that's auto executed on form submit. preventDefault() will stop this behavior.
 			// you still want to include preventDefault() if checkValidity() is false to block submission. checkValidity() checks input constraints.
 			// checkValidity() returns true if all inputs satisfy their validation rules.
@@ -50,9 +58,9 @@ export default function VideoForm({ onFormSubmit }) {
 			})
 				.then((response) => {
 					if (!response.ok) {
-						if (response.status === 409) {
-							urlRef.current.setCustomValidity("Duplicate youtube URL Id found.");
-							urlFeedback.current.textContent = urlRef.current.validationMessage;
+						if (response.status === 409 && youtubeIdElement.current && urlFeedback.current) {
+							youtubeIdElement.current.setCustomValidity("Duplicate youtube URL Id found.");
+							urlFeedback.current.textContent = youtubeIdElement.current.validationMessage;
 							setValidation(true);
 							throw new Error(`${response.status} — Duplicate youtube URL Id found`);
 						}
@@ -62,7 +70,8 @@ export default function VideoForm({ onFormSubmit }) {
 					}
 				})
 				.then((data) => {
-					urlRef.current.setCustomValidity("");
+					if (youtubeIdElement.current)
+						youtubeIdElement.current.setCustomValidity("");
 					onFormSubmit(data); // Calls parent function to update state
 				})
 				.catch((error) => console.error(error)); // Note this will only catch like server timeout errors,
@@ -70,7 +79,7 @@ export default function VideoForm({ onFormSubmit }) {
 		}
 	}
 
-	const handleChange = (e) => {
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
 		setFormData({
 			...formData,
 			[e.target.name]: e.target.value,
@@ -142,7 +151,7 @@ export default function VideoForm({ onFormSubmit }) {
 						placeholder="e.g. https://www.youtube.com/embed/{id}"
 						value={formData.youtubeId}
 						onChange={handleChange}
-						ref={urlRef}
+						ref={youtubeIdElement}
 					/>
 					<div className="invalid-feedback" ref={urlFeedback}></div>
 				</div>
