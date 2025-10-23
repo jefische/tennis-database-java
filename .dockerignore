@@ -1,41 +1,40 @@
-# flyctl launch added from .gitignore
 # Maven build directory
-**\target
+**/target
 
 # IDE files
-**\.vscode
-**\.idea
-**\*.iml
-**\*.iws
-**\*.ipr
+**/.vscode
+**/.idea
+**/*.iml
+**/*.iws
+**/*.ipr
 
 # Compiled class files
-**\*.class
+**/*.class
 
 # Package files
-**\*.jar
-**\*.war
-**\*.ear
+**/*.jar
+**/*.war
+**/*.ear
 
 # Logs
-**\*.log
+**/*.log
 
 # OS generated files
-**\.DS_Store
-**\.DS_Store?
-**\._*
-**\.Spotlight-V100
-**\.Trashes
-**\ehthumbs.db
-**\Thumbs.db
+**/.DS_Store
+**/.DS_Store?
+**/._*
+**/.Spotlight-V100
+**/.Trashes
+**/ehthumbs.db
+**/Thumbs.db
 
 # Client side files
-client\node_modules
-client\dist
-client\build
-client\.env
+client/node_modules
+client/dist
+client/build
+client/.env
 
 # Server side files
-server\.env
-**\ca.pem
+server/.env
+**/ca.pem
 fly.toml
