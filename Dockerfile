@@ -18,11 +18,12 @@ WORKDIR /app
 
 # Copy Maven wrapper and pom first (from server/)
 COPY server/mvnw ./
-RUN chmod +x ./mvnw
+# RUN chmod +x ./mvnw
 COPY server/.mvn ./.mvn
 COPY server/pom.xml ./
 
 # Pre-fetch dependencies
+# RUN ls -l ./mvnw && file ./mvnw && cat ./mvnw
 RUN ./mvnw dependency:go-offline -B
 
 # Copy server source
