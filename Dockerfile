@@ -17,15 +17,15 @@ FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
 
 # Copy Maven wrapper and pom first (from server/)
-COPY server/mvnw .
-COPY server/.mvn .mvn
-COPY server/pom.xml .
+COPY server/mvnw ./
+COPY server/.mvn ./.mvn
+COPY server/pom.xml ./
 
 # Pre-fetch dependencies
 RUN ./mvnw dependency:go-offline -B
 
 # Copy server source
-COPY server/src src
+COPY server/src ./src
 
 # Copy built frontend to Spring Boot static resources
 COPY --from=frontend-build /app/dist src/main/resources/static/
