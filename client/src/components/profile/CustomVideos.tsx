@@ -2,7 +2,13 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { Fragment, useState, useRef } from "react";
 
-export default function CustomVideos({ url, title, maxWidth }) {
+interface CustomVideosProps {
+	url: string,
+	title: string,
+	maxWidth?: string,
+}
+
+export default function CustomVideos({ url, title, maxWidth }: CustomVideosProps) {
 	const [modalIsOpen, setIsOpen] = useState(false);
 	const [timestamp, setTimestamp] = useState({
 		Start: 0,

@@ -2,7 +2,13 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { Fragment, useState } from "react";
 
-export default function PlayerVideoCard({ id, title, maxWidth }) {
+interface PlayerVideoCardProps {
+	id: string,
+	description: string,
+	maxWidth: string
+}
+
+export default function PlayerVideoCard({ id, description, maxWidth }: PlayerVideoCardProps) {
 	const [modalIsOpen, setIsOpen] = useState(false);
 
 	const openModal = () => setIsOpen(true);
@@ -17,7 +23,7 @@ export default function PlayerVideoCard({ id, title, maxWidth }) {
 						backgroundImage: `url(http://img.youtube.com/vi/${id}/0.jpg)`,
 					}}
 				></div>
-				<p>{title}</p>
+				<p>{description}</p>
 			</div>
 			<Modal
 				show={modalIsOpen}
@@ -28,7 +34,7 @@ export default function PlayerVideoCard({ id, title, maxWidth }) {
 				dialogClassName="modal-50w"
 			>
 				<Modal.Header closeButton>
-					<Modal.Title>{title}</Modal.Title>
+					<Modal.Title>{description}</Modal.Title>
 				</Modal.Header>
 				<Modal.Body style={{ height: "60vh" }} className="flex flex-col 2xl:flex-row gap-[20px]">
 					<div className="col" style={{ maxWidth: "900px" }}>
@@ -36,7 +42,7 @@ export default function PlayerVideoCard({ id, title, maxWidth }) {
 							height="100%"
 							width="100%"
 							src={`https://www.youtube.com/embed/${id}?loop=1&playlist=${id}`}
-							title={title}
+							title={description}
 							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 							referrerPolicy="strict-origin-when-cross-origin"
 							allowFullScreen

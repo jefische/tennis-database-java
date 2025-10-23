@@ -10,7 +10,7 @@ const navigation = [
 	{ name: "FAQ", href: "/faq", current: false },
 ];
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
 	return classes.filter(Boolean).join(" ");
 }
 
@@ -21,9 +21,9 @@ export default function Navbar() {
 	const isProduction = import.meta.env.PROD;
 	const isProfile = isProduction ? false : true;
 
-	const handleActive = (e) => {
+	const handleActive = (e: React.MouseEvent<HTMLAnchorElement>) => {
 		const nextLinks = activeLink.map((link) => {
-			if (link.name == e.target.innerHTML) {
+			if (link.name == (e.target as HTMLElement).innerHTML) {
 				return {
 					...link,
 					current: true,
@@ -127,7 +127,6 @@ export default function Navbar() {
 					{activeLink.map((item) => (
 						<NavLink
 							key={item.name}
-							as="a"
 							to={item.href}
 							aria-current={item.current ? "page" : undefined}
 							className={classNames(

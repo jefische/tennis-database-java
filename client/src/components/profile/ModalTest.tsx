@@ -1,10 +1,32 @@
 import { useEffect, useRef, useState, Fragment } from "react";
 import { Modal, Button } from "react-bootstrap";
 
-export default function ModalTest({ id, title, maxWidth }) {
+declare global {
+	interface Window {
+		YT: any;
+		onYouTubeIframeAPIReady: () => void;
+	}
+}
+
+interface YouTubePlayer {
+	seekTo: (seconds: number, allowSeekAhead: boolean) => void;
+	playVideo: () => void;
+	pauseVideo: () => void;
+	destroy: () => void;
+}
+
+interface ModalTestProps {
+	id?: number,
+	title?: string,
+	maxWidth?: string
+}
+
+
+export default function ModalTest({ id, title, maxWidth }: ModalTestProps) {
 	const [modalIsOpen, setIsOpen] = useState(false);
 	const playerRef = useRef(null);
-	const playerInstanceRef = useRef(null); // holds the YT.Player instance
+	// const playerInstanceRef = useRef(null); // holds the YT.Player instance
+	const playerInstanceRef = useRef<YouTubePlayer | null>(null); // holds the YT.Player instance
 	const [timestamps, setTimeStamps] = useState({
 		start: 0,
 		matchPoint: 1200,
@@ -54,7 +76,14 @@ export default function ModalTest({ id, title, maxWidth }) {
 		};
 	}, [modalIsOpen, id]);
 
-	const goToTime = (label) => {
+	interface Timestamps {
+		start: number;
+		matchPoint: number;
+	}
+
+	type TimestampLabel = keyof Timestamps;
+
+	const goToTime = (label: TimestampLabel) => {
 		const player = playerInstanceRef.current;
 		if (player && timestamps[label] !== undefined) {
 			player.seekTo(timestamps[label], true);

@@ -18,6 +18,7 @@ WORKDIR /app
 
 # Copy Maven wrapper and pom first (from server/)
 COPY server/mvnw ./
+RUN chmod +x ./mvnw
 COPY server/.mvn ./.mvn
 COPY server/pom.xml ./
 
