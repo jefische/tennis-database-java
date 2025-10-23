@@ -61,5 +61,5 @@ The REST API runs on `http://localhost:8080` with endpoints for:
 
 Pull requests are welcome. For major changes, please open an issue first.
 
-
+Make sure to update dockerignore from CRLF to LF line endings for Github Actions.
 
