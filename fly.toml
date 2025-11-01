@@ -20,3 +20,6 @@ primary_region = 'dfw'
   memory = '1gb'
   cpu_kind = 'shared'
   cpus = 1
+
+[env]
+  SPRING_PROFILES_ACTIVE = "production"
