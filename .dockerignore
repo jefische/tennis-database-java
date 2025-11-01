@@ -32,7 +32,6 @@
 client/node_modules
 client/dist
 client/build
-client/.env
 
 # Server side files
 server/.env
