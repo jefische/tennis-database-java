@@ -2,6 +2,9 @@
 FROM node:18-alpine AS frontend-build
 WORKDIR /app
 
+# Add build argument
+ARG VITE_API_URL=https://tennis-database-java.fly.dev
+
 # Copy frontend package files
 COPY client/package*.json ./
 RUN npm install
