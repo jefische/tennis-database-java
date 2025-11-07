@@ -9,7 +9,7 @@ const defaultData = {
 	round: "1st",
 	player1: "Caroline Wozniacki",
 	player2: "Nao Hibino",
-	title: "Caroline Wozniacki vs. Nao Hibino Full Match | 2024 US Open Round 1 (43 min)",
+	title: "Caroline Wozniacki vs. Nao Hibino | 2024 US Open Round 1 (43 min)",
 };
 
 interface VideoFormProps {
@@ -79,12 +79,48 @@ export default function VideoForm({ onFormSubmit }: VideoFormProps) {
 		}
 	}
 
+	// Add new handler to update video description automatically based on other fields
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
+		const { name, value } = e.target;
+		
+		// Create updated form data with the new value
+		const updatedFormData = {
+			...formData,
+			[name]: value,
+		};
+
+		let rounds: string = updatedFormData.round;
+		switch (updatedFormData.round) {
+			case "1st":
+				rounds = "Round 1";
+				break;
+			case "2nd":
+				rounds = "Round 2";
+				break;
+			case "3rd":
+				rounds = "Round 3";
+				break;
+			case "4th":
+				rounds = "Round 4";
+				break;
+			default:
+				break;
+		}
+
+		// Use the updated values to build the title
+		setFormData({
+			...updatedFormData,
+			title: `${updatedFormData.player1} vs. ${updatedFormData.player2} | ${updatedFormData.tournament} ${updatedFormData.year} ${rounds} (0hr 00min)`
+		});
+	};
+
+	// Separate handler for typing into the title field
+	const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
 		setFormData({
 			...formData,
 			[e.target.name]: e.target.value,
 		});
-	};
+	}
 
 	return (
 		<form
@@ -174,9 +210,9 @@ export default function VideoForm({ onFormSubmit }: VideoFormProps) {
 						<option value="2nd">2nd</option>
 						<option value="3rd">3rd</option>
 						<option value="4th">4th</option>
-						<option value="Quarterfinals">Quarterfinals</option>
-						<option value="Semifinals">Semifinals</option>
-						<option value="Finals">Finals</option>
+						<option value="Quarterfinal">Quarterfinals</option>
+						<option value="Semifinal">Semifinals</option>
+						<option value="Final">Finals</option>
 					</select>
 					<div className="invalid-feedback">Please select a round.</div>
 				</div>
@@ -226,7 +262,7 @@ export default function VideoForm({ onFormSubmit }: VideoFormProps) {
 					required
 					placeholder="e.g. Jannik Sinner v Alexander Zverev Full Match | Australian Open 2025 Final (2hr 36min)"
 					value={formData.title}
-					onChange={handleChange}
+					onChange={handleTitleChange}
 				/>
 				<div className="invalid-feedback">Please enter a video title.</div>
 			</div>

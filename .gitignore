@@ -32,7 +32,7 @@ Thumbs.db
 /client/node_modules/
 /client/dist
 /client/build/
-/client/.env
+/client/.env.production
 
 # Server side files
 /server/.env

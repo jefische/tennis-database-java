@@ -67,12 +67,48 @@ export default function VideoEditForm({ onFormSubmit, editData }: VideoEditFormP
 		}
 	}
 
+	// Add new handler to update video description automatically based on other fields
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
+		const { name, value } = e.target;
+		
+		// Create updated form data with the new value
+		const updatedFormData = {
+			...formData,
+			[name]: value,
+		};
+
+		let rounds: string = updatedFormData.round;
+		switch (updatedFormData.round) {
+			case "1st":
+				rounds = "Round 1";
+				break;
+			case "2nd":
+				rounds = "Round 2";
+				break;
+			case "3rd":
+				rounds = "Round 3";
+				break;
+			case "4th":
+				rounds = "Round 4";
+				break;
+			default:
+				break;
+		}
+
+		// Use the updated values to build the title
+		setFormData({
+			...updatedFormData,
+			title: `${updatedFormData.player1} vs. ${updatedFormData.player2} | ${updatedFormData.tournament} ${updatedFormData.year} ${rounds} (0hr 00min)`
+		});
+	};
+
+	// Separate handler for typing into the title field
+	const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
 		setFormData({
 			...formData,
 			[e.target.name]: e.target.value,
 		});
-	};
+	}
 
 	return (
 		<form
@@ -214,7 +250,7 @@ export default function VideoEditForm({ onFormSubmit, editData }: VideoEditFormP
 					required
 					placeholder="e.g. Jannik Sinner v Alexander Zverev Full Match | Australian Open 2025 Final (2hr 36min)"
 					value={formData.title}
-					onChange={handleChange}
+					onChange={handleTitleChange}
 				/>
 				<div className="invalid-feedback">Please enter a video title.</div>
 			</div>
