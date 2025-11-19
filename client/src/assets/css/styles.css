@@ -252,6 +252,10 @@ main.content-container {
 }
 /*********** Modals **************/
 
+.modal-header {
+	gap: 10%;
+}
+
 .modal-30w {
 	max-width: none !important;
 	width: 30% !important;
