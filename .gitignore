@@ -33,6 +33,7 @@ Thumbs.db
 /client/dist
 /client/build/
 /client/.env.production
+/client/.env.development
 
 # Server side files
 /server/.env

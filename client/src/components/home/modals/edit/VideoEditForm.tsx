@@ -1,6 +1,8 @@
 import { useState, useRef } from "react";
 import { checkThumbnail } from "../../../../assets/types/helpers";
 import { Videos } from "@/assets/types";
+import Button from "react-bootstrap/Button";
+import { pullDuration } from "@/assets/types/callbacks";
 
 interface VideoEditFormProps {
 	onFormSubmit: (data: Videos[]) => void,
@@ -107,6 +109,31 @@ export default function VideoEditForm({ onFormSubmit, editData }: VideoEditFormP
 		setFormData({
 			...formData,
 			[e.target.name]: e.target.value,
+		});
+	}
+
+	const setDuration = async () => {
+		const duration = await pullDuration(formData.youtubeId);
+		let rounds: string = formData.round;
+		switch (formData.round) {
+			case "1st":
+				rounds = "Round 1";
+				break;
+			case "2nd":
+				rounds = "Round 2";
+				break;
+			case "3rd":
+				rounds = "Round 3";
+				break;
+			case "4th":
+				rounds = "Round 4";
+				break;
+			default:
+				break;
+		}
+		setFormData({
+			...formData,
+			title: `${formData.player1} vs. ${formData.player2} | ${formData.tournament} ${formData.year} ${rounds} (${duration})`
 		});
 	}
 
@@ -243,6 +270,13 @@ export default function VideoEditForm({ onFormSubmit, editData }: VideoEditFormP
 
 			<div>
 				<label htmlFor="title">Title</label>
+				<Button 
+					variant="outline-primary" 
+					size="sm" className="mx-4 mb-2" 
+					onClick={setDuration}
+				>
+					YT API
+				</Button>
 				<input
 					className="form-control"
 					type="text"

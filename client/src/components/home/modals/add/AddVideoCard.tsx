@@ -3,7 +3,6 @@ import Modal from "react-bootstrap/Modal";
 import VideoForm from "./VideoForm";
 import { Fragment, useState, useEffect } from "react";
 import { setVideosFunction, Videos } from "@/assets/types";
-import { formatHrMin, isoDurationToSeconds } from "@/assets/types/helpers";
 
 interface AddVideoTypes {
 	setAllVideos: setVideosFunction,
@@ -16,7 +15,6 @@ export default function AddVideoCard({ setAllVideos, setVideos }: AddVideoTypes)
 	// The Child (Form Component) triggers setIsSubmitted(true) when the form is submitted.
 	// The Parent (Modal Component) updates and displays the submission message instead of the form.
 	const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-	const [testData, setTestData] = useState({});
 
 	const openModal = () => setIsOpen(true);
 	const closeModal = () => setIsOpen(false);
@@ -36,28 +34,6 @@ export default function AddVideoCard({ setAllVideos, setVideos }: AddVideoTypes)
 			return () => clearTimeout(timer); // Cleanup timer on unmount
 		}
 	}, [isSubmitted, closeModal]);
-
-	const pullDuration = async () => {
-		const key: string = import.meta.env.VITE_GOOGLE_API_KEY;
-		const link = `https://www.googleapis.com/youtube/v3/videos?id=ATI9B7ZLof8&key=${key}&part=snippet,contentDetails,statistics,status`;
-		
-		try {
-			const response = await fetch(link);
-			if (!response.ok) {
-				throw new Error(`${response.status} - response not ok`)
-			}
-			const data = await response.json();
-			console.log(data)
-			const iso = data.items[0].contentDetails.duration;
-			const secs = isoDurationToSeconds(iso);
-			console.log(formatHrMin(secs)); // 3hr 44min
-			
-		} catch(e) {
-			console.error(e)
-		}
-		
-		
-	}
 
 	return (
 		<Fragment>
@@ -89,7 +65,6 @@ export default function AddVideoCard({ setAllVideos, setVideos }: AddVideoTypes)
 					>
 						<Modal.Header closeButton>
 							<Modal.Title>Add New Video</Modal.Title>
-							<button onClick={pullDuration}>api call</button>
 						</Modal.Header>
 						<Modal.Body>
 							<div className="flex justify-center" style={{ maxWidth: "1280px" }}>
