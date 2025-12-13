@@ -27,6 +27,7 @@ A comprehensive tennis database management system built with modern web technolo
 - Node.js (v14+)
 - Java 11+
 - Maven 3.6+
+---
 
 ### Installation
 
@@ -48,6 +49,7 @@ cd client
 npm install
 npm run dev
 ```
+---
 
 ## API Documentation
 
@@ -57,9 +59,12 @@ The REST API runs on `http://localhost:8080` with endpoints for:
 - `/videos/{youtubeId}` - Get/delete specific video
 - `/videos/edit` - Update video
 
+---
+
 ## Client-Side State Management
 The frontend uses React's built-in state management with `useState` and prop drilling. There is no external state library (e.g., Redux, Zustand, or Context API).
 
+```
 Home (Parent)
 ├── activeVideos, allVideos (state)
 ├── setVideos, setAllVideos (state setters)
@@ -82,7 +87,8 @@ Home (Parent)
     └── child: VideoForm
         ├── receives: onFormSubmit (callback)
         └── local state: formData, formValidated
-
+```
+---
 
 ## Contributing
 
