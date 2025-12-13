@@ -46,7 +46,7 @@ mvn spring-boot:run
 ```bash
 cd client
 npm install
-npm start
+npm run dev
 ```
 
 ## API Documentation
@@ -56,6 +56,33 @@ The REST API runs on `http://localhost:8080` with endpoints for:
 - `/videos/add` - Add new video
 - `/videos/{youtubeId}` - Get/delete specific video
 - `/videos/edit` - Update video
+
+## Client-Side State Management
+The frontend uses React's built-in state management with `useState` and prop drilling. There is no external state library (e.g., Redux, Zustand, or Context API).
+
+Home (Parent)
+├── activeVideos, allVideos (state)
+├── setVideos, setAllVideos (state setters)
+│
+├── Sidebar
+│   ├── receives: allVideos, setVideos, initFilters
+│   ├── local state: formData (filter checkboxes)
+│   └── children: TournamentFilters, YearFilters
+│
+├── SearchBar
+│   ├── receives: allVideos, setVideos
+│   └── local state: query
+│
+├── VideoCard (mapped)
+│   └── receives: setAllVideos, setVideos
+│
+└── AddVideoCard
+    ├── receives: setAllVideos, setVideos
+    ├── local state: modalIsOpen, isSubmitted
+    └── child: VideoForm
+        ├── receives: onFormSubmit (callback)
+        └── local state: formData, formValidated
+
 
 ## Contributing
 
