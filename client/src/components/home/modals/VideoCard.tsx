@@ -4,9 +4,10 @@ import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { Fragment, useState } from "react";
 import EditModal from "./edit/EditModal";
+import { pullTranscript } from "@/assets/types/callbacks";
 import { VideoCards, Videos } from "@/types";
 
-export default function VideoCard({ id, title, maxWidth, setAllVideos, setVideos }: VideoCards ) {
+export default function VideoCard({ id, title, maxWidth, setAllVideos, setVideos }: VideoCards) {
 	const [modalIsOpen, setIsOpen] = useState<boolean>(false);
 	const [editModal, setEditModal] = useState<boolean>(false);
 	const [editData, setEditData] = useState<Videos>({} as Videos);
@@ -42,6 +43,10 @@ export default function VideoCard({ id, title, maxWidth, setAllVideos, setVideos
 	const closeEditModal = () => setEditModal(false);
 
 	const isProduction = import.meta.env.PROD;
+
+	function handleTranscript(): void {
+		pullTranscript("s");
+	}
 
 	function handleDelete(): void {
 		fetch(`http://localhost:8080/videos/${id}`, {
@@ -99,11 +104,14 @@ export default function VideoCard({ id, title, maxWidth, setAllVideos, setVideos
 				aria-labelledby="video modal"
 				dialogClassName="modal-90w"
 			>
-				<Modal.Header style={{ textAlign: "center" }} closeButton>
-					<Modal.Title className="col">{title}</Modal.Title>
+				<Modal.Header closeButton>
+					<Modal.Title className="col">
+						{title}
+						{!isProduction && <Button onClick={handleTranscript}>Create Transcript</Button>}
+					</Modal.Title>
 				</Modal.Header>
-				<Modal.Body style={{ height: "80vh" }} className="flex flex-col items-center gap-[20px]">
-					<div className="col" style={{ maxWidth: "1280px", width: "100%" }}>
+				<Modal.Body>
+					<div className="col body">
 						<iframe
 							height="100%"
 							width="100%"
@@ -114,7 +122,13 @@ export default function VideoCard({ id, title, maxWidth, setAllVideos, setVideos
 							allowFullScreen
 						></iframe>
 					</div>
-					<p>Comments section in development</p>
+					<p className="ai-summary">
+						Carlos Alcaraz defeated world number one Yanick Sinner in a gripping five-set Roland Garros
+						final, 4-6, 7-6(7), 6-4, 6-7(5), 9-7, in over five hours. After overcoming three match points,
+						Alcaraz showcased extraordinary resilience, precision, and shot-making — particularly his lethal
+						forehand and backhand down the line. The match marked the longest men’s final in Roland Garros
+						history and underscored a burgeoning rivalry between two of tennis’s brightest stars.
+					</p>
 				</Modal.Body>
 				<Modal.Footer>
 					<Button variant="secondary" onClick={closeModal}>

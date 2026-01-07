@@ -256,6 +256,33 @@ main.content-container {
 	gap: 10%;
 }
 
+.modal-dialog {
+	.modal-content {
+		.modal-header {
+			text-align: center;
+
+			.modal-title button {
+				margin-left: 15px;
+			}
+		}
+		.modal-body {
+			display: flex;
+			gap: 15px;
+			height: 80vh;
+
+			.body {
+				flex-basis: 75%;
+				max-width: 1280px;
+				width: 100%;
+			}
+			p.ai-summary {
+				overflow-y: scroll;
+				max-height: 80vh;
+			}
+		}
+	}
+}
+
 .modal-30w {
 	max-width: none !important;
 	width: 30% !important;

@@ -5,16 +5,20 @@ import { useState, useEffect } from "react";
 import { Videos, setVideosFunction } from "@/assets/types";
 
 interface EditModalProps {
-	editModalOpen: boolean,
-	closeEditModal: () => void,
-	editData: Videos,
-	setAllVideos: setVideosFunction,
-	setVideos: setVideosFunction
+	editModalOpen: boolean;
+	closeEditModal: () => void;
+	editData: Videos;
+	setAllVideos: setVideosFunction;
+	setVideos: setVideosFunction;
 }
 
-export default function EditModal(
-	{ editModalOpen, closeEditModal, editData, setAllVideos, setVideos }: EditModalProps) {
-		
+export default function EditModal({
+	editModalOpen,
+	closeEditModal,
+	editData,
+	setAllVideos,
+	setVideos,
+}: EditModalProps) {
 	const [isSubmitted, setIsSubmitted] = useState(false);
 
 	function handleSubmit(data: Videos[]): void {
@@ -60,7 +64,7 @@ export default function EditModal(
 							<Modal.Title>Edit Video</Modal.Title>
 						</Modal.Header>
 						<Modal.Body>
-							<div className="flex justify-center" style={{ maxWidth: "1280px" }}>
+							<div className="col body">
 								<VideoEditForm onFormSubmit={handleSubmit} editData={editData} />
 							</div>
 						</Modal.Body>
