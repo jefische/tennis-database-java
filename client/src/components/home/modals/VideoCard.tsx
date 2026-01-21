@@ -45,7 +45,7 @@ export default function VideoCard({ id, title, maxWidth, setAllVideos, setVideos
 	const isProduction = import.meta.env.PROD;
 
 	function handleTranscript(): void {
-		pullTranscript("s");
+		pullTranscript("str");
 	}
 
 	function handleDelete(): void {
@@ -123,11 +123,12 @@ export default function VideoCard({ id, title, maxWidth, setAllVideos, setVideos
 						></iframe>
 					</div>
 					<p className="ai-summary">
-						Carlos Alcaraz defeated world number one Yanick Sinner in a gripping five-set Roland Garros
+						{/* Carlos Alcaraz defeated world number one Yanick Sinner in a gripping five-set Roland Garros
 						final, 4-6, 7-6(7), 6-4, 6-7(5), 9-7, in over five hours. After overcoming three match points,
 						Alcaraz showcased extraordinary resilience, precision, and shot-making — particularly his lethal
 						forehand and backhand down the line. The match marked the longest men’s final in Roland Garros
-						history and underscored a burgeoning rivalry between two of tennis’s brightest stars.
+						history and underscored a burgeoning rivalry between two of tennis’s brightest stars. */}
+						<b>AI summary in development</b>
 					</p>
 				</Modal.Body>
 				<Modal.Footer>
