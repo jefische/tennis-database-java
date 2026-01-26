@@ -32,8 +32,8 @@ export async function pullTranscript(id: string): Promise<string> {
 		}
 		const data = await response.json();
 		return JSON.stringify(data);
-	} catch (e) {
-		console.error(e);
+	} catch (error) {
+		console.error(error);
 	}
 
 	return "N/A";

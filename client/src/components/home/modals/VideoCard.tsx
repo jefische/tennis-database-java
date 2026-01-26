@@ -5,6 +5,7 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import { Fragment, useState } from "react";
 import EditModal from "./edit/EditModal";
 import { pullTranscript } from "@/assets/types/callbacks";
+import { generateMatchSummary } from "@/utils/matchSummaryAgent";
 import { VideoCards, Videos } from "@/types";
 
 export default function VideoCard({ id, title, maxWidth, setAllVideos, setVideos }: VideoCards) {
@@ -44,8 +45,10 @@ export default function VideoCard({ id, title, maxWidth, setAllVideos, setVideos
 
 	const isProduction = import.meta.env.PROD;
 
-	function handleTranscript(): void {
-		pullTranscript("str");
+	async function handleTranscript(): Promise<void> {
+		// pullTranscript("str");
+		const summary: string = await generateMatchSummary("https://www.youtube.com/watch?v=ckbX699wngs");
+		console.log(summary);
 	}
 
 	function handleDelete(): void {

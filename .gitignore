@@ -39,5 +39,7 @@ Thumbs.db
 /server/.env
 ca.pem
 
-# typescript
+# Summary-service files
+node_modules
+.env
 
