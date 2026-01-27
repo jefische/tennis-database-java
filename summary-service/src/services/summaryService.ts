@@ -1,12 +1,18 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { YoutubeLoader } from "@langchain/community/document_loaders/web/youtube";
+
+import { getTranscriptFromUrl } from "./youtubeTranscript.js";
+
 
 // Create the model using Google Gemini
 const model = new ChatGoogleGenerativeAI({
 	model: "gemini-2.5-flash",
 	temperature: 0, // Controls randomness. 0 is good for deterministic results.
-	apiKey: process.env.GOOGLE_API_KEY,
+	apiKey: process.env.GOOGLE_API_KEY
 });
 
 /**
@@ -16,12 +22,24 @@ const model = new ChatGoogleGenerativeAI({
  */
 export async function generateMatchSummary(youtubeUrl: string): Promise<string> {
 	try {
-		// Load the YouTube transcript
-		const loader = YoutubeLoader.createFromUrl(youtubeUrl);
-		const docs = await loader.load();
+		/////////////////////////////////////////////////////////////////////////////////////////
+		// Load the YouTube transcript - langchain/community doc_loaders Youtube library appraoch
+		/////////////////////////////////////////////////////////////////////////////////////////
+		// const loader = YoutubeLoader.createFromUrl(youtubeUrl, 
+		// 	{
+		// 		language: "en",
+		// 		addVideoInfo: true,
+		// 	});
+		// const docs = await loader.load();
 
-		// Extract the transcript text from the loaded documents
-		const video_transcript = docs.map((doc) => doc.pageContent).join("\n");
+		// // Extract the transcript text from the loaded documents
+		// const video_transcript = docs.map((doc) => doc.pageContent).join("\n");
+
+		////////////////////////////////////////////
+		// youtubei.js appraoch with Innertube class
+		////////////////////////////////////////////
+		// Then in generateMatchSummary:
+		const video_transcript = await getTranscriptFromUrl(youtubeUrl);
 
 		// Create the system message with the transcript
 		const systemMessage = `You are a professional tennis analyst specializing in match analysis and commentary.
