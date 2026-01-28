@@ -1,5 +1,6 @@
 import os
 from youtube_transcript_api import YouTubeTranscriptApi
+from langchain_community.document_loaders import YoutubeLoader
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 import re
@@ -62,22 +63,22 @@ def generate_match_summary(youtube_url: str) -> str:
     # Create the system message with the transcript
     system_message = f"""You are a professional tennis analyst specializing in match analysis and commentary.
 
-Your task: Analyze the provided tennis match transcript and create a structured summary.
+        Your task: Analyze the provided tennis match transcript and create a structured summary.
 
-TRANSCRIPT:
-{video_transcript}
+        TRANSCRIPT:
+        {video_transcript}
 
-OUTPUT REQUIREMENTS:
-1. Match Summary (50-100 words MAX. DO NOT go over 100 words):
-- Players and final score
-- Key turning points
-- Notable performance highlights
-- Match significance/context
+        OUTPUT REQUIREMENTS:
+        1. Match Summary (50-100 words MAX. DO NOT go over 100 words):
+        - Players and final score
+        - Key turning points
+        - Notable performance highlights
+        - Match significance/context
 
-FORMAT:
-The match summary should be in paragraph form, to be inserted into an HTML web page.
+        FORMAT:
+        The match summary should be in paragraph form, to be inserted into an HTML web page.
 
-TONE: Professional but engaging, suitable for tennis fans."""
+        TONE: Professional but engaging, suitable for tennis fans."""
 
     # Create the chat template
     chat_template = ChatPromptTemplate.from_messages([
@@ -90,3 +91,42 @@ TONE: Professional but engaging, suitable for tennis fans."""
     response = chain.invoke({})
 
     return response.content
+
+def gen_match_summary_v2(youtube_url: str) -> str:
+    loader = YoutubeLoader.from_youtube_url(
+        youtube_url, add_video_info=False
+    )
+
+    docs=loader.load()
+    transcript=docs[0].page_content
+
+    # Create the system message with the transcript
+    system_message = f"""You are a professional tennis analyst specializing in match analysis and commentary.
+
+        Your task: Analyze the provided tennis match transcript and create a structured summary.
+
+        TRANSCRIPT:
+        {transcript}
+
+        OUTPUT REQUIREMENTS:
+        1. Match Summary (50-100 words MAX. DO NOT go over 100 words):
+        - Players and final score
+        - Key turning points
+        - Notable performance highlights
+        - Match significance/context
+
+        FORMAT:
+        The match summary should be in paragraph form, to be inserted into an HTML web page.
+
+        TONE: Professional but engaging, suitable for tennis fans."""
+
+    # Create the chat template
+    chat_template = ChatPromptTemplate.from_messages([
+        ("system", system_message),
+        ("human", "Please provide a match summary based on the transcript."),
+    ])
+
+    chain = chat_template | model
+    result = chain.invoke({})
+    
+    return result.content
