@@ -1,9 +1,11 @@
 package com.tennisdb.server.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.tennisdb.server.service.VideoService;
 import com.tennisdb.server.dto.ErrorResponse;
+import com.tennisdb.server.dto.SummaryResponse;
 import com.tennisdb.server.model.Video;
 
 import org.springframework.http.ResponseEntity;
@@ -74,6 +76,23 @@ public class VideoController {
 			return ResponseEntity.status(200).body(allVideos);
 		} else {
 			return ResponseEntity.status(400).build();
+		}
+	}
+
+	@PostMapping(value = "api/summary/{youtubeId}")
+	public ResponseEntity<?> addSummary(@PathVariable String youtubeId) {
+		try {
+			// Check if video exists
+			Optional<Video> getVideo = videoService.getVideoByYoutubeId(youtubeId);
+			if(!getVideo.isPresent()) {
+				return ResponseEntity.status(404)
+					.body(new ErrorResponse(404, "Video not found"));
+			}
+	
+			return ResponseEntity.ok(new SummaryResponse("input summary variable"));
+		} catch(Exception e) {
+			return ResponseEntity.status(500)
+				.body(new ErrorResponse(500, "Failed to generate summary: " + e.getMessage()));
 		}
 	}
 

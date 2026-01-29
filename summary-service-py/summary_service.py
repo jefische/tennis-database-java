@@ -46,7 +46,8 @@ def fetch_transcript(video_id: str) -> str:
         except Exception as e2:
             raise Exception(f"Failed to get transcript: {str(e2)}")
 
-def generate_match_summary(youtube_url: str) -> str:
+# Apply the youtubeapi directly with custom functions above
+def generate_match_summary_yt_api(youtube_url: str) -> str:
     """
     Generates a tennis match summary from a YouTube video transcript.
 
@@ -92,7 +93,8 @@ def generate_match_summary(youtube_url: str) -> str:
 
     return response.content
 
-def gen_match_summary_v2(youtube_url: str) -> str:
+# Apply the langchain community youtubeloader package which uses youtubeapi internally
+def generate_match_summary(youtube_url: str) -> str:
     loader = YoutubeLoader.from_youtube_url(
         youtube_url, add_video_info=False
     )

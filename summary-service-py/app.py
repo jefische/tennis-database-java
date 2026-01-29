@@ -5,7 +5,6 @@ load_dotenv()
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from summary_service import generate_match_summary
-from summary_service import gen_match_summary_v2
 
 app = Flask(__name__)
 CORS(app)
@@ -25,8 +24,7 @@ def summary():
     print(f"Generating summary for: {youtube_url}")
 
     try:
-        # summary_text = generate_match_summary(youtube_url)
-        summary_text = gen_match_summary_v2(youtube_url)
+        summary_text = generate_match_summary(youtube_url)
         return jsonify({"summary": summary_text})
     except Exception as e:
         print(f"Error generating summary: {e}")
