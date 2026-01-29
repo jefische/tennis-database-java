@@ -56,7 +56,7 @@ public class ServerApplicationTests {
 
 	@Test
 	void testGetVideo_ByYoutubeId_Endpoint(){
-		Video testVideo = new Video(4,"French Open", 2025, "ckbX699wngs", "Carlos Alcaraz", "Jannik Sinner", "Carlos Alcaraz vs Jannik Sinner | Roland-Garros 2025 Final (5hr 53min)", "Finals");
+		Video testVideo = new Video(4,"French Open", 2025, "ckbX699wngs", "Carlos Alcaraz", "Jannik Sinner", "Carlos Alcaraz vs Jannik Sinner | Roland-Garros 2025 Final (5hr 53min)", "Finals", null);
 		ResponseEntity<Video> response = restTemplate.exchange(
 			"/videos/ckbX699wngs",
 			HttpMethod.GET,

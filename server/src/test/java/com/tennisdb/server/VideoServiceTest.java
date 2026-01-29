@@ -41,8 +41,8 @@ public class VideoServiceTest {
 	@Test
 	public void testGetVideo(){
 		// Arrange - Create test data
-		Video video1 = new Video(1, "Wimbledon", 2025, "http://example.com/video1", "Alcaraz", "Sinner", "Finals match", "Finals");
-		Video video2 = new Video(2, "US Open", 2024, "http://example.com/video2", "Djokovic", "Shelton", "Quarterfinals match", "Quarterfinals");
+		Video video1 = new Video(1, "Wimbledon", 2025, "http://example.com/video1", "Alcaraz", "Sinner", "Finals match", "Finals", null);
+		Video video2 = new Video(2, "US Open", 2024, "http://example.com/video2", "Djokovic", "Shelton", "Quarterfinals match", "Quarterfinals", null);
 		List<Video> expectedVideos = Arrays.asList(video1, video2);
 
 		// Mock the repository (dependency) behavior
@@ -69,7 +69,7 @@ public class VideoServiceTest {
 	@Test
 	public void testGetVideoById() {
 		String youtubeId = "http://example.com/video1";
-		Optional<Video> video1 = Optional.of(new Video(1, "Wimbledon", 2025, "http://example.com/video1", "Alcaraz", "Sinner", "Finals match", "Finals"));
+		Optional<Video> video1 = Optional.of(new Video(1, "Wimbledon", 2025, "http://example.com/video1", "Alcaraz", "Sinner", "Finals match", "Finals", null));
 		when(videoRepository.findByYoutubeId(youtubeId)).thenReturn(video1);
 
 		Optional<Video> actual = videoService.getVideoByYoutubeId(youtubeId);
@@ -79,7 +79,7 @@ public class VideoServiceTest {
 
 	@Test
 	public void testCreateVideo(){
-		Video video1 = new Video(1, "Wimbledon", 2025, "http://example.com/video1", "Alcaraz", "Sinner", "Finals match", "Finals");
+		Video video1 = new Video(1, "Wimbledon", 2025, "http://example.com/video1", "Alcaraz", "Sinner", "Finals match", "Finals", null);
 
 		when(videoRepository.save(video1)).thenReturn(video1);
 		Video savedVideo = videoService.addNewVideo(video1);
