@@ -1,9 +1,9 @@
 package com.tennisdb.server.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.tennisdb.server.service.VideoService;
+import com.tennisdb.server.service.SummaryService;
 import com.tennisdb.server.dto.ErrorResponse;
 import com.tennisdb.server.dto.SummaryResponse;
 import com.tennisdb.server.model.Video;
@@ -23,9 +23,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class VideoController {
 
 	private VideoService videoService;
+	private SummaryService summaryService;
 
-	public VideoController(VideoService videoService) {
+	public VideoController(VideoService videoService, SummaryService summaryService) {
 		this.videoService = videoService;
+		this.summaryService = summaryService;
 	}
 
 	@GetMapping(value = "videos")
@@ -83,17 +85,24 @@ public class VideoController {
 	public ResponseEntity<?> addSummary(@PathVariable String youtubeId) {
 		try {
 			// Check if video exists
-			Optional<Video> getVideo = videoService.getVideoByYoutubeId(youtubeId);
-			if(!getVideo.isPresent()) {
+			if(!videoService.getVideoByYoutubeId(youtubeId).isPresent()) {
 				return ResponseEntity.status(404)
 					.body(new ErrorResponse(404, "Video not found"));
 			}
-	
-			return ResponseEntity.ok(new SummaryResponse("input summary variable"));
+
+			// Construct full YouTube URL from youtubeId
+			String youtubeUrl = "https://www.youtube.com/watch?v=" + youtubeId;
+
+			// Generate summary from Python service
+			String summary = summaryService.generateSummary(youtubeUrl);
+
+			// Save summary to video entity
+			summaryService.saveSummaryToVideo(youtubeId, summary);
+
+			return ResponseEntity.ok(new SummaryResponse(summary));
 		} catch(Exception e) {
 			return ResponseEntity.status(500)
 				.body(new ErrorResponse(500, "Failed to generate summary: " + e.getMessage()));
 		}
 	}
-
 }
