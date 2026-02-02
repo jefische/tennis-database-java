@@ -17,12 +17,12 @@ export default function Home() {
 	const isProduction = import.meta.env.PROD;
 	const baseURL: string = import.meta.env.VITE_API_URL;
 
-	const filterData: VideoFilters = allVideos.reduce(setFilterData, {tournament: {}, year: {}});
+	const filterData: VideoFilters = allVideos.reduce(setFilterData, { tournament: {}, year: {} });
 	// console.log("filter data...")
 	// console.log(filterData)
 
 	// Sort the initial data object by keys
-	const filterDataSorted: VideoFilters = {tournament: {}, year: {}};
+	const filterDataSorted: VideoFilters = { tournament: {}, year: {} };
 
 	const tournamentKeys: string[] = Object.keys(filterData.tournament).sort();
 	const yearKeys: string[] = Object.keys(filterData.year).sort();
@@ -70,6 +70,7 @@ export default function Home() {
 										key={x.videoId}
 										id={x.youtubeId}
 										title={x.title}
+										summary={x.summary}
 										setAllVideos={setAllVideos}
 										setVideos={setVideos}
 									/>

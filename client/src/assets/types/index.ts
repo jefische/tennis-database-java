@@ -40,14 +40,15 @@ let allVideos = [
 import { Dispatch, SetStateAction } from "react";
 
 export interface Videos {
-	videoId: number,
-    tournament: "Australian Open" | "French Open" | "Wimbledon" | "US Open",
-    year: number,
-    youtubeId: string,
-    player1: string,
-    player2: string,
-    title: string,
-    round: "1st" | "2nd" | "3rd" | "4th" | "Quarterfinals" | "Semifinals" |"Finals",
+	videoId: number;
+	tournament: "Australian Open" | "French Open" | "Wimbledon" | "US Open";
+	year: number;
+	youtubeId: string;
+	player1: string;
+	player2: string;
+	title: string;
+	round: "1st" | "2nd" | "3rd" | "4th" | "Quarterfinals" | "Semifinals" | "Finals";
+	summary?: string;
 }
 
 // export interface VideoFilters {
@@ -60,28 +61,29 @@ export interface Videos {
 // }
 
 export interface VideoFilterItem {
-	title: string | number,
-	year?: number[],
-	count: number,
-	include: boolean
+	title: string | number;
+	year?: number[];
+	count: number;
+	include: boolean;
 }
 
 export type VideoFilters = {
 	tournament: {
-		[name: string]: VideoFilterItem
-	},
+		[name: string]: VideoFilterItem;
+	};
 	year: {
-		[year: string]: VideoFilterItem
-	}
-}
+		[year: string]: VideoFilterItem;
+	};
+};
 
 export type setVideosFunction = Dispatch<SetStateAction<Videos[]>>;
 export type setFiltersFunction = Dispatch<SetStateAction<VideoFilters>>;
 
 export interface VideoCards {
-	id: string,
-	title: string,
-	maxWidth?: number,
-	setAllVideos: setVideosFunction,
-	setVideos: setVideosFunction,
+	id: string;
+	title: string;
+	maxWidth?: number;
+	summary?: string;
+	setAllVideos: setVideosFunction;
+	setVideos: setVideosFunction;
 }

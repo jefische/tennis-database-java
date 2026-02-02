@@ -94,7 +94,7 @@ def generate_match_summary_yt_api(youtube_url: str) -> str:
     return response.content
 
 # Apply the langchain community youtubeloader package which uses youtubeapi internally
-def generate_match_summary(youtube_url: str) -> str:
+def generate_match_summary(youtube_url: str, video_info: dict = None) -> str:
     loader = YoutubeLoader.from_youtube_url(
         youtube_url, add_video_info=False
     )
@@ -102,10 +102,32 @@ def generate_match_summary(youtube_url: str) -> str:
     docs=loader.load()
     transcript=docs[0].page_content
 
+    # Build canonical details section if video_info is provided
+    canonical_details = ""
+    if video_info:
+        details = []
+        if video_info.get("player1") and video_info.get("player2"):
+            details.append(f"Players: {video_info['player1']} vs {video_info['player2']}")
+        if video_info.get("tournament"):
+            details.append(f"Tournament: {video_info['tournament']}")
+        if video_info.get("year"):
+            details.append(f"Year: {video_info['year']}")
+        if video_info.get("round"):
+            details.append(f"Round: {video_info['round']}")
+
+        if details:
+            canonical_details = f"""
+        CANONICAL MATCH DETAILS (use these exact spellings for names and details):
+        {chr(10).join('        - ' + d for d in details)}
+
+        IMPORTANT: If the transcript contains spelling variations or errors for player names,
+        tournament names, or other details listed above, use the CANONICAL spellings provided."""
+
     # Create the system message with the transcript
     system_message = f"""You are a professional tennis analyst specializing in match analysis and commentary.
 
         Your task: Analyze the provided tennis match transcript and create a structured summary.
+        {canonical_details}
 
         TRANSCRIPT:
         {transcript}
@@ -118,7 +140,9 @@ def generate_match_summary(youtube_url: str) -> str:
         - Match significance/context
 
         FORMAT:
-        The match summary should be in paragraph form, to be inserted into an HTML web page.
+        - The match summary should be text in paragraph form, to be inserted into an HTML web page.
+        - Add appropriate bolding using <b> and italics using <i> to highlight important parts of the summary.
+        - Always be sure to bold the score, and bold any statistics or figures reported in the summary.
 
         TONE: Professional but engaging, suitable for tennis fans."""
 
@@ -130,5 +154,5 @@ def generate_match_summary(youtube_url: str) -> str:
 
     chain = chat_template | model
     result = chain.invoke({})
-    
+
     return result.content

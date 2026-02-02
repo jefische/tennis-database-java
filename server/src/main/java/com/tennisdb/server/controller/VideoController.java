@@ -85,7 +85,8 @@ public class VideoController {
 	public ResponseEntity<?> addSummary(@PathVariable String youtubeId) {
 		try {
 			// Check if video exists
-			if(!videoService.getVideoByYoutubeId(youtubeId).isPresent()) {
+			Video video = videoService.getVideoByYoutubeId(youtubeId).orElse(null);
+			if(video == null) {
 				return ResponseEntity.status(404)
 					.body(new ErrorResponse(404, "Video not found"));
 			}
@@ -94,7 +95,7 @@ public class VideoController {
 			String youtubeUrl = "https://www.youtube.com/watch?v=" + youtubeId;
 
 			// Generate summary from Python service
-			String summary = summaryService.generateSummary(youtubeUrl);
+			String summary = summaryService.generateSummary(youtubeUrl, video);
 
 			// Save summary to video entity
 			summaryService.saveSummaryToVideo(youtubeId, summary);

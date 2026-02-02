@@ -8,10 +8,11 @@ import { pullTranscript } from "@/assets/types/callbacks";
 import { generateMatchSummary } from "@/utils/matchSummaryAgent";
 import { VideoCards, Videos } from "@/types";
 
-export default function VideoCard({ id, title, maxWidth, setAllVideos, setVideos }: VideoCards) {
+export default function VideoCard({ id, title, summary, maxWidth, setAllVideos, setVideos }: VideoCards) {
 	const [modalIsOpen, setIsOpen] = useState<boolean>(false);
 	const [editModal, setEditModal] = useState<boolean>(false);
 	const [editData, setEditData] = useState<Videos>({} as Videos);
+	const [aiSummary, setAiSummary] = useState<String>(summary || "AI summary in development");
 
 	const openModal = () => setIsOpen(true);
 	const closeModal = () => setIsOpen(false);
@@ -47,8 +48,9 @@ export default function VideoCard({ id, title, maxWidth, setAllVideos, setVideos
 
 	async function handleTranscript(): Promise<void> {
 		// pullTranscript("str");
-		const summary: string = await generateMatchSummary("https://www.youtube.com/watch?v=ckbX699wngs");
-		console.log(summary);
+		console.log("generating summary...");
+		const summary: string = await generateMatchSummary(`${id}`);
+		setAiSummary(summary);
 	}
 
 	function handleDelete(): void {
@@ -125,14 +127,7 @@ export default function VideoCard({ id, title, maxWidth, setAllVideos, setVideos
 							allowFullScreen
 						></iframe>
 					</div>
-					<p className="ai-summary">
-						{/* Carlos Alcaraz defeated world number one Yanick Sinner in a gripping five-set Roland Garros
-						final, 4-6, 7-6(7), 6-4, 6-7(5), 9-7, in over five hours. After overcoming three match points,
-						Alcaraz showcased extraordinary resilience, precision, and shot-making — particularly his lethal
-						forehand and backhand down the line. The match marked the longest men’s final in Roland Garros
-						history and underscored a burgeoning rivalry between two of tennis’s brightest stars. */}
-						<b>AI summary in development</b>
-					</p>
+					{aiSummary && <div className="ai-summary" dangerouslySetInnerHTML={{ __html: aiSummary }} />}
 				</Modal.Body>
 				<Modal.Footer>
 					<Button variant="secondary" onClick={closeModal}>

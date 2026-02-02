@@ -9,14 +9,14 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
  * @param youtubeUrl - Full YouTube URL or video ID
  * @returns Promise<string> - The generated match summary
  */
-export async function generateMatchSummary(youtubeUrl: string): Promise<string> {
+export async function generateMatchSummary(youtubeId: string): Promise<string> {
 	try {
-		const response = await fetch(`${API_URL}/videos/summary`, {
+		const response = await fetch(`${API_URL}/api/summary/${youtubeId}`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ youtubeUrl }),
+			body: JSON.stringify({ youtubeId }),
 		});
 
 		if (!response.ok) {

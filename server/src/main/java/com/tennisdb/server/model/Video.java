@@ -45,7 +45,7 @@ public class Video {
 	@Column(name="round")
 	private String round;
 
-	@Column(name="summary")
+	@Column(name="summary", columnDefinition = "TEXT")
 	private String summary;
 
 

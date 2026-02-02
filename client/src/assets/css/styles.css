@@ -267,6 +267,7 @@ main.content-container {
 		}
 		.modal-body {
 			display: flex;
+			flex-direction: column;
 			gap: 15px;
 			height: 80vh;
 
@@ -275,7 +276,7 @@ main.content-container {
 				max-width: 1280px;
 				width: 100%;
 			}
-			p.ai-summary {
+			.ai-summary {
 				overflow-y: scroll;
 				max-height: 80vh;
 			}
@@ -304,6 +305,13 @@ main.content-container {
 }
 
 @media (min-width: 992px) {
+	.modal-dialog {
+		.modal-content {
+			.modal-body {
+				flex-direction: row;
+			}
+		}
+	}
 	.modal-30w {
 		max-width: none !important;
 		width: 30% !important;

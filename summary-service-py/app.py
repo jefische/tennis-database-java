@@ -21,10 +21,22 @@ def summary():
         return jsonify({"error": "youtubeUrl is required"}), 400
 
     youtube_url = data["youtubeUrl"]
+
+    # Extract video metadata (optional fields)
+    video_info = {
+        "player1": data.get("player1"),
+        "player2": data.get("player2"),
+        "tournament": data.get("tournament"),
+        "year": data.get("year"),
+        "round": data.get("round"),
+        "title": data.get("title")
+    }
+
     print(f"Generating summary for: {youtube_url}")
+    print(f"Video info: {video_info}")
 
     try:
-        summary_text = generate_match_summary(youtube_url)
+        summary_text = generate_match_summary(youtube_url, video_info)
         return jsonify({"summary": summary_text})
     except Exception as e:
         print(f"Error generating summary: {e}")
