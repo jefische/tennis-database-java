@@ -269,7 +269,7 @@ main.content-container {
 			display: flex;
 			flex-direction: column;
 			gap: 15px;
-			height: 80vh;
+			/* max-height: 80vh; */
 
 			.body {
 				flex-basis: 75%;
@@ -280,6 +280,9 @@ main.content-container {
 				overflow-y: scroll;
 				max-height: 80vh;
 			}
+		}
+		.modal-body.play-video {
+			height: 80vh;
 		}
 	}
 }

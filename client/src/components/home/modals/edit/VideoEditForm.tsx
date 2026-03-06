@@ -141,7 +141,6 @@ export default function VideoEditForm({ onFormSubmit, editData }: VideoEditFormP
 		<form
 			id="video-form"
 			className={`add-video ${formValidated ? "was-validated" : ""}`}
-			style={{ maxWidth: "800px" }}
 			ref={formRef}
 			method="post"
 			noValidate

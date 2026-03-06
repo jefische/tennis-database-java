@@ -7,12 +7,13 @@ import EditModal from "./edit/EditModal";
 import { pullTranscript } from "@/assets/types/callbacks";
 import { generateMatchSummary } from "@/utils/matchSummaryAgent";
 import { VideoCards, Videos } from "@/types";
+import ReactMarkdown from "react-markdown";
 
 export default function VideoCard({ id, title, summary, maxWidth, setAllVideos, setVideos }: VideoCards) {
 	const [modalIsOpen, setIsOpen] = useState<boolean>(false);
 	const [editModal, setEditModal] = useState<boolean>(false);
 	const [editData, setEditData] = useState<Videos>({} as Videos);
-	const [aiSummary, setAiSummary] = useState<String>(summary || "AI summary in development");
+	const [aiSummary, setAiSummary] = useState<string>(summary || "AI summary in development");
 
 	const openModal = () => setIsOpen(true);
 	const closeModal = () => setIsOpen(false);
@@ -115,7 +116,7 @@ export default function VideoCard({ id, title, summary, maxWidth, setAllVideos, 
 						{!isProduction && <Button onClick={handleTranscript}>Create Transcript</Button>}
 					</Modal.Title>
 				</Modal.Header>
-				<Modal.Body>
+				<Modal.Body className="play-video">
 					<div className="col body">
 						<iframe
 							height="100%"
@@ -127,7 +128,8 @@ export default function VideoCard({ id, title, summary, maxWidth, setAllVideos, 
 							allowFullScreen
 						></iframe>
 					</div>
-					{aiSummary && <div className="ai-summary" dangerouslySetInnerHTML={{ __html: aiSummary }} />}
+					{/* {aiSummary && <div className="ai-summary" dangerouslySetInnerHTML={{ __html: aiSummary }} />} */}
+					{aiSummary && <div className="ai-summary"><ReactMarkdown>{aiSummary}</ReactMarkdown></div>}
 				</Modal.Body>
 				<Modal.Footer>
 					<Button variant="secondary" onClick={closeModal}>
