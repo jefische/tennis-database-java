@@ -5,8 +5,8 @@ import { Fragment, useState, useEffect } from "react";
 import { setVideosFunction, Videos } from "@/assets/types";
 
 interface AddVideoTypes {
-	setAllVideos: setVideosFunction,
-	setVideos: setVideosFunction
+	setAllVideos: setVideosFunction;
+	setVideos: setVideosFunction;
 }
 
 export default function AddVideoCard({ setAllVideos, setVideos }: AddVideoTypes) {
@@ -67,7 +67,7 @@ export default function AddVideoCard({ setAllVideos, setVideos }: AddVideoTypes)
 							<Modal.Title>Add New Video</Modal.Title>
 						</Modal.Header>
 						<Modal.Body>
-							<div className="flex justify-center" style={{ maxWidth: "1280px" }}>
+							<div className="col">
 								<VideoForm onFormSubmit={handleSubmit} />
 							</div>
 						</Modal.Body>

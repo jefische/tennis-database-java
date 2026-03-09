@@ -64,7 +64,7 @@ export default function EditModal({
 							<Modal.Title>Edit Video</Modal.Title>
 						</Modal.Header>
 						<Modal.Body>
-							<div className="col body">
+							<div className="col">
 								<VideoEditForm onFormSubmit={handleSubmit} editData={editData} />
 							</div>
 						</Modal.Body>

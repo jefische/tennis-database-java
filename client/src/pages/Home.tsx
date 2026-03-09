@@ -64,13 +64,13 @@ export default function Home() {
 							<SearchBar allVideos={allVideos} setVideos={setVideos} />
 						</div>
 						<div className="video-container mb-[50px]">
-							{activeVideos.sort(sortVideos).map((x: Videos) => {
+							{activeVideos.sort(sortVideos).map((video: Videos) => {
 								return (
 									<VideoCard
-										key={x.videoId}
-										id={x.youtubeId}
-										title={x.title}
-										summary={x.summary}
+										key={video.videoId}
+										id={video.youtubeId}
+										title={video.title}
+										summary={video.summary}
 										setAllVideos={setAllVideos}
 										setVideos={setVideos}
 									/>

@@ -32,7 +32,7 @@ public class SummaryService {
     }
 
     public String generateSummary(String youtubeUrl, Video video) {
-        String endpoint = summaryServiceUrl + "/api/summary";
+        String endpoint = summaryServiceUrl + "/agent/summary";
 
         // Debug: print video details
         System.out.println("Video object: " + video);
@@ -76,6 +76,14 @@ public class SummaryService {
 
             throw new RuntimeException("No summary returned from service");
 
+        } catch (org.springframework.web.client.HttpServerErrorException e) {
+            // Check if the error response contains "No transcript available"
+            String responseBody = e.getResponseBodyAsString();
+            System.out.println("Python service error response: " + responseBody);
+            if (responseBody.contains("No transcript available")) {
+                return "No transcript available for this video";
+            }
+            throw new RuntimeException("Failed to generate summary: " + e.getMessage(), e);
         } catch (Exception e) {
             throw new RuntimeException("Failed to generate summary: " + e.getMessage(), e);
         }

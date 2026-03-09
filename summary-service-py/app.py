@@ -13,7 +13,7 @@ CORS(app)
 def health():
     return jsonify({"status": "ok"})
 
-@app.route("/api/summary", methods=["POST"])
+@app.route("/agent/summary", methods=["POST"])
 def summary():
     data = request.get_json()
 

@@ -21,11 +21,12 @@ export async function generateMatchSummary(youtubeId: string): Promise<string> {
 
 		if (!response.ok) {
 			const error = await response.json();
-			throw new Error(error.message || "Failed to generate summary");
+			throw new Error(error.error || error.message || "Failed to generate summary");
 		}
 
 		const data = await response.json();
 		return data.summary;
+		// return JSON.parse(data.summary);
 	} catch (error) {
 		console.error("Error generating match summary:", error);
 		throw new Error(

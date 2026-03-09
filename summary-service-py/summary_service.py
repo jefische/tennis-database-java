@@ -70,14 +70,32 @@ def generate_match_summary_yt_api(youtube_url: str) -> str:
         {video_transcript}
 
         OUTPUT REQUIREMENTS:
-        1. Match Summary (50-100 words MAX. DO NOT go over 100 words):
-        - Players and final score
-        - Key turning points
-        - Notable performance highlights
-        - Match significance/context
+        Return a JSON object with the following fields:
+        - "winner": Name of the winning player
+        - "score": Final match score (e.g. "6-4, 3-6, 7-6")
+        - "matchRating": Integer 1-10 rating of how exciting/competitive the match was
+        - "overview": 4-5 sentence match overview covering the final score and significance (50 words max)
+        - "highlights": Array of 3-5 key moments or standout performances as short strings
+        - "tags": Array of 2-4 descriptive tags (e.g. "five-setter", "upset", "rivalry", "comeback")
 
         FORMAT:
-        The match summary should be in paragraph form, to be inserted into an HTML web page.
+        - Return ONLY valid JSON, no markdown code fences, no extra text.
+        - Use markdown ** for bolding within the "overview" string only.
+        - Always bold the score in the overview.
+
+        EXAMPLE OUTPUT:
+        {{
+            "winner": "Roger Federer",
+            "score": "6-4, 3-6, 7-6(5)",
+            "matchRating": 8,
+            "overview": "Roger Federer edged Rafael Nadal **6-4, 3-6, 7-6(5)** in a tightly contested semifinal at the 2024 Australian Open. Federer controlled the opening set with precise serving before Nadal stormed back to level the match. The decider went to a tiebreak where Federer's nerves of steel proved decisive. He won five of the last six points to seal the victory. This was their 41st career meeting and one of their most dramatic encounters.",
+            "highlights": [
+                "Federer saved 3 break points in the opening set",
+                "Nadal's forehand winner streak in the second set",
+                "Third-set tiebreak: Federer won 5 of the last 6 points"
+            ],
+            "tags": ["three-setter", "rivalry", "tiebreak"]
+        }}
 
         TONE: Professional but engaging, suitable for tennis fans."""
 
@@ -99,7 +117,12 @@ def generate_match_summary(youtube_url: str, video_info: dict = None) -> str:
         youtube_url, add_video_info=False
     )
 
-    docs=loader.load()
+    try:
+        docs=loader.load()
+    except Exception:
+        raise Exception("No transcript available for this video")
+    if not docs:
+        raise Exception("No transcript available for this video")
     transcript=docs[0].page_content
 
     # Build canonical details section if video_info is provided
@@ -133,26 +156,50 @@ def generate_match_summary(youtube_url: str, video_info: dict = None) -> str:
         {transcript}
 
         OUTPUT REQUIREMENTS:
-        1. Match Summary (50-100 words MAX. DO NOT go over 100 words):
-        - Players and final score
-        - Key turning points
-        - Notable performance highlights
-        - Match significance/context
+        Return a JSON object with the following fields:
+        - "winner": Name of the winning player
+        - "score": Final match score (e.g. "6-4, 3-6, 7-6")
+        - "matchRating": Decimal 0-5 star rating of how exciting/competitive the match was. Always use one decimal point (e.g 1.5, 3.7, 4.5, etc..)
+        - "overview": 4-5 sentence match overview covering the final score and significance (50 words max)
+        - "highlights": Array of 3-5 key moments or standout performances as short strings
+        - "tags": Array of 2-4 descriptive tags (e.g. "five-setter", "upset", "rivalry", "comeback")
 
         FORMAT:
-        - The match summary should be text in paragraph form, to be inserted into an HTML web page.
-        - Add appropriate bolding using <b> and italics using <i> to highlight important parts of the summary.
-        - Always be sure to bold the score, and bold any statistics or figures reported in the summary.
+        - Return ONLY valid JSON, NO markdown code fences, NO extra text.
+
+        EXAMPLE OUTPUT:
+        {{
+            "winner": "Roger Federer",
+            "score": "6-4, 3-6, 7-6(5)",
+            "matchRating": 8,
+            "overview": "Roger Federer edged Rafael Nadal 6-4, 3-6, 7-6(5) in a tightly contested semifinal at the 2024 Australian Open. Federer controlled the opening set with precise serving before Nadal stormed back to level the match. The decider went to a tiebreak where Federer's nerves of steel proved decisive. He won five of the last six points to seal the victory. This was their 41st career meeting and one of their most dramatic encounters.",
+            "highlights": [
+                "Federer saved 3 break points in the opening set",
+                "Nadal's forehand winner streak in the second set",
+                "Third-set tiebreak: Federer won 5 of the last 6 points"
+            ],
+            "tags": ["three-setter", "rivalry", "tiebreak"]
+        }}
 
         TONE: Professional but engaging, suitable for tennis fans."""
 
-    # Create the chat template
-    chat_template = ChatPromptTemplate.from_messages([
+    # Invoke model directly (no template variables needed, avoids brace escaping issues)
+    result = model.invoke([
         ("system", system_message),
         ("human", "Please provide a match summary based on the transcript."),
     ])
 
-    chain = chat_template | model
-    result = chain.invoke({})
+    # # ChatPromptTemplate approach (has brace escaping issues with JSON examples)
+    # chat_template = ChatPromptTemplate.from_messages([
+    #     ("system", system_message),
+    #     ("human", "Please provide a match summary based on the transcript."),
+    # ])
+    # chain = chat_template | model
+    # result = chain.invoke({})
 
-    return result.content
+    # Strip markdown code fences if the LLM includes them despite instructions
+    content = result.content.strip()
+    content = re.sub(r'^```json\s*', '', content)
+    content = re.sub(r'\s*```$', '', content)
+
+    return content
