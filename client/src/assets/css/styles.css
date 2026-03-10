@@ -104,73 +104,38 @@ select {
 /* Archives Section ************************************************************/
 
 /*********** Sidebar filters **************/
-aside.sidebar {
-	border-right: 1px solid;
 
-	display: none;
-	flex-direction: column;
-	align-items: center;
+.scrollbar-custom {
+	scrollbar-width: thin;
+	scrollbar-color: transparent transparent;
+	transition: scrollbar-color 0.3s;
 
-	padding: 15px 15px;
-	height: 100%;
-	width: 245px;
-	max-width: 245px;
-	min-width: 245px;
-
-	ul.filter {
-		padding: 10px 0;
-
-		font-weight: 700;
-		li {
-			font-weight: 400;
-			padding: 5px;
-			label {
-				padding-left: 10px;
-			}
-		}
+	&:hover {
+		scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
 	}
 
-	.accordion-rjs {
-		max-width: 180px;
-		min-width: 180px;
-		padding-top: 10px;
-
-		.accordion-item-rjs {
-			.accordion-title-rjs {
-				border-top: 1px solid;
-				cursor: pointer;
-				display: flex;
-				font-weight: 700;
-				justify-content: space-between;
-				padding-top: 10px;
-			}
-			.accordion-title-rjs:hover h6 {
-				text-decoration: underline;
-			}
-			.accordion-title-rjs:active h6,
-			.accordion-title-rjs:active div.expand {
-				scale: 0.95;
-			}
-		}
+	/* Webkit (Chrome, Safari, Edge) */
+	&::-webkit-scrollbar {
+		width: 6px;
 	}
-}
-
-@media (min-width: 768px) {
-	aside.sidebar {
-		display: flex;
-		overflow-y: scroll;
+	&::-webkit-scrollbar-track {
+		background: transparent;
 	}
-}
-
-.content-container {
-	height: 100%;
-	overflow: auto;
+	&::-webkit-scrollbar-thumb {
+		background: transparent;
+		border-radius: 3px;
+	}
+	&:hover::-webkit-scrollbar-thumb {
+		background: rgba(255, 255, 255, 0.3);
+	}
+	&::-webkit-scrollbar-thumb:hover {
+		background: rgba(255, 255, 255, 0.5);
+	}
 }
 
 /*********** Thumbnail cards **************/
 
 main.content-container {
-	width: 100%;
 	.header-container {
 		align-items: center;
 		display: flex;
@@ -231,7 +196,6 @@ main.content-container {
 	}
 
 	.card-title {
-		/* color: #000; */
 		font-size: 16px;
 		font-weight: 600;
 	}
@@ -243,6 +207,7 @@ main.content-container {
 }
 
 .card-cover:hover .card-title {
+	text-shadow: none;
 	/* color: #fff;
 	text-shadow:
 		-1px -1px 0 #000,
@@ -406,7 +371,7 @@ form.add-video {
 /* Learn From the Pros Section ************************************************************/
 
 .hero-container {
-	height: 705px;
+	/* height: 705px; */
 
 	.herolist {
 		padding: 0;
@@ -426,7 +391,7 @@ form.add-video {
 
 #billboard-gradient {
 	position: absolute;
-	bottom: -1;
+	bottom: -1px;
 	width: 100%;
 	aspect-ratio: 1920 / 768;
 	background: transparent url("/bgs/header-gradient-overlay.png") top center;

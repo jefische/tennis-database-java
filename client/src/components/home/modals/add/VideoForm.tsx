@@ -187,14 +187,14 @@ export default function VideoForm({ onFormSubmit }: VideoFormProps) {
 						className="form-control"
 						type="number"
 						min="1970"
-						max="2025"
+						max="2026"
 						step="1"
 						name="year"
 						value={formData.year}
 						onChange={handleChange}
 						required
 					/>
-					<div className="invalid-feedback">Please enter a year between 1970-2025.</div>
+					<div className="invalid-feedback">Please enter a year between 1970-2026.</div>
 				</div>
 			</div>
 

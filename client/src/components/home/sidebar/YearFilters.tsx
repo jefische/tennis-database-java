@@ -2,8 +2,8 @@ import { setFiltersFunction, VideoFilterItem, VideoFilters } from "@/assets/type
 import { useState } from "react";
 
 interface YearFilterProps {
-	formData: VideoFilters,
-	setFormData: setFiltersFunction
+	formData: VideoFilters;
+	setFormData: setFiltersFunction;
 }
 
 export default function YearFilters({ formData, setFormData }: YearFilterProps) {
@@ -22,10 +22,11 @@ export default function YearFilters({ formData, setFormData }: YearFilterProps) 
 		setFormData({
 			...formData,
 			year: Object.fromEntries(
-				Object.entries(formData.year).map(([key,val]) => {
-					return [key, {...val, include: !select}]
-				}))
-		})
+				Object.entries(formData.year).map(([key, val]) => {
+					return [key, { ...val, include: !select }];
+				}),
+			),
+		});
 	}
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -37,7 +38,7 @@ export default function YearFilters({ formData, setFormData }: YearFilterProps) 
 				[name]: {
 					...formData.year[name],
 					include: checked,
-				} 
+				},
 			},
 		});
 		// If any individual year is unchecked, uncheck the select all input field
@@ -45,36 +46,47 @@ export default function YearFilters({ formData, setFormData }: YearFilterProps) 
 	};
 
 	return (
-		<div className="accordion-rjs">
+		<div className="accordion-rjs pt-[10px]">
 			<div className="accordion-item-rjs">
-				<div className="accordion-title-rjs" onClick={() => setIsActive(!isActive)}>
-					<h6>Year</h6>
+				<div
+					className="accordion-title-rjs flex justify-content-between border-top cursor-pointer pt-[10px]"
+					onClick={() => setIsActive(!isActive)}
+				>
+					<h6 className="hover:underline">Year</h6>
 					<div className="expand pe-[10px]">{isActive ? "-" : "+"}</div>
 				</div>
-				<div className={`accordion-content-rjs ${isActive ? "block" : "hidden"}`}>
-					<ul className="filter">
-						<li>
-							<input type="checkbox" checked={select} onChange={selectAll} />
-							<label htmlFor="selectAll">Select All ({numYears})</label>
-						</li>
-						{years.map(([key, val]) => {
-							let name = key;
-							let count = val.count;
-							return (
-								<li key={name}>
-									<input
-										type="checkbox"
-										name={name}
-										checked={formData.year[name] === undefined ? true : formData.year[name].include}
-										onChange={handleChange}
-									/>
-									<label htmlFor={name}>
-										{name} ({count})
-									</label>
-								</li>
-							);
-						})}
-					</ul>
+				<div
+					className={`grid transition-[grid-template-rows] duration-350 ease-in-out ${isActive ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+				>
+					<div className="overflow-hidden">
+						<ul className="filter py-2 px-0">
+							<li className="p-1">
+								<input type="checkbox" checked={select} onChange={selectAll} />
+								<label htmlFor="selectAll" className="ps-[10px]">
+									Select All ({numYears})
+								</label>
+							</li>
+							{years.map(([key, val]) => {
+								let name = key;
+								let count = val.count;
+								return (
+									<li key={name} className="p-1">
+										<input
+											type="checkbox"
+											name={name}
+											checked={
+												formData.year[name] === undefined ? true : formData.year[name].include
+											}
+											onChange={handleChange}
+										/>
+										<label htmlFor={name} className="ps-[10px]">
+											{name} ({count})
+										</label>
+									</li>
+								);
+							})}
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>

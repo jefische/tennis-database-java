@@ -80,7 +80,7 @@ public class SummaryService {
             // Check if the error response contains "No transcript available"
             String responseBody = e.getResponseBodyAsString();
             System.out.println("Python service error response: " + responseBody);
-            if (responseBody.contains("No transcript available")) {
+            if (responseBody.toLowerCase().contains("no transcript available")) {
                 return "No transcript available for this video";
             }
             throw new RuntimeException("Failed to generate summary: " + e.getMessage(), e);

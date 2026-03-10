@@ -30,7 +30,7 @@ export default function AddVideoCard({ setAllVideos, setVideos }: AddVideoTypes)
 			const timer = setTimeout(() => {
 				setIsSubmitted(false);
 				closeModal();
-			}, 3000); // 3 seconds
+			}, 1000); // 3 seconds
 			return () => clearTimeout(timer); // Cleanup timer on unmount
 		}
 	}, [isSubmitted, closeModal]);

@@ -5,8 +5,8 @@ import Button from "react-bootstrap/Button";
 import { pullDuration } from "@/assets/types/callbacks";
 
 interface VideoEditFormProps {
-	onFormSubmit: (data: Videos[]) => void,
-	editData: Videos
+	onFormSubmit: (data: Videos[]) => void;
+	editData: Videos;
 }
 
 export default function VideoEditForm({ onFormSubmit, editData }: VideoEditFormProps) {
@@ -24,8 +24,7 @@ export default function VideoEditForm({ onFormSubmit, editData }: VideoEditFormP
 
 		try {
 			await checkThumbnail(thumbUrl);
-			if (youtubeIdElement.current)
-				youtubeIdElement.current.setCustomValidity(""); //if an input element has a non-empty validationMessage, its checkValidity() method will return false
+			if (youtubeIdElement.current) youtubeIdElement.current.setCustomValidity(""); //if an input element has a non-empty validationMessage, its checkValidity() method will return false
 		} catch (err) {
 			console.error(err);
 			if (youtubeIdElement.current && urlFeedback.current) {
@@ -60,8 +59,7 @@ export default function VideoEditForm({ onFormSubmit, editData }: VideoEditFormP
 					}
 				})
 				.then((data) => {
-					if (youtubeIdElement.current)
-						youtubeIdElement.current.setCustomValidity("");
+					if (youtubeIdElement.current) youtubeIdElement.current.setCustomValidity("");
 					onFormSubmit(data); // Calls parent function to reload video state
 				})
 				.catch((error) => console.error(error)); // Note this will only catch like server timeout errors,
@@ -72,7 +70,7 @@ export default function VideoEditForm({ onFormSubmit, editData }: VideoEditFormP
 	// Add new handler to update video description automatically based on other fields
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
 		const { name, value } = e.target;
-		
+
 		// Create updated form data with the new value
 		const updatedFormData = {
 			...formData,
@@ -100,7 +98,7 @@ export default function VideoEditForm({ onFormSubmit, editData }: VideoEditFormP
 		// Use the updated values to build the title
 		setFormData({
 			...updatedFormData,
-			title: `${updatedFormData.player1} vs. ${updatedFormData.player2} | ${updatedFormData.tournament} ${updatedFormData.year} ${rounds} (0hr 00min)`
+			title: `${updatedFormData.player1} vs. ${updatedFormData.player2} | ${updatedFormData.tournament} ${updatedFormData.year} ${rounds} (0hr 00min)`,
 		});
 	};
 
@@ -110,7 +108,7 @@ export default function VideoEditForm({ onFormSubmit, editData }: VideoEditFormP
 			...formData,
 			[e.target.name]: e.target.value,
 		});
-	}
+	};
 
 	const setDuration = async () => {
 		const duration = await pullDuration(formData.youtubeId);
@@ -133,9 +131,9 @@ export default function VideoEditForm({ onFormSubmit, editData }: VideoEditFormP
 		}
 		setFormData({
 			...formData,
-			title: `${formData.player1} vs. ${formData.player2} | ${formData.tournament} ${formData.year} ${rounds} (${duration})`
+			title: `${formData.player1} vs. ${formData.player2} | ${formData.tournament} ${formData.year} ${rounds} (${duration})`,
 		});
-	}
+	};
 
 	return (
 		<form
@@ -177,14 +175,14 @@ export default function VideoEditForm({ onFormSubmit, editData }: VideoEditFormP
 						className="form-control"
 						type="number"
 						min="1970"
-						max="2025"
+						max="2026"
 						step="1"
 						name="year"
 						value={formData.year}
 						onChange={handleChange}
 						required
 					/>
-					<div className="invalid-feedback">Please enter a year between 1970-2025.</div>
+					<div className="invalid-feedback">Please enter a year between 1970-2026.</div>
 				</div>
 			</div>
 
@@ -269,11 +267,7 @@ export default function VideoEditForm({ onFormSubmit, editData }: VideoEditFormP
 
 			<div>
 				<label htmlFor="title">Title</label>
-				<Button 
-					variant="outline-primary" 
-					size="sm" className="mx-4 mb-2" 
-					onClick={setDuration}
-				>
+				<Button variant="outline-primary" size="sm" className="mx-4 mb-2" onClick={setDuration}>
 					YT API
 				</Button>
 				<input

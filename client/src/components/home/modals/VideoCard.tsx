@@ -202,7 +202,9 @@ export default function VideoCard({ id, title, summary, maxWidth, setAllVideos, 
 							</div>
 						</div>
 					)}
-					{summaryError && <div className="ai-summary p-4 text-sm text-red-600">{summaryError}</div>}
+					{summaryError && (
+						<div className="ai-summary p-4 text-md text-red-600 font-[600]">{summaryError}</div>
+					)}
 				</Modal.Body>
 				<Modal.Footer>
 					<Button variant="secondary" onClick={closeModal}>

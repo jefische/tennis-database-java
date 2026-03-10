@@ -3,30 +3,36 @@ import PlayerVideoCard from "../components/players/PlayerVideoCard";
 import Navbar from "../components/Navbar";
 
 export default function Players() {
-	const isProduction = import.meta.env.PROD;
+	// const isProduction = import.meta.env.PROD;
+	const isProduction = false;
 	const myWidth = "200px";
 	return (
 		<>
 			<Navbar />
 			{isProduction ? (
 				<div className="body-container bg-gray-custom">
-					<h1 style={{ textAlign: "center", paddingTop: "10%", color: "#fff" }}>Player page is under development</h1>
+					<h1 style={{ textAlign: "center", paddingTop: "10%", color: "#fff" }}>
+						Player page is under development
+					</h1>
 				</div>
 			) : (
 				<div className="body-container">
-					<main className="content-container bg-gray-custom">
+					<main className="content-container h-full overflow-y-scroll bg-gray-custom">
 						<section className="hero-container">
 							<div className="herolist">
-								<Carousel fade style={{ height: "100%" }} pause="hover" controls={false} indicators={false}>
-									<Carousel.Item interval={5000}>
+								<Carousel fade pause="hover" controls={false} indicators={false}>
+									{/* <Carousel.Item interval={5000}>
 										<img src="/bgs/novak_1920x1226.jpg" alt="hero image" />
 									</Carousel.Item>
 									<Carousel.Item interval={5000}>
-										<img src="/bgs/big3.jpeg" alt="hero image" />
-									</Carousel.Item>
+										<img src="/bgs/Osaka.webp" alt="hero image" />
+									</Carousel.Item> */}
 									<Carousel.Item interval={5000}>
-										<img src="/bgs/novak_640x408.jpg" alt="hero image" />
+										<img src="/bgs/big3_v2.jpg" alt="hero image" />
 									</Carousel.Item>
+									{/* <Carousel.Item interval={5000}>
+										<img src="/bgs/novak_640x408.jpg" alt="hero image" />
+									</Carousel.Item> */}
 								</Carousel>
 								<div id="billboard-gradient"></div>
 							</div>

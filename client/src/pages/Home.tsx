@@ -2,6 +2,7 @@ import VideoCard from "../components/home/modals/VideoCard";
 import AddVideoCard from "../components/home/modals/add/AddVideoCard";
 import Sidebar from "../components/home/sidebar/Sidebar";
 import Navbar from "../components/Navbar";
+import TagFilters from "../components/TagFilters";
 import { SearchBar } from "../components/SearchBar";
 import { useState, useEffect } from "react";
 import { VideoFilters, Videos } from "@/types";
@@ -56,13 +57,14 @@ export default function Home() {
 			<Navbar />
 
 			<div className="body-container">
-				<section className="flex bg-gray-custom" style={{ height: "100%" }}>
+				<section className="flex bg-gray-custom h-full">
 					<Sidebar allVideos={allVideos} setVideos={setVideos} initFilters={filterDataSorted} />
-					<main className="archives content-container px-[50px]">
+					<main className="archives content-container w-full overflow-auto px-[50px] scrollbar-custom">
 						<div className="header-container py-[50px]">
 							<h1>Welcome to the Match Archive</h1>
 							<SearchBar allVideos={allVideos} setVideos={setVideos} />
 						</div>
+						<TagFilters></TagFilters>
 						<div className="video-container mb-[50px]">
 							{activeVideos.sort(sortVideos).map((video: Videos) => {
 								return (

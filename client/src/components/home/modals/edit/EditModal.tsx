@@ -32,7 +32,7 @@ export default function EditModal({
 			const timer = setTimeout(() => {
 				setIsSubmitted(false);
 				closeEditModal();
-			}, 3000); // 3 seconds
+			}, 1000); // 3 seconds
 			return () => clearTimeout(timer); // Cleanup timer if the component unmounts causing memory leaks, unpredictable UI behavior. React will start throwing warnings if this happens saying can't call setState on an unmounted component.
 		}
 	}, [isSubmitted, closeEditModal]);

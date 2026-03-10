@@ -4,10 +4,9 @@ import YearFilters from "./YearFilters";
 import { Videos, setVideosFunction, VideoFilters } from "@/assets/types";
 
 interface SidebarProps {
-	allVideos: Videos[],
-	setVideos: setVideosFunction,
-	initFilters: VideoFilters
-
+	allVideos: Videos[];
+	setVideos: setVideosFunction;
+	initFilters: VideoFilters;
 }
 
 export default function Sidebar({ allVideos, setVideos, initFilters }: SidebarProps) {
@@ -28,9 +27,13 @@ export default function Sidebar({ allVideos, setVideos, initFilters }: SidebarPr
 		// Then, filter formData for tournaments to include by years selected from above.
 		for (var key in formData.tournament) {
 			if (formData.tournament[key].include == true) {
-				const temp: Videos[] = allVideos.filter((x) => formData.tournament[key].title === x.tournament && yearsToInclude.includes(x.year));
+				const temp: Videos[] = allVideos.filter(
+					(x) => formData.tournament[key].title === x.tournament && yearsToInclude.includes(x.year),
+				);
 
-				if (temp.length > 0) {filterVideos = filterVideos.concat(temp);}
+				if (temp.length > 0) {
+					filterVideos = filterVideos.concat(temp);
+				}
 			}
 		}
 		setVideos(filterVideos);
@@ -41,7 +44,7 @@ export default function Sidebar({ allVideos, setVideos, initFilters }: SidebarPr
 	}, [allVideos]); // This dependency allows setFormData to run twice. Initially allVideos is empty on first render while the data is fetched from our API.
 
 	return (
-		<aside className="sidebar">
+		<aside className="hidden md:flex flex-col items-center w-3xs p-4 border-r-2 border-gray-600 overflow-y-scroll scrollbar-custom">
 			<form action="" className="w-[180px]" onSubmit={handleSubmit}>
 				Filter Match Results
 				<TournamentFilters formData={formData} setFormData={setFormData} />
