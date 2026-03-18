@@ -32,19 +32,28 @@ def extract_video_id(url_or_id: str) -> str:
 
     raise ValueError(f"Could not extract video ID from: {url_or_id}")
 
+ytt_api = YouTubeTranscriptApi()
+
 def fetch_transcript(video_id: str) -> str:
     """Fetch transcript from YouTube using youtube-transcript-api."""
+    print(f"[TRANSCRIPT] Attempting to fetch transcript for video: {video_id}")
     try:
-        transcript_list = YouTubeTranscriptApi.get_transcript(video_id, languages=['en'])
-        transcript_text = ' '.join([entry['text'] for entry in transcript_list])
+        print(f"[TRANSCRIPT] Trying English transcript...")
+        transcript = ytt_api.fetch(video_id, languages=['en'])
+        print(f"[TRANSCRIPT] English transcript found ({len(transcript)} entries)")
+        transcript_text = ' '.join([entry.text for entry in transcript])
         return transcript_text
     except Exception as e:
+        print(f"[TRANSCRIPT] English transcript failed: {e}")
         # Try to get any available transcript
         try:
-            transcript_list = YouTubeTranscriptApi.get_transcript(video_id)
-            transcript_text = ' '.join([entry['text'] for entry in transcript_list])
+            print(f"[TRANSCRIPT] Trying any available language...")
+            transcript = ytt_api.fetch(video_id)
+            print(f"[TRANSCRIPT] Fallback transcript found ({len(transcript)} entries)")
+            transcript_text = ' '.join([entry.text for entry in transcript])
             return transcript_text
         except Exception as e2:
+            print(f"[TRANSCRIPT] All attempts failed: {e2}")
             raise Exception(f"Failed to get transcript: {str(e2)}")
 
 # Apply the youtubeapi directly with custom functions above
@@ -114,17 +123,31 @@ def generate_match_summary_yt_api(youtube_url: str) -> str:
 
 # Apply the langchain community youtubeloader package which uses youtubeapi internally
 def generate_match_summary(youtube_url: str, video_info: dict = None) -> str:
-    loader = YoutubeLoader.from_youtube_url(
-        youtube_url, add_video_info=False
-    )
+    print(f"[SUMMARY] Starting summary generation for: {youtube_url}")
+    video_id = extract_video_id(youtube_url)
+    print(f"[SUMMARY] Extracted video ID: {video_id}")
 
     try:
-        docs=loader.load()
-    except Exception:
-        raise Exception("No transcript available for this video")
-    if not docs:
-        raise Exception("No transcript available for this video")
-    transcript=docs[0].page_content
+        print(f"[SUMMARY] Step 1: Trying fetch_transcript...")
+        transcript = fetch_transcript(video_id)
+        print(f"[SUMMARY] Transcript fetched ({len(transcript)} chars)")
+    except Exception as e:
+        print(f"[SUMMARY] fetch_transcript failed: {e}")
+        # Fallback to YoutubeLoader which may find other transcript types
+        try:
+            print(f"[SUMMARY] Step 2: Trying YoutubeLoader fallback...")
+            loader = YoutubeLoader.from_youtube_url(
+                youtube_url, add_video_info=False
+            )
+            docs = loader.load()
+            if not docs:
+                print(f"[SUMMARY] YoutubeLoader returned empty docs")
+                raise Exception("No transcript available for this video")
+            transcript = docs[0].page_content
+            print(f"[SUMMARY] YoutubeLoader transcript fetched ({len(transcript)} chars)")
+        except Exception as e2:
+            print(f"[SUMMARY] YoutubeLoader also failed: {e2}")
+            raise Exception("No transcript available for this video")
 
     # Build canonical details section if video_info is provided
     canonical_details = ""
