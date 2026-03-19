@@ -45,6 +45,7 @@ public class VideoService {
 			toEdit.setTitle(video.getTitle());
 			toEdit.setTournament(video.getTournament());
 			toEdit.setYear(video.getYear());
+			toEdit.setDuration(video.getDuration());
 			videoRepository.save(toEdit);
 			return true;
 		}

@@ -49,6 +49,7 @@ export interface Videos {
 	title: string;
 	round: "1st" | "2nd" | "3rd" | "4th" | "Quarterfinals" | "Semifinals" | "Finals";
 	summary?: string;
+	duration?: string;
 }
 
 // export interface VideoFilters {

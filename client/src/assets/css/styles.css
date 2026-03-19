@@ -54,15 +54,6 @@ select {
 }
 
 .landing-page {
-	align-items: center;
-	display: flex;
-	height: 100%;
-	justify-content: center;
-	text-align: center;
-
-	background-image: url("/bgs/wawrinka.jpg");
-	background-position: center;
-	background-size: cover;
 
 	div {
 		animation: mymove 3s;

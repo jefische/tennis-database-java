@@ -17,12 +17,12 @@ import lombok.NoArgsConstructor;
 @Data
 public class Video {
 	
-	@Column(name="videoId")
+	@Column
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer videoId;
 
-	@Column(name="tournament")
+	@Column
 	private String tournament;
 
 	//year is a reserved keyword in H2 database. 
@@ -30,23 +30,26 @@ public class Video {
 	@Column(name="video_year") // Escape the year column name
 	private Integer year;
 
-	@Column(name="youtubeId", unique = true)
+	@Column(unique = true)
 	private String youtubeId;
 
-	@Column(name="player1")
+	@Column
 	private String player1;
 
-	@Column(name="player2")
+	@Column
 	private String player2;
 
-	@Column(name="title")
+	@Column
 	private String title;
 
-	@Column(name="round")
+	@Column
 	private String round;
 
-	@Column(name="summary", columnDefinition = "TEXT")
+	@Column(columnDefinition = "TEXT") // this overrides default DDL of varchar(255). text allows for ~65k characters
 	private String summary;
+
+	@Column
+	private String duration;
 
 
 	/**

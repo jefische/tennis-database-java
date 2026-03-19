@@ -4,7 +4,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { Fragment, useState } from "react";
 import EditModal from "./edit/EditModal";
-import { pullTranscript } from "@/assets/types/callbacks";
+import { pullTranscript } from "@/utils/callbacks";
 import { generateMatchSummary } from "@/utils/matchSummaryAgent";
 import { VideoCards, Videos } from "@/types";
 import { Star } from "lucide-react";

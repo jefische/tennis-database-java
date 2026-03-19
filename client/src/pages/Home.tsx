@@ -7,7 +7,7 @@ import { SearchBar } from "../components/SearchBar";
 import { useState, useEffect } from "react";
 import { VideoFilters, Videos } from "@/types";
 
-import { sortVideos, setFilterData } from "../assets/types/helpers";
+import { sortVideos, setFilterData } from "../utils/helpers";
 
 export default function Home() {
 	const [activeVideos, setVideos] = useState<Videos[]>([]);

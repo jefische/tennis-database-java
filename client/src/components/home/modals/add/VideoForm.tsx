@@ -1,8 +1,8 @@
 import { useState, useRef, forwardRef } from "react";
-import { checkThumbnail } from "../../../../assets/types/helpers";
+import { checkThumbnail } from "../../../../utils/helpers";
 import { Videos } from "@/assets/types";
 import Button from "react-bootstrap/Button";
-import { pullDuration } from "@/assets/types/callbacks";
+import { pullDuration } from "@/utils/callbacks";
 
 const defaultData = {
 	tournament: "US Open",
@@ -12,6 +12,7 @@ const defaultData = {
 	player1: "Caroline Wozniacki",
 	player2: "Nao Hibino",
 	title: "Caroline Wozniacki vs. Nao Hibino | 2024 US Open Round 1 (43 min)",
+	duration: "(0hr 43min)",
 };
 
 interface VideoFormProps {
@@ -255,7 +256,7 @@ export default function VideoForm({ onFormSubmit }: VideoFormProps) {
 						placeholder="e.g. Carlos Alcaraz"
 						value={formData.player1}
 						onChange={handleChange}
-						pattern="^[a-zA-Z\s-']+$"
+						pattern="[a-zA-Z'\s\-]+" // Letters, hyphens and apostrophes only
 					/>
 					<div className="invalid-feedback">Please enter a player name (characters only).</div>
 				</div>
@@ -271,7 +272,7 @@ export default function VideoForm({ onFormSubmit }: VideoFormProps) {
 						placeholder="e.g. Tommy Paul"
 						value={formData.player2}
 						onChange={handleChange}
-						pattern="^[a-zA-Z\s-']+$"
+						pattern="[a-zA-Z'\s\-]+" // Letters, hyphens and apostrophes only
 					/>
 					<div className="invalid-feedback">Please enter a player name (characters only).</div>
 				</div>
