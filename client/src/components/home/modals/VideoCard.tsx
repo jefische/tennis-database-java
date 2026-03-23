@@ -18,7 +18,7 @@ interface AISummary {
 	tags: string[];
 }
 
-export default function VideoCard({ id, title, summary, maxWidth, setAllVideos, setVideos }: VideoCards) {
+export default function VideoCard({ id, title, duration, summary, maxWidth, setAllVideos, setVideos }: VideoCards) {
 	const [modalIsOpen, setIsOpen] = useState<boolean>(false);
 	const [editModal, setEditModal] = useState<boolean>(false);
 	const [editData, setEditData] = useState<Videos>({} as Videos);
@@ -130,7 +130,7 @@ export default function VideoCard({ id, title, summary, maxWidth, setAllVideos, 
 						/>
 					</DropdownButton>
 				)}
-				<p className="card-title">{title}</p>
+				<p className="card-title">{title} ({duration})</p>
 			</div>
 			<Modal
 				show={modalIsOpen}
@@ -142,7 +142,7 @@ export default function VideoCard({ id, title, summary, maxWidth, setAllVideos, 
 			>
 				<Modal.Header closeButton>
 					<Modal.Title className="col">
-						{title}
+						{title} ({duration})
 						{!isProduction && <Button onClick={handleTranscript}>Create Transcript</Button>}
 					</Modal.Title>
 				</Modal.Header>

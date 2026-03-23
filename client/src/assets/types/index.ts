@@ -83,6 +83,7 @@ export type setFiltersFunction = Dispatch<SetStateAction<VideoFilters>>;
 export interface VideoCards {
 	id: string;
 	title: string;
+	duration?: string;
 	maxWidth?: number;
 	summary?: string;
 	setAllVideos: setVideosFunction;

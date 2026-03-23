@@ -98,11 +98,11 @@ export default function VideoEditForm({ onFormSubmit, editData }: VideoEditFormP
 		// Use the updated values to build the title
 		setFormData({
 			...updatedFormData,
-			title: `${updatedFormData.player1} vs. ${updatedFormData.player2} | ${updatedFormData.tournament} ${updatedFormData.year} ${rounds} (${updatedFormData.duration})`,
+			title: `${updatedFormData.player1} vs. ${updatedFormData.player2} | ${updatedFormData.tournament} ${updatedFormData.year} ${rounds}`,
 		});
 	};
 
-	// Separate handler for typing into the title field
+	// Separate handler for user input into the title field
 	const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
 		setFormData({
 			...formData,
@@ -226,7 +226,7 @@ export default function VideoEditForm({ onFormSubmit, editData }: VideoEditFormP
 						placeholder="e.g. Carlos Alcaraz"
 						value={formData.player1}
 						onChange={handleChange}
-						pattern="[a-zA-Z'\s\-]+" // Letters, hyphens and apostrophes only
+						pattern="[a-zA-Z'\s\-/]+" // Letters, hyphens and apostrophes only
 					/>
 					<div className="invalid-feedback">Please enter a player name (characters only).</div>
 				</div>
@@ -242,7 +242,7 @@ export default function VideoEditForm({ onFormSubmit, editData }: VideoEditFormP
 						placeholder="e.g. Tommy Paul"
 						value={formData.player2}
 						onChange={handleChange}
-						pattern="[a-zA-Z'\s\-]+" // Letters, hyphens and apostrophes only
+						pattern="[a-zA-Z'\s\-/]+" // Letters, hyphens and apostrophes only
 					/>
 					<div className="invalid-feedback">Please enter a player name (characters only).</div>
 				</div>

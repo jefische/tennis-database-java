@@ -72,6 +72,7 @@ export default function Home() {
 										key={video.videoId}
 										id={video.youtubeId}
 										title={video.title}
+										duration={video.duration}
 										summary={video.summary}
 										setAllVideos={setAllVideos}
 										setVideos={setVideos}
