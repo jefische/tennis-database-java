@@ -39,11 +39,29 @@ def get_all_videos() -> list[dict]:
 if __name__ == "__main__":
     dry_run = "--dry-run" in sys.argv
 
+    # Parse --min-id=N and --max-id=N options
+    min_id = None
+    max_id = None
+    for arg in sys.argv:
+        if arg.startswith("--min-id="):
+            min_id = int(arg.split("=", 1)[1])
+        elif arg.startswith("--max-id="):
+            max_id = int(arg.split("=", 1)[1])
+
     if dry_run:
         print("=== DRY RUN MODE (no API calls) ===\n")
 
     videos = get_all_videos()
     print(f"Found {len(videos)} total videos\n")
+
+    if min_id is not None:
+        videos = [v for v in videos if v.get("videoId", 0) >= min_id]
+        print(f"Filtered to {len(videos)} videos with videoId >= {min_id}")
+    if max_id is not None:
+        videos = [v for v in videos if v.get("videoId", 0) <= max_id]
+        print(f"Filtered to {len(videos)} videos with videoId <= {max_id}")
+    if min_id is not None or max_id is not None:
+        print()
 
     to_process = [v for v in videos if needs_summary(v)]
     print(f"{len(to_process)} videos need summaries\n")
@@ -82,3 +100,16 @@ if __name__ == "__main__":
 
 # Run for real:
 # python batchSummary.py
+
+# Only process videos with videoId >= 100:
+# python batchSummary.py --min-id=100
+
+
+# python batchSummary.py --max-id=50
+
+# Seems like 18 videos is the limit before my ip address is blocked
+# Only process videos with 20 <= videoId <= 80:
+# python batchSummary.py --min-id=20 --max-id=80
+
+# Combine with dry run
+# python batchSummary.py --dry-run --min-id=100

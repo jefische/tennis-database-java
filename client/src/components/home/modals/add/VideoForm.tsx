@@ -111,7 +111,7 @@ export default function VideoForm({ onFormSubmit }: VideoFormProps) {
 		// Use the updated values to build the title
 		setFormData({
 			...updatedFormData,
-			title: `${updatedFormData.player1} vs. ${updatedFormData.player2} | ${updatedFormData.tournament} ${updatedFormData.year} ${rounds} (0hr 00min)`,
+			title: `${updatedFormData.player1} vs. ${updatedFormData.player2} | ${updatedFormData.tournament} ${updatedFormData.year} ${rounds}`,
 		});
 	};
 
@@ -125,26 +125,9 @@ export default function VideoForm({ onFormSubmit }: VideoFormProps) {
 
 	const setDuration = async () => {
 		const duration = await pullDuration(formData.youtubeId);
-		let rounds: string = formData.round;
-		switch (formData.round) {
-			case "1st":
-				rounds = "Round 1";
-				break;
-			case "2nd":
-				rounds = "Round 2";
-				break;
-			case "3rd":
-				rounds = "Round 3";
-				break;
-			case "4th":
-				rounds = "Round 4";
-				break;
-			default:
-				break;
-		}
 		setFormData({
 			...formData,
-			title: `${formData.player1} vs. ${formData.player2} | ${formData.tournament} ${formData.year} ${rounds} (${duration})`,
+			duration: duration,
 		});
 	};
 
@@ -256,7 +239,7 @@ export default function VideoForm({ onFormSubmit }: VideoFormProps) {
 						placeholder="e.g. Carlos Alcaraz"
 						value={formData.player1}
 						onChange={handleChange}
-						pattern="[a-zA-Z'\s\-]+" // Letters, hyphens and apostrophes only
+						pattern="[a-zA-Z'\s\-\/]+" // Letters, hyphens and apostrophes only
 					/>
 					<div className="invalid-feedback">Please enter a player name (characters only).</div>
 				</div>
@@ -272,7 +255,7 @@ export default function VideoForm({ onFormSubmit }: VideoFormProps) {
 						placeholder="e.g. Tommy Paul"
 						value={formData.player2}
 						onChange={handleChange}
-						pattern="[a-zA-Z'\s\-]+" // Letters, hyphens and apostrophes only
+						pattern="[a-zA-Z'\s\-\/]+" // Letters, hyphens and apostrophes only
 					/>
 					<div className="invalid-feedback">Please enter a player name (characters only).</div>
 				</div>

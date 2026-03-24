@@ -1,5 +1,15 @@
 import { Videos, VideoFilters } from "@/types"
 
+const ROUND_ORDER: Record<string, number> = {
+  "Finals": 1,
+  "Semifinals": 2,
+  "Quarterfinals": 3,
+  "4th": 4,
+  "3rd": 5,
+  "2nd": 6,
+  "1st": 7,
+};
+
 export function sortVideos(a : Videos, b: Videos): number {
 	const nameA: string = a.tournament.toUpperCase();
 	const nameB: string = b.tournament.toUpperCase();
@@ -7,16 +17,28 @@ export function sortVideos(a : Videos, b: Videos): number {
 	const yearA: number = a.year;
 	const yearB: number = b.year;
 
+	const roundA: number = ROUND_ORDER[a.round] ?? 99;
+	const roundB: number = ROUND_ORDER[b.round] ?? 99;
+
 	if (nameA < nameB) {
 		return -1;
 	}
 	if (nameA > nameB) {
 		return 1;
 	}
-	
-	// If it's the same tournament, sort by year
-	return yearB - yearA;
-	
+	if (nameA === nameB) {
+		if (yearA < yearB) {
+			return 1;
+		}
+		if (yearA > yearB) {
+			return -1;
+		}
+		if (yearA === yearB) {
+			return roundA - roundB;
+		}
+	}
+
+	return 0;
 }
 
 export function setFilterData(acc: VideoFilters, x: Videos): VideoFilters {

@@ -146,8 +146,8 @@ export default function VideoCard({ id, title, duration, summary, maxWidth, setA
 						{!isProduction && <Button onClick={handleTranscript}>Create Transcript</Button>}
 					</Modal.Title>
 				</Modal.Header>
-				<Modal.Body className="play-video">
-					<div className="col body">
+				<Modal.Body className="flex flex-col xl:flex-row gap-[15px] h-[80vh]">
+					<div className="basis-2/3 shrink-0">
 						<iframe
 							height="100%"
 							width="100%"

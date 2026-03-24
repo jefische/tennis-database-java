@@ -226,7 +226,7 @@ export default function VideoEditForm({ onFormSubmit, editData }: VideoEditFormP
 						placeholder="e.g. Carlos Alcaraz"
 						value={formData.player1}
 						onChange={handleChange}
-						pattern="[a-zA-Z'\s\-/]+" // Letters, hyphens and apostrophes only
+						pattern="[a-zA-Z'\s\-\/]+" // Letters, hyphens, forward slash and apostrophes only
 					/>
 					<div className="invalid-feedback">Please enter a player name (characters only).</div>
 				</div>
@@ -242,7 +242,7 @@ export default function VideoEditForm({ onFormSubmit, editData }: VideoEditFormP
 						placeholder="e.g. Tommy Paul"
 						value={formData.player2}
 						onChange={handleChange}
-						pattern="[a-zA-Z'\s\-/]+" // Letters, hyphens and apostrophes only
+						pattern="[a-zA-Z'\s\-\/]+" // Letters, hyphens, forward slash and apostrophes only
 					/>
 					<div className="invalid-feedback">Please enter a player name (characters only).</div>
 				</div>
