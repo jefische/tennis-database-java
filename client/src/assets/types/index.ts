@@ -47,7 +47,7 @@ export interface Videos {
 	player1: string;
 	player2: string;
 	title: string;
-	round: "1st" | "2nd" | "3rd" | "4th" | "Quarterfinals" | "Semifinals" | "Finals";
+	round: "1st" | "2nd" | "3rd" | "4th" | "Quarterfinals" | "Semifinals" | "Finals" | "Exhibition";
 	summary?: string;
 	duration?: string;
 }

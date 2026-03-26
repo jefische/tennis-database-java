@@ -9,24 +9,22 @@ interface SearchBarProps {
 export function SearchBar({ allVideos, setVideos }: SearchBarProps ) {
 	const [query, setQuery] = useState<string>("");
 
-	const results: Videos[] = filterItems(allVideos, query);
-	
 	// Search filter is run against the video title/description field
 	function filterItems(items: Videos[], query: string) {
 		query = query.toLowerCase();
-		
+
 		return items.filter((item) => {
-			// return item.player1.split(" ").some((name) => name.toLowerCase().startsWith(query));
 			return item.title.toLowerCase().includes(query);
 		});
 	}
-	
+
 	function handleSearchInput(e: React.ChangeEvent<HTMLInputElement>): void {
-		setQuery(e.target.value);
-		if (e.target.value == "") {
+		const value = e.target.value;
+		setQuery(value);
+		if (value === "") {
 			setVideos(allVideos);
 		} else {
-			setVideos(results);
+			setVideos(filterItems(allVideos, value));
 		}
 	}
 

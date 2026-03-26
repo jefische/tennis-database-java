@@ -8,6 +8,7 @@ const ROUND_ORDER: Record<string, number> = {
   "3rd": 5,
   "2nd": 6,
   "1st": 7,
+  "Exhibition": 8,
 };
 
 export function sortVideos(a : Videos, b: Videos): number {
@@ -39,6 +40,7 @@ export function sortVideos(a : Videos, b: Videos): number {
 	}
 
 	return 0;
+
 }
 
 export function setFilterData(acc: VideoFilters, x: Videos): VideoFilters {
