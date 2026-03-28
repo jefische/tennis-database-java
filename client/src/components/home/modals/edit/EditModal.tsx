@@ -1,6 +1,6 @@
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import VideoEditForm from "./VideoEditForm";
+import VideoForm from "../VideoForm";
 import { useState, useEffect } from "react";
 import { Videos, setVideosFunction } from "@/assets/types";
 
@@ -65,7 +65,12 @@ export default function EditModal({
 						</Modal.Header>
 						<Modal.Body>
 							<div className="col">
-								<VideoEditForm onFormSubmit={handleSubmit} editData={editData} />
+								<VideoForm
+									initialData={editData}
+									HTTPmethod="PUT"
+									endpoint="videos/edit"
+									onFormSubmit={handleSubmit}
+								/>
 							</div>
 						</Modal.Body>
 						<Modal.Footer>

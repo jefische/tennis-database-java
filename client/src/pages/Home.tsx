@@ -1,5 +1,5 @@
 import VideoCard from "../components/home/modals/VideoCard";
-import AddVideoCard from "../components/home/modals/add/AddVideoCard";
+import AddModal from "../components/home/modals/add/AddModal";
 import Sidebar from "../components/home/sidebar/Sidebar";
 import Navbar from "../components/Navbar";
 import TagFilters from "../components/TagFilters";
@@ -79,7 +79,7 @@ export default function Home() {
 									/>
 								);
 							})}
-							{!isProduction && <AddVideoCard setAllVideos={setAllVideos} setVideos={setVideos} />}
+							{!isProduction && <AddModal setAllVideos={setAllVideos} setVideos={setVideos} />}
 						</div>
 					</main>
 				</section>

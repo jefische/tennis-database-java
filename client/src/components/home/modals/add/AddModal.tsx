@@ -1,15 +1,26 @@
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import VideoForm from "./VideoForm";
+import VideoForm from "../VideoForm";
 import { Fragment, useState, useEffect } from "react";
 import { setVideosFunction, Videos } from "@/assets/types";
+
+const defaultData: Omit<Videos, "videoId"> = {
+	tournament: "US Open",
+	year: 2024,
+	youtubeId: "JFwsha7u1IE",
+	round: "1st",
+	player1: "Caroline Wozniacki",
+	player2: "Nao Hibino",
+	title: "Caroline Wozniacki vs. Nao Hibino | 2024 US Open Round 1 (43 min)",
+	duration: "(0hr 43min)",
+};
 
 interface AddVideoTypes {
 	setAllVideos: setVideosFunction;
 	setVideos: setVideosFunction;
 }
 
-export default function AddVideoCard({ setAllVideos, setVideos }: AddVideoTypes) {
+export default function AddModal({ setAllVideos, setVideos }: AddVideoTypes) {
 	const [modalIsOpen, setIsOpen] = useState<boolean>(false);
 	// The Parent (Modal Component) holds the isSubmitted state.
 	// The Child (Form Component) triggers setIsSubmitted(true) when the form is submitted.
@@ -54,33 +65,36 @@ export default function AddVideoCard({ setAllVideos, setVideos }: AddVideoTypes)
 					</Modal.Body>
 				</Modal>
 			) : (
-				<>
-					<Modal
-						show={modalIsOpen}
-						onHide={closeModal}
-						centered
-						backdrop="static"
-						aria-labelledby="video modal"
-						dialogClassName="modal-50w"
-					>
-						<Modal.Header closeButton>
-							<Modal.Title>Add New Video</Modal.Title>
-						</Modal.Header>
-						<Modal.Body>
-							<div className="col">
-								<VideoForm onFormSubmit={handleSubmit} />
-							</div>
-						</Modal.Body>
-						<Modal.Footer>
-							<Button variant="primary" form="video-form" type="submit">
-								Save
-							</Button>
-							<Button variant="secondary" onClick={closeModal}>
-								Close
-							</Button>
-						</Modal.Footer>
-					</Modal>
-				</>
+				<Modal
+					show={modalIsOpen}
+					onHide={closeModal}
+					centered
+					backdrop="static"
+					aria-labelledby="video modal"
+					dialogClassName="modal-50w"
+				>
+					<Modal.Header closeButton>
+						<Modal.Title>Add New Video</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						<div className="col">
+							<VideoForm
+								initialData={defaultData}
+								HTTPmethod="POST"
+								endpoint="videos/add"
+								onFormSubmit={handleSubmit}
+							/>
+						</div>
+					</Modal.Body>
+					<Modal.Footer>
+						<Button variant="primary" form="video-form" type="submit">
+							Save
+						</Button>
+						<Button variant="secondary" onClick={closeModal}>
+							Close
+						</Button>
+					</Modal.Footer>
+				</Modal>
 			)}
 		</Fragment>
 	);
