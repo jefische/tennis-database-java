@@ -2,19 +2,20 @@ import { useState } from "react";
 import { setVideosFunction, Videos } from "@/types";
 
 interface SearchBarProps {
-	allVideos: Videos[],
-	setVideos: setVideosFunction,
+	allVideos: Videos[];
+	setVideos: setVideosFunction;
 }
 
-export function SearchBar({ allVideos, setVideos }: SearchBarProps ) {
+export function SearchBar({ allVideos, setVideos }: SearchBarProps) {
 	const [query, setQuery] = useState<string>("");
 
 	// Search filter is run against the video title/description field
 	function filterItems(items: Videos[], query: string) {
 		query = query.toLowerCase();
+		const words = query.split(/\s+/);
 
 		return items.filter((item) => {
-			return item.title.toLowerCase().includes(query);
+			return words.every((word) => item.title.toLowerCase().includes(word));
 		});
 	}
 
@@ -33,7 +34,7 @@ export function SearchBar({ allVideos, setVideos }: SearchBarProps ) {
 			<input
 				className="search-bar"
 				type="text"
-				placeholder="Search by Player"
+				placeholder="Search by Player or Video Title"
 				value={query}
 				onChange={handleSearchInput}
 			/>
