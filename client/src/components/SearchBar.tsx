@@ -33,6 +33,7 @@ export function SearchBar({ allVideos, setVideos }: SearchBarProps) {
 		<>
 			<input
 				className="search-bar"
+				name="searchBar"
 				type="text"
 				placeholder="Search by Player or Video Title"
 				value={query}

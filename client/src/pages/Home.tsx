@@ -19,8 +19,8 @@ export default function Home() {
 	const baseURL: string = import.meta.env.VITE_API_URL;
 
 	const filterData: VideoFilters = allVideos.reduce(setFilterData, { tournament: {}, year: {} });
-	// console.log("filter data...")
-	// console.log(filterData)
+	// console.log("filter data...");
+	// console.log(filterData);
 
 	// Sort the initial data object by keys
 	const filterDataSorted: VideoFilters = { tournament: {}, year: {} };

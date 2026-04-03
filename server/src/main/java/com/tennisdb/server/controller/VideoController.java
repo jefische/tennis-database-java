@@ -1,11 +1,13 @@
 package com.tennisdb.server.controller;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import com.tennisdb.server.service.VideoService;
 import com.tennisdb.server.service.SummaryService;
 import com.tennisdb.server.dto.ErrorResponse;
-import com.tennisdb.server.dto.SummaryResponse;
+// import com.tennisdb.server.dto.SummaryResponse;
+import com.tennisdb.server.dto.VideoResponse;
 import com.tennisdb.server.model.Video;
 
 import org.springframework.http.ResponseEntity;
@@ -33,7 +35,17 @@ public class VideoController {
 	@GetMapping(value = "videos")
 	public ResponseEntity<List<Video>> getVideos() {
 		List<Video> videos = videoService.getVideos();
-		return ResponseEntity.status(200).body(videos);
+		return ResponseEntity.status(200).body(videos);	
+	}
+
+	@GetMapping(value = "videosAI")
+	public ResponseEntity<List<VideoResponse>> getVideosAI() {
+		List<Video> videos = videoService.getVideos();
+		List<VideoResponse> videoReponses = new ArrayList<>();
+		for (Video v: videos) {
+			videoReponses.add(videoService.mapToVideoResponse(v));
+		}
+		return ResponseEntity.status(200).body(videoReponses);
 	}
 
 	@GetMapping(value = "videos/{youtubeId}")
@@ -100,7 +112,7 @@ public class VideoController {
 			// Save summary to video entity
 			summaryService.saveSummaryToVideo(youtubeId, summary);
 
-			return ResponseEntity.ok(new SummaryResponse(summary));
+			return ResponseEntity.ok(summary);
 		} catch(Exception e) {
 			return ResponseEntity.status(500)
 				.body(new ErrorResponse(500, "Failed to generate summary: " + e.getMessage()));

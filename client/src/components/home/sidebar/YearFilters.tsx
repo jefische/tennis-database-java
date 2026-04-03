@@ -1,4 +1,4 @@
-import { setFiltersFunction, VideoFilterItem, VideoFilters } from "@/assets/types";
+import { setFiltersFunction, VideoFilters, YearFilterItem } from "@/assets/types";
 import { useState } from "react";
 
 interface YearFilterProps {
@@ -12,7 +12,7 @@ export default function YearFilters({ formData, setFormData }: YearFilterProps) 
 	const [select, setSelect] = useState(true);
 
 	let numYears: number = 0; // for Select All count
-	const years: [string, VideoFilterItem][] = Object.entries(formData.year).filter(([key, val]) => {
+	const years: [string, YearFilterItem][] = Object.entries(formData.year).filter(([key, val]) => {
 		numYears += val.count;
 		return key;
 	});

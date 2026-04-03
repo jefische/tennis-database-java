@@ -79,7 +79,7 @@ export default function AddModal({ setAllVideos, setVideos }: AddVideoTypes) {
 					<Modal.Body>
 						<div className="col">
 							<VideoForm
-								initialData={defaultData}
+								initialData={{}}
 								HTTPmethod="POST"
 								endpoint="videos/add"
 								onFormSubmit={handleSubmit}

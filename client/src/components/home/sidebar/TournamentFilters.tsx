@@ -1,4 +1,4 @@
-import { setFiltersFunction, VideoFilters, VideoFilterItem } from "@/assets/types";
+import { setFiltersFunction, VideoFilters, TournamentFilterItem } from "@/assets/types";
 import { useState } from "react";
 
 interface TournamentFilterProps {
@@ -12,7 +12,7 @@ export default function TournamentFilters({ formData, setFormData }: TournamentF
 	const [select, setSelect] = useState(true);
 
 	let numTournaments: number = 0; // for Select All count
-	const tournaments: [string, VideoFilterItem][] = Object.entries(formData.tournament).filter(([key, val]) => {
+	const tournaments: [string, TournamentFilterItem][] = Object.entries(formData.tournament).filter(([key, val]) => {
 		numTournaments += val.count;
 		return key;
 	});

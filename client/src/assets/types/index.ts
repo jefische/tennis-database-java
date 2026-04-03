@@ -41,17 +41,18 @@ import { Dispatch, SetStateAction } from "react";
 
 export interface Videos {
 	videoId: number;
-	tournament: "Australian Open" | "French Open" | "Wimbledon" | "US Open";
+	tournament: "Australian Open" | "French Open" | "Wimbledon" | "US Open" | "Indian Wells";
 	year: number;
 	youtubeId: string;
 	player1: string;
 	player2: string;
 	title: string;
-	round: "1st" | "2nd" | "3rd" | "4th" | "Quarterfinals" | "Semifinals" | "Finals" | "Exhibition";
+	round: Rounds;
 	summary?: string;
 	duration?: string;
 }
 
+type Rounds = "1st" | "2nd" | "3rd" | "4th" | "Quarterfinals" | "Semifinals" | "Finals" | "Exhibition";
 // export interface VideoFilters {
 //     [key: string]: { // index signatures for unknown property names
 //         title: string,
@@ -61,21 +62,35 @@ export interface Videos {
 //     }
 // }
 
-export interface VideoFilterItem {
-	title: string | number;
-	year?: number[];
+// export interface VideoFilterItem {
+// 	title: string | number;
+// 	year?: number[];
+// 	count: number;
+// 	include: boolean;
+// }
+
+type BaseFilterItem = {
 	count: number;
 	include: boolean;
-}
+};
 
-export type VideoFilters = {
+export type TournamentFilterItem = BaseFilterItem & {
+	title: string;
+	year: number[];
+};
+
+export type YearFilterItem = BaseFilterItem & {
+	title: number;
+};
+
+export interface VideoFilters {
 	tournament: {
-		[name: string]: VideoFilterItem;
+		[name: string]: TournamentFilterItem;
 	};
 	year: {
-		[year: string]: VideoFilterItem;
+		[year: string]: YearFilterItem;
 	};
-};
+}
 
 export type setVideosFunction = Dispatch<SetStateAction<Videos[]>>;
 export type setFiltersFunction = Dispatch<SetStateAction<VideoFilters>>;

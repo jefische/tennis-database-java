@@ -1,9 +1,10 @@
 import { Videos } from "@/assets/types";
 import Button from "react-bootstrap/Button";
 import { useVideoForm } from "@/hooks/useVideoForm";
+import { Tournaments } from "@/assets/data/tournaments";
 
 interface VideoFormProps {
-	initialData: Omit<Videos, "videoId">;
+	initialData: Partial<Omit<Videos, "videoId">>;
 	HTTPmethod: string;
 	endpoint: string;
 	onFormSubmit: (data: Videos[]) => void;
@@ -52,10 +53,9 @@ export default function VideoForm({ initialData, HTTPmethod, endpoint, onFormSub
 						<option disabled value="">
 							Choose...
 						</option>
-						<option value="Australian Open">Australian Open</option>
-						<option value="French Open">French Open</option>
-						<option value="Wimbledon">Wimbledon</option>
-						<option value="US Open">US Open</option>
+						{Tournaments.map((name) => {
+							return <option value={name}>{name}</option>;
+						})}
 					</select>
 					<div className="invalid-feedback">Please enter a tournament.</div>
 				</div>

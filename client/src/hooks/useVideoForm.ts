@@ -4,7 +4,7 @@ import { checkThumbnail } from "@/utils/helpers";
 import { pullDuration } from "@/utils/callbacks";
 
 interface useVideoFormProps {
-	initialData: Omit<Videos, "videoId">;
+	initialData: Partial<Omit<Videos, "videoId">>;
 	HTTPmethod: string;
 	endpoint: string;
 	onFormSubmit: (data: Videos[]) => void;
@@ -12,7 +12,7 @@ interface useVideoFormProps {
 
 export function useVideoForm({ initialData, HTTPmethod, endpoint, onFormSubmit }: useVideoFormProps) {
 	// All shared state
-	const [formData, setFormData] = useState<Omit<Videos, "videoId">>(initialData);
+	const [formData, setFormData] = useState<Partial<Omit<Videos, "videoId">>>(initialData);
 	const [formValidated, setValidation] = useState<boolean>(false);
 	const formRef = useRef<HTMLFormElement>(null);
 	const youtubeIdElement = useRef<HTMLInputElement>(null);
@@ -81,7 +81,7 @@ export function useVideoForm({ initialData, HTTPmethod, endpoint, onFormSubmit }
 			[name]: value,
 		};
 
-		let rounds: string = updatedFormData.round;
+		let rounds: string = updatedFormData.round ?? "";
 		switch (updatedFormData.round) {
 			case "1st":
 				rounds = "Round 1";
@@ -115,7 +115,7 @@ export function useVideoForm({ initialData, HTTPmethod, endpoint, onFormSubmit }
 	};
 
 	const setDuration = async () => {
-		const duration = await pullDuration(formData.youtubeId);
+		const duration = await pullDuration(formData.youtubeId ?? "");
 		setFormData({
 			...formData,
 			duration: duration,

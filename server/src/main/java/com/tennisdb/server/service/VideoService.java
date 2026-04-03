@@ -6,6 +6,9 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tennisdb.server.dto.SummaryResponse;
+import com.tennisdb.server.dto.VideoResponse;
 import com.tennisdb.server.model.Video;
 import com.tennisdb.server.repository.VideoRepository;
 
@@ -13,9 +16,36 @@ import com.tennisdb.server.repository.VideoRepository;
 public class VideoService {
 	
 	private VideoRepository videoRepository;
+	private final ObjectMapper objectMapper = new ObjectMapper();
 
 	public VideoService(VideoRepository videoRepository) {
 		this.videoRepository = videoRepository;
+	}
+
+	public VideoResponse mapToVideoResponse(Video video) {
+		VideoResponse response = new VideoResponse();
+		response.setVideoId(video.getVideoId());
+		response.setTournament(video.getTournament());
+		response.setYear(video.getYear());
+		response.setYoutubeId(video.getYoutubeId());
+		response.setPlayer1(video.getPlayer1());
+		response.setPlayer2(video.getPlayer2());
+		response.setTitle(video.getTitle());
+		response.setRound(video.getRound());
+		response.setDuration(video.getDuration());
+
+		if (video.getSummary() != null) {
+			try {
+				SummaryResponse summary = objectMapper.readValue(
+					video.getSummary(), SummaryResponse.class
+				);
+				response.setSummary(summary);
+			} catch (Exception e) {
+				// If parsing fails, leave summary as null
+			}
+		}
+
+		return response;
 	}
 
 	public List<Video> getVideos() {
