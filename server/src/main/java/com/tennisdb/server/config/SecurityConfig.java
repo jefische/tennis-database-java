@@ -29,7 +29,10 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // Public endpoints
+                // Static resources & SPA routes
+                .requestMatchers("/", "/index.html", "/assets/**", "/favicon.ico", "/bgs/**").permitAll()
+                .requestMatchers("/{path:[^.]*}").permitAll()
+                // Public API endpoints
                 .requestMatchers(HttpMethod.GET, "/videos/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/videosAI").permitAll()
                 .requestMatchers("/auth/**").permitAll()
