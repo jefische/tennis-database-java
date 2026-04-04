@@ -25,6 +25,12 @@ public class WebConfig implements WebMvcConfigurer {
         // Serve React static assets
         registry.addResourceHandler("/assets/**")
                 .addResourceLocations("classpath:/static/assets/");
+
+        // Serve public static files (icons, images, etc.)
+        registry.addResourceHandler("/icons/**")
+                .addResourceLocations("classpath:/static/icons/");
+        registry.addResourceHandler("/bgs/**")
+                .addResourceLocations("classpath:/static/bgs/");
     }
     @Override
     public void addViewControllers(@NonNull ViewControllerRegistry registry) {

@@ -30,7 +30,7 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 // Static resources & SPA routes
-                .requestMatchers("/", "/index.html", "/assets/**", "/favicon.ico", "/bgs/**").permitAll()
+                .requestMatchers("/", "/index.html", "/assets/**", "/icons/**", "/favicon.ico", "/bgs/**").permitAll()
                 .requestMatchers("/{path:[^.]*}").permitAll()
                 // Public API endpoints
                 .requestMatchers(HttpMethod.GET, "/videos/**").permitAll()
