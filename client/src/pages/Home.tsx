@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { VideoFilters, Videos } from "@/types";
 
 import { sortVideos, setFilterData } from "../utils/helpers";
+import ShadcnAddModal from "@/components/home/modals/add/ShadcnAddModal";
 
 export default function Home() {
 	const [activeVideos, setVideos] = useState<Videos[]>([]);
@@ -66,6 +67,7 @@ export default function Home() {
 						</div>
 						<TagFilters></TagFilters>
 						<div className="video-container mb-[50px]">
+							{!isProduction && <ShadcnAddModal />}
 							{activeVideos.sort(sortVideos).map((video: Videos) => {
 								return (
 									<VideoCard

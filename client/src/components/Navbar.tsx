@@ -1,7 +1,17 @@
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import {
+	Disclosure,
+	DisclosureButton,
+	DisclosurePanel,
+	Menu,
+	MenuButton,
+	MenuItem,
+	MenuItems,
+} from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { NavLink, Link, useLocation } from "react-router-dom";
 import { useState } from "react";
+
+import LoginModal from "./home/modals/login/LoginModal";
 
 const navigation = [
 	{ name: "Full Matches", href: "/home", current: true },
@@ -17,6 +27,7 @@ function classNames(...classes: string[]) {
 export default function Navbar() {
 	const [activeLink, setActiveLink] = useState(navigation);
 	const currentPath = useLocation().pathname;
+	const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
 	const isProduction = import.meta.env.PROD;
 	const isProfile = isProduction ? false : true;
@@ -84,7 +95,11 @@ export default function Navbar() {
 									<MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
 										<span className="absolute -inset-1.5" />
 										<span className="sr-only">Open user menu</span>
-										<img alt="avatar icon" src="/icons/male-user-100.png" className="size-8 rounded-full" />
+										<img
+											alt="avatar icon"
+											src="/icons/male-user-100.png"
+											className="size-8 rounded-full"
+										/>
 									</MenuButton>
 								</div>
 								<MenuItems
@@ -104,19 +119,20 @@ export default function Navbar() {
 											href="#"
 											className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
 										>
-											Settings
+											Register
 										</a>
 									</MenuItem>
 									<MenuItem>
-										<a
-											href="#"
-											className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+										<button
+											onClick={() => setDialogOpen(true)}
+											className="block px-4 py-2 text-sm text-blue-600 underline data-focus:bg-gray-100"
 										>
-											Sign out
-										</a>
+											Sign in
+										</button>
 									</MenuItem>
 								</MenuItems>
 							</Menu>
+							<LoginModal dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} />
 						</div>
 					)}
 				</div>
@@ -130,7 +146,9 @@ export default function Navbar() {
 							to={item.href}
 							aria-current={item.current ? "page" : undefined}
 							className={classNames(
-								item.current ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white",
+								item.current
+									? "bg-gray-900 text-white"
+									: "text-gray-300 hover:bg-gray-700 hover:text-white",
 								"block rounded-md px-3 py-2 text-base font-medium",
 							)}
 							onClick={handleActive}
