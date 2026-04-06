@@ -71,6 +71,37 @@ export function useVideoForm({ initialData, HTTPmethod, endpoint, onFormSubmit }
 		}
 	}
 
+	const handleChangeRadix = (name: string, val: string): void => {
+		const updatedFormData = {
+			...formData,
+			[name]: val,
+		};
+
+		let rounds: string = updatedFormData.round ?? "";
+		switch (updatedFormData.round) {
+			case "1st":
+				rounds = "Round 1";
+				break;
+			case "2nd":
+				rounds = "Round 2";
+				break;
+			case "3rd":
+				rounds = "Round 3";
+				break;
+			case "4th":
+				rounds = "Round 4";
+				break;
+			default:
+				break;
+		}
+
+		// Use the updated values to build the title
+		setFormData({
+			...updatedFormData,
+			title: `${updatedFormData.player1} vs. ${updatedFormData.player2} | ${updatedFormData.tournament} ${updatedFormData.year} ${rounds}`,
+		});
+	};
+
 	// Add new handler to update video description automatically based on other fields
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
 		const { name, value } = e.target;
@@ -130,6 +161,7 @@ export function useVideoForm({ initialData, HTTPmethod, endpoint, onFormSubmit }
 		urlFeedback,
 		saveVideo,
 		handleChange,
+		handleChangeRadix,
 		handleTitleChange,
 		setDuration,
 	};

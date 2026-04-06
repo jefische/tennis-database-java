@@ -11,8 +11,24 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import ShadcnVideoForm from "../ShadcnVideoForm";
+import { setVideosFunction, Videos } from "@/assets/types";
+import { useState } from "react";
 
-export default function ShadcnAddModal() {
+interface AddVideoTypes {
+	setAllVideos: setVideosFunction;
+	setVideos: setVideosFunction;
+}
+
+export default function ShadcnAddModal({ setAllVideos, setVideos }: AddVideoTypes) {
+	const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+
+	function handleSubmit(data: Videos[]): void {
+		setVideos(data);
+		setAllVideos(data);
+		setIsSubmitted(true);
+	}
+
 	return (
 		<>
 			{/* <div className="card-cover">
@@ -25,20 +41,18 @@ export default function ShadcnAddModal() {
 					<img src="/icons/add-100.png" alt="add new video icon" width={"100px"} height={"100px"} />
 					{/* <button>Add New Video</button> */}
 				</DialogTrigger>
-				<DialogContent className="sm:max-w-lg">
+				<DialogContent className="sm:max-w-3xl">
 					<DialogHeader>
 						<DialogTitle>Add New Video</DialogTitle>
-						<DialogDescription>Enter your username and password below.</DialogDescription>
+						<DialogDescription>Enter video details below.</DialogDescription>
 					</DialogHeader>
 					{/* your form fields go here */}
-					<fieldset className="grid gap-2">
-						<Label htmlFor="username">Username</Label>
-						<Input id="username" />
-					</fieldset>
-					<fieldset className="grid gap-2">
-						<Label htmlFor="password">Password</Label>
-						<Input id="password" type="password" />
-					</fieldset>
+					<ShadcnVideoForm
+						initialData={{}}
+						HTTPmethod="POST"
+						endpoint="videos/add"
+						onFormSubmit={handleSubmit}
+					/>
 					<DialogFooter>
 						<DialogClose asChild>
 							<Button>Submit</Button>

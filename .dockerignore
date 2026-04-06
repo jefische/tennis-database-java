@@ -28,8 +28,13 @@
 **/ehthumbs.db
 **/Thumbs.db
 
+# Directories not used in Docker build
+summary-service/
+summary-service-py/
+z_batch-videos-py/
+
 # Client side files
-client/node_modules
+**/node_modules
 client/dist
 client/build
 client/.env.production
