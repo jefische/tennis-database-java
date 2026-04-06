@@ -67,7 +67,12 @@ export default function Home() {
 						</div>
 						<TagFilters></TagFilters>
 						<div className="video-container mb-[50px]">
-							{!isProduction && <ShadcnAddModal />}
+							{!isProduction && (
+								<>
+									<ShadcnAddModal setAllVideos={setAllVideos} setVideos={setVideos} />{" "}
+									<AddModal setAllVideos={setAllVideos} setVideos={setVideos} />
+								</>
+							)}
 							{activeVideos.sort(sortVideos).map((video: Videos) => {
 								return (
 									<VideoCard
@@ -81,7 +86,6 @@ export default function Home() {
 									/>
 								);
 							})}
-							{!isProduction && <AddModal setAllVideos={setAllVideos} setVideos={setVideos} />}
 						</div>
 					</main>
 				</section>
