@@ -10,10 +10,9 @@ import { VideoFilters, Videos, User } from "@/types";
 import { sortVideos, setFilterData } from "../utils/helpers";
 import ShadcnAddModal from "@/components/home/modals/add/ShadcnAddModal";
 
-export default function Home() {
+export default function Home({ user }: { user: User }) {
 	const [activeVideos, setVideos] = useState<Videos[]>([]);
 	const [allVideos, setAllVideos] = useState<Videos[]>([]);
-	const [user, setUser] = useState<User>(null);
 
 	// import.meta is a runtime metadata object available in ES modules
 	// Vite injects an env object on import.meta
@@ -53,19 +52,10 @@ export default function Home() {
 			.catch((error) => {
 				console.error("Error fetching data:", error);
 			});
-
-		const token = localStorage.getItem("token");
-		if (token) {
-			// decode the payload to get username/role
-			const payload = JSON.parse(atob(token.split(".")[1]));
-			setUser({ username: payload.sub, role: payload.role, token });
-		}
 	}, [baseURL]);
 
 	return (
 		<>
-			<Navbar user={user} setUser={setUser} />
-
 			<div className="body-container">
 				<section className="flex bg-gray-custom h-full">
 					<Sidebar allVideos={allVideos} setVideos={setVideos} initFilters={filterDataSorted} />

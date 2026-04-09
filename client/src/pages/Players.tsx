@@ -1,6 +1,5 @@
 import Carousel from "react-bootstrap/Carousel";
 import PlayerVideoCard from "../components/players/PlayerVideoCard";
-import Navbar from "../components/Navbar";
 
 export default function Players() {
 	// const isProduction = import.meta.env.PROD;
@@ -8,7 +7,6 @@ export default function Players() {
 	const myWidth = "200px";
 	return (
 		<>
-			<Navbar />
 			{isProduction ? (
 				<div className="body-container bg-gray-custom">
 					<h1 style={{ textAlign: "center", paddingTop: "10%", color: "#fff" }}>
