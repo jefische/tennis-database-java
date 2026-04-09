@@ -13,6 +13,20 @@ import {
 	SelectValue,
 	SelectLabel,
 } from "@/components/ui/select";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import { Field, FieldLabel, FieldError } from "@/components/ui/field";
+import { z } from "zod";
+
+const schema = z.object({
+	tournament: z.string().min(1, "Please select a tournament"),
+	year: z.number({ message: "Please enter a year" }).min(1970).max(2026),
+	round: z.string(),
+	youtubeId: z.string(),
+	player1: z.string(),
+	player2: z.string(),
+	title: z.string(),
+});
 
 interface VideoFormProps {
 	initialData: Partial<Omit<Videos, "videoId">>;
@@ -21,7 +35,7 @@ interface VideoFormProps {
 	onFormSubmit: (data: Videos[]) => void;
 }
 
-export default function VideoForm({ initialData, HTTPmethod, endpoint, onFormSubmit }: VideoFormProps) {
+export default function ShadcnVideoForm({ initialData, HTTPmethod, endpoint, onFormSubmit }: VideoFormProps) {
 	const {
 		formData,
 		formValidated,
@@ -40,6 +54,19 @@ export default function VideoForm({ initialData, HTTPmethod, endpoint, onFormSub
 		onFormSubmit: onFormSubmit,
 	});
 
+	const form = useForm<z.infer<typeof schema>>({
+		resolver: zodResolver(schema),
+		defaultValues: {
+			tournament: "",
+			year: 2026,
+			round: "",
+			youtubeId: "",
+			player1: "",
+			player2: "",
+			title: "",
+		},
+	});
+
 	return (
 		<form
 			id="video-form"
@@ -50,54 +77,63 @@ export default function VideoForm({ initialData, HTTPmethod, endpoint, onFormSub
 			onSubmit={saveVideo}
 		>
 			<div className="row">
+				{/* Radix Select needs Controller */}
 				<div className="col">
-					<Label htmlFor="tournament">Tournament</Label>
-					<Select
-						value={formData.tournament}
-						onValueChange={(val) => handleChangeRadix("tournament", val)}
+					<Controller
 						name="tournament"
-						required
-					>
-						<SelectTrigger className="w-full">
-							<SelectValue placeholder="Select a tournament" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectGroup>
-								<SelectLabel>Choose...</SelectLabel>
-								{Tournaments.map((name) => {
-									return <SelectItem value={name}>{name}</SelectItem>;
-								})}
-							</SelectGroup>
-						</SelectContent>
-					</Select>
-				</div>
-				<div className="col">
-					<Label htmlFor="year">Year</Label>
-					<Input
-						type="number"
-						min={1970}
-						max={2026}
-						step={1}
-						name="year"
-						value={formData.year}
-						onChange={handleChange}
-						required
+						control={form.control}
+						render={({ field, fieldState }) => (
+							<Field data-invalid={fieldState.invalid}>
+								<FieldLabel htmlFor={field.name}>Tournament</FieldLabel>
+								<Select value={field.value} onValueChange={field.onChange}>
+									<SelectTrigger id={field.name} className="w-full">
+										<SelectValue placeholder="Select a tournament" />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectGroup>
+											<SelectLabel>Choose...</SelectLabel>
+											{Tournaments.map((name) => {
+												return (
+													<SelectItem key={name} value={name}>
+														{name}
+													</SelectItem>
+												);
+											})}
+										</SelectGroup>
+									</SelectContent>
+								</Select>
+								{fieldState.error && <FieldError errors={[fieldState.error]} />}
+							</Field>
+						)}
 					/>
+				</div>
+
+				{/* Native input uses register */}
+				<div className="col">
+					<Field data-invalid={!!form.formState.errors.year}>
+						<FieldLabel htmlFor="year">Year</FieldLabel>
+						<Input
+							type="number"
+							step={1}
+							{...form.register("year", { setValueAs: (v) => (v === "" ? undefined : Number(v)) })}
+						/>
+						{form.formState.errors.year && <FieldError errors={[form.formState.errors.year]} />}
+					</Field>
 				</div>
 			</div>
 
 			<div className="row">
 				<div className="col">
-					<Label htmlFor="youtubeId">Youtube ID</Label>
-					<Input
-						type="text"
-						name="youtubeId"
-						required
-						placeholder="e.g. https://www.youtube.com/embed/{id}"
-						value={formData.youtubeId}
-						onChange={handleChange}
-						ref={youtubeIdElement}
-					/>
+					<Field data-invalid={!!form.formState.errors.year}>
+						<FieldLabel htmlFor="youtubeId">Youtube ID</FieldLabel>
+						<Input
+							type="text"
+							placeholder="e.g. https://www.youtube.com/embed/{id}"
+							{...form.register("youtubeId")}
+							ref={youtubeIdElement}
+						/>
+						{form.formState.errors.youtubeId && <FieldError errors={[form.formState.errors.youtubeId]} />}
+					</Field>
 				</div>
 				<div className="col">
 					<Label htmlFor="round">Round</Label>

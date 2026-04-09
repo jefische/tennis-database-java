@@ -41,7 +41,7 @@ export default function ShadcnAddModal({ setAllVideos, setVideos }: AddVideoType
 					<img src="/icons/add-100.png" alt="add new video icon" width={"100px"} height={"100px"} />
 					{/* <button>Add New Video</button> */}
 				</DialogTrigger>
-				<DialogContent className="sm:max-w-3xl">
+				<DialogContent className="sm:max-w-3xl duration-200">
 					<DialogHeader>
 						<DialogTitle>Add New Video</DialogTitle>
 						<DialogDescription>Enter video details below.</DialogDescription>

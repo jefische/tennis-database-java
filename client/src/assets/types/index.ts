@@ -103,4 +103,11 @@ export interface VideoCards {
 	summary?: string;
 	setAllVideos: setVideosFunction;
 	setVideos: setVideosFunction;
+	user: User;
 }
+
+export type User = {
+	username: string;
+	role: string;
+	token: string;
+} | null;

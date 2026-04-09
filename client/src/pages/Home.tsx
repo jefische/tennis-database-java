@@ -5,7 +5,7 @@ import Navbar from "../components/Navbar";
 import TagFilters from "../components/TagFilters";
 import { SearchBar } from "../components/SearchBar";
 import { useState, useEffect } from "react";
-import { VideoFilters, Videos } from "@/types";
+import { VideoFilters, Videos, User } from "@/types";
 
 import { sortVideos, setFilterData } from "../utils/helpers";
 import ShadcnAddModal from "@/components/home/modals/add/ShadcnAddModal";
@@ -13,10 +13,12 @@ import ShadcnAddModal from "@/components/home/modals/add/ShadcnAddModal";
 export default function Home() {
 	const [activeVideos, setVideos] = useState<Videos[]>([]);
 	const [allVideos, setAllVideos] = useState<Videos[]>([]);
+	const [user, setUser] = useState<User>(null);
 
 	// import.meta is a runtime metadata object available in ES modules
 	// Vite injects an env object on import.meta
-	const isProduction = import.meta.env.PROD;
+	// const isProduction = import.meta.env.PROD;
+
 	const baseURL: string = import.meta.env.VITE_API_URL;
 
 	const filterData: VideoFilters = allVideos.reduce(setFilterData, { tournament: {}, year: {} });
@@ -51,11 +53,18 @@ export default function Home() {
 			.catch((error) => {
 				console.error("Error fetching data:", error);
 			});
+
+		const token = localStorage.getItem("token");
+		if (token) {
+			// decode the payload to get username/role
+			const payload = JSON.parse(atob(token.split(".")[1]));
+			setUser({ username: payload.sub, role: payload.role, token });
+		}
 	}, [baseURL]);
 
 	return (
 		<>
-			<Navbar />
+			<Navbar user={user} setUser={setUser} />
 
 			<div className="body-container">
 				<section className="flex bg-gray-custom h-full">
@@ -67,10 +76,10 @@ export default function Home() {
 						</div>
 						<TagFilters></TagFilters>
 						<div className="video-container mb-[50px]">
-							{!isProduction && (
+							{user?.role === "ADMIN" && (
 								<>
 									<ShadcnAddModal setAllVideos={setAllVideos} setVideos={setVideos} />{" "}
-									<AddModal setAllVideos={setAllVideos} setVideos={setVideos} />
+									{/* <AddModal setAllVideos={setAllVideos} setVideos={setVideos} /> */}
 								</>
 							)}
 							{activeVideos.sort(sortVideos).map((video: Videos) => {
@@ -83,6 +92,7 @@ export default function Home() {
 										summary={video.summary}
 										setAllVideos={setAllVideos}
 										setVideos={setVideos}
+										user={user}
 									/>
 								);
 							})}

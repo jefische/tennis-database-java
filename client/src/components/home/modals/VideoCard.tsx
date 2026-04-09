@@ -17,7 +17,16 @@ interface AISummary {
 	tags: string[];
 }
 
-export default function VideoCard({ id, title, duration, summary, maxWidth, setAllVideos, setVideos }: VideoCards) {
+export default function VideoCard({
+	id,
+	title,
+	duration,
+	summary,
+	maxWidth,
+	setAllVideos,
+	setVideos,
+	user,
+}: VideoCards) {
 	const [modalIsOpen, setIsOpen] = useState<boolean>(false);
 	const [editModal, setEditModal] = useState<boolean>(false);
 	const [editData, setEditData] = useState<Videos>({} as Videos);
@@ -112,7 +121,7 @@ export default function VideoCard({ id, title, duration, summary, maxWidth, setA
 						backgroundImage: `url(http://img.youtube.com/vi/${id}/0.jpg)`,
 					}}
 				></div>
-				{!isProduction && (
+				{user?.role === "ADMIN" && (
 					<DropdownButton drop="start" title="Actions">
 						<Dropdown.Item href="#" onClick={handleDelete}>
 							Delete Record
@@ -144,7 +153,7 @@ export default function VideoCard({ id, title, duration, summary, maxWidth, setA
 				<Modal.Header closeButton>
 					<Modal.Title className="col">
 						{title} ({duration})
-						{!isProduction && <Button onClick={handleTranscript}>Create Transcript</Button>}
+						{user?.role === "ADMIN" && <Button onClick={handleTranscript}>Create Transcript</Button>}
 					</Modal.Title>
 				</Modal.Header>
 				<Modal.Body className="flex flex-col xl:flex-row gap-[15px] h-[80vh]">
