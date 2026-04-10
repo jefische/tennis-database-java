@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import ShadcnVideoForm from "../ShadcnVideoForm";
+import RHFVideoForm from "../RHFVideoForm";
 import { setVideosFunction, Videos } from "@/assets/types";
 import { useState } from "react";
 
@@ -47,7 +47,7 @@ export default function ShadcnAddModal({ setAllVideos, setVideos }: AddVideoType
 						<DialogDescription>Enter video details below.</DialogDescription>
 					</DialogHeader>
 					{/* your form fields go here */}
-					<ShadcnVideoForm
+					<RHFVideoForm
 						initialData={{}}
 						HTTPmethod="POST"
 						endpoint="videos/add"
