@@ -1,5 +1,5 @@
-import { Videos } from "@/assets/types";
-import Button from "react-bootstrap/Button";
+import { Videos, User } from "@/types";
+// import Button from "react-bootstrap/Button";
 import { useVideoForm } from "@/hooks/useVideoForm";
 import { Tournaments } from "@/assets/data/tournaments";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,7 @@ import {
 	SelectValue,
 	SelectLabel,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
@@ -21,7 +22,7 @@ import { checkThumbnail } from "@/utils/helpers";
 
 const schema = z.object({
 	tournament: z.string().min(1, "Please select a tournament"),
-	year: z.number({ message: "Please enter a year" }).min(1970).max(2026),
+	year: z.number({ message: "Please enter a year" }).min(1970).max(2027),
 	round: z.string(),
 	youtubeId: z.string(),
 	player1: z.string(),
@@ -34,9 +35,10 @@ interface VideoFormProps {
 	HTTPmethod: string;
 	endpoint: string;
 	onFormSubmit: (data: Videos[]) => void;
+	user: User;
 }
 
-export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, onFormSubmit }: VideoFormProps) {
+export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, onFormSubmit, user }: VideoFormProps) {
 	const { formValidated, setDuration } = useVideoForm({
 		initialData: initialData,
 		HTTPmethod: HTTPmethod,
@@ -47,13 +49,13 @@ export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, onForm
 	const form = useForm<z.infer<typeof schema>>({
 		resolver: zodResolver(schema),
 		defaultValues: {
-			tournament: "",
-			year: 2026,
-			round: "",
-			youtubeId: "",
-			player1: "",
-			player2: "",
-			title: "",
+			tournament: initialData.tournament ?? "",
+			year: initialData.year ?? new Date().getFullYear(),
+			round: initialData.round ?? "",
+			youtubeId: initialData.youtubeId ?? "",
+			player1: initialData.player1 ?? "",
+			player2: initialData.player2 ?? "",
+			title: initialData.title ?? "",
 		},
 	});
 
@@ -70,10 +72,11 @@ export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, onForm
 			return; // exit saveVideo
 		}
 
-		fetch(`http://localhost:8080/${endpoint}`, {
+		fetch(`${import.meta.env.VITE_API_URL}/${endpoint}`, {
 			method: `${HTTPmethod}`,
 			headers: {
 				"Content-Type": "application/json",
+				Authorization: `Bearer ${user?.token}`,
 			},
 			body: JSON.stringify(data),
 		})
@@ -88,8 +91,8 @@ export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, onForm
 					return response.json();
 				}
 			})
-			.then((data) => {
-				onFormSubmit(data); // Calls parent function to reload video state
+			.then((responseData) => {
+				onFormSubmit(responseData); // Calls parent function to reload video state
 			})
 			.catch((error) => console.error(error)); // Note this will only catch like server timeout errors,
 		// a response status of 400 or 500 even though an error code, fetch doesn't consider these as errors in terms of the promise being rejected.
@@ -133,159 +136,149 @@ export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, onForm
 		<form
 			id="video-form"
 			className={`add-video ${formValidated ? "was-validated" : ""}`}
-			method="post"
 			onSubmit={form.handleSubmit(saveVideo)}
 		>
-			<div className="row">
+			<div className="grid grid-cols-2 gap-6">
 				{/* Radix Select needs Controller */}
-				<div className="col">
-					<Controller
-						name="tournament"
-						control={form.control}
-						render={({ field, fieldState }) => (
-							<Field data-invalid={fieldState.invalid}>
-								<FieldLabel htmlFor={field.name}>Tournament</FieldLabel>
-								<Select value={field.value} onValueChange={(val) => handleChanges(field, val)}>
-									<SelectTrigger id={field.name} className="w-full">
-										<SelectValue placeholder="Select a tournament" />
-									</SelectTrigger>
-									<SelectContent>
-										<SelectGroup>
-											<SelectLabel>Choose...</SelectLabel>
-											{Tournaments.map((name) => {
-												return (
-													<SelectItem key={name} value={name}>
-														{name}
-													</SelectItem>
-												);
-											})}
-										</SelectGroup>
-									</SelectContent>
-								</Select>
-								{fieldState.error && <FieldError errors={[fieldState.error]} />}
-							</Field>
-						)}
-					/>
-				</div>
 
-				{/* Native input uses register */}
-				<div className="col">
-					<Field data-invalid={!!form.formState.errors.year}>
-						<FieldLabel htmlFor="year">Year</FieldLabel>
-						<Input
-							type="number"
-							step={1}
-							{...form.register("year", { setValueAs: (v) => (v === "" ? undefined : Number(v)) })}
-						/>
-						{form.formState.errors.year && <FieldError errors={[form.formState.errors.year]} />}
-					</Field>
-				</div>
-			</div>
-
-			<div className="row">
-				<div className="col">
-					<Field data-invalid={!!form.formState.errors.year}>
-						<FieldLabel htmlFor="youtubeId">Youtube ID</FieldLabel>
-						<Input
-							type="text"
-							placeholder="e.g. https://www.youtube.com/embed/{id}"
-							{...form.register("youtubeId")}
-						/>
-						{form.formState.errors.youtubeId && <FieldError errors={[form.formState.errors.youtubeId]} />}
-					</Field>
-				</div>
-				<div className="col">
-					<Controller
-						name="round"
-						control={form.control}
-						render={({ field, fieldState }) => (
-							<Field data-invalid={fieldState.invalid}>
-								<FieldLabel htmlFor={field.name}>Round</FieldLabel>
-								<Select value={field.value} onValueChange={(val) => handleChanges(field, val)}>
-									<SelectTrigger id={field.name} className="w-full">
-										<SelectValue placeholder="Select a round" />
-									</SelectTrigger>
-									<SelectContent>
-										<SelectGroup>
-											<SelectLabel>Choose...</SelectLabel>
-											<SelectItem value="1st">1st</SelectItem>
-											<SelectItem value="2nd">2nd</SelectItem>
-											<SelectItem value="3rd">3rd</SelectItem>
-											<SelectItem value="4th">4th</SelectItem>
-											<SelectItem value="Quarterfinals">Quarterfinals</SelectItem>
-											<SelectItem value="Semifinals">Semifinals</SelectItem>
-											<SelectItem value="Finals">Finals</SelectItem>
-											<SelectItem value="Exhibition">Exhibition</SelectItem>
-										</SelectGroup>
-									</SelectContent>
-								</Select>
-							</Field>
-						)}
-					/>
-				</div>
-			</div>
-
-			<div className="row">
-				<div className="col">
-					<Controller
-						name="player1"
-						control={form.control}
-						render={({ field, fieldState }) => (
-							<Field data-invalid={fieldState.invalid}>
-								<FieldLabel htmlFor={field.name}>Player 1</FieldLabel>
-								<Input
-									{...field}
-									type="text"
-									id={field.name}
-									placeholder="e.g. Carlos Alcaraz"
-									onChange={(e) => handleChanges(field, e.target.value)}
-									pattern="[a-zA-Z'\s\-\/]+" // Letters, hyphens, forward slash and apostrophes only
-								/>
-							</Field>
-						)}
-					/>
-				</div>
-				<div className="col">
-					<Controller
-						name="player2"
-						control={form.control}
-						render={({ field, fieldState }) => (
-							<Field data-invalid={fieldState.invalid}>
-								<FieldLabel htmlFor={field.name}>Player 2</FieldLabel>
-								<Input
-									{...field}
-									type="text"
-									id={field.name}
-									placeholder="e.g. Tommy Paul"
-									onChange={(e) => handleChanges(field, e.target.value)}
-									pattern="[a-zA-Z'\s\-\/]+" // Letters, hyphens, forward slash and apostrophes only
-								/>
-							</Field>
-						)}
-					/>
-				</div>
-			</div>
-
-			<div>
 				<Controller
-					name="title"
+					name="tournament"
 					control={form.control}
 					render={({ field, fieldState }) => (
 						<Field data-invalid={fieldState.invalid}>
-							<FieldLabel htmlFor={field.name}>Title</FieldLabel>
-							<Button variant="outline-primary" size="sm" className="mx-4 mb-2" onClick={setDuration}>
-								YT API
-							</Button>
+							<FieldLabel htmlFor={field.name}>Tournament</FieldLabel>
+							<Select value={field.value} onValueChange={(val) => handleChanges(field, val)}>
+								<SelectTrigger id={field.name} className="w-full">
+									<SelectValue placeholder="Select a tournament" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectGroup>
+										<SelectLabel>Choose...</SelectLabel>
+										{Tournaments.map((name) => {
+											return (
+												<SelectItem key={name} value={name}>
+													{name}
+												</SelectItem>
+											);
+										})}
+									</SelectGroup>
+								</SelectContent>
+							</Select>
+							{fieldState.error && <FieldError errors={[fieldState.error]} />}
+						</Field>
+					)}
+				/>
+
+				{/* Native input uses register */}
+				<Field data-invalid={!!form.formState.errors.year}>
+					<FieldLabel htmlFor="year">Year</FieldLabel>
+					<Input
+						type="number"
+						step={1}
+						{...form.register("year", { setValueAs: (v) => (v === "" ? undefined : Number(v)) })}
+					/>
+					{form.formState.errors.year && <FieldError errors={[form.formState.errors.year]} />}
+				</Field>
+			</div>
+
+			<div className="grid grid-cols-2 gap-6">
+				<Field data-invalid={!!form.formState.errors.year}>
+					<FieldLabel htmlFor="youtubeId">Youtube ID</FieldLabel>
+					<Input
+						type="text"
+						placeholder="e.g. https://www.youtube.com/embed/{id}"
+						{...form.register("youtubeId")}
+					/>
+					{form.formState.errors.youtubeId && <FieldError errors={[form.formState.errors.youtubeId]} />}
+				</Field>
+
+				<Controller
+					name="round"
+					control={form.control}
+					render={({ field, fieldState }) => (
+						<Field data-invalid={fieldState.invalid}>
+							<FieldLabel htmlFor={field.name}>Round</FieldLabel>
+							<Select value={field.value} onValueChange={(val) => handleChanges(field, val)}>
+								<SelectTrigger id={field.name} className="w-full">
+									<SelectValue placeholder="Select a round" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectGroup>
+										<SelectLabel>Choose...</SelectLabel>
+										<SelectItem value="1st">1st</SelectItem>
+										<SelectItem value="2nd">2nd</SelectItem>
+										<SelectItem value="3rd">3rd</SelectItem>
+										<SelectItem value="4th">4th</SelectItem>
+										<SelectItem value="Quarterfinals">Quarterfinals</SelectItem>
+										<SelectItem value="Semifinals">Semifinals</SelectItem>
+										<SelectItem value="Finals">Finals</SelectItem>
+										<SelectItem value="Exhibition">Exhibition</SelectItem>
+									</SelectGroup>
+								</SelectContent>
+							</Select>
+						</Field>
+					)}
+				/>
+			</div>
+
+			<div className="grid grid-cols-2 gap-6">
+				<Controller
+					name="player1"
+					control={form.control}
+					render={({ field, fieldState }) => (
+						<Field data-invalid={fieldState.invalid}>
+							<FieldLabel htmlFor={field.name}>Player 1</FieldLabel>
 							<Input
 								{...field}
 								type="text"
 								id={field.name}
-								placeholder="e.g. Jannik Sinner v Alexander Zverev Full Match | Australian Open 2025 Final (2hr 36min)"
+								placeholder="e.g. Carlos Alcaraz"
+								onChange={(e) => handleChanges(field, e.target.value)}
+								pattern="[a-zA-Z'\s\-\/]+" // Letters, hyphens, forward slash and apostrophes only
+							/>
+						</Field>
+					)}
+				/>
+
+				<Controller
+					name="player2"
+					control={form.control}
+					render={({ field, fieldState }) => (
+						<Field data-invalid={fieldState.invalid}>
+							<FieldLabel htmlFor={field.name}>Player 2</FieldLabel>
+							<Input
+								{...field}
+								type="text"
+								id={field.name}
+								placeholder="e.g. Tommy Paul"
+								onChange={(e) => handleChanges(field, e.target.value)}
+								pattern="[a-zA-Z'\s\-\/]+" // Letters, hyphens, forward slash and apostrophes only
 							/>
 						</Field>
 					)}
 				/>
 			</div>
+
+			<Controller
+				name="title"
+				control={form.control}
+				render={({ field, fieldState }) => (
+					<Field data-invalid={fieldState.invalid}>
+						<div className="flex items-center gap-4">
+							<FieldLabel htmlFor={field.name}>Title</FieldLabel>
+							<Button variant="outline" size="default" className="mx-4 mb-2" onClick={setDuration}>
+								YT API
+							</Button>
+						</div>
+						<Input
+							{...field}
+							type="text"
+							id={field.name}
+							placeholder="e.g. Jannik Sinner v Alexander Zverev Full Match | Australian Open 2025 Final (2hr 36min)"
+						/>
+					</Field>
+				)}
+			/>
 		</form>
 	);
 }

@@ -100,7 +100,7 @@ export default function Navbar({ user, setUser }: NavbarProps) {
 						{/* Profile dropdown */}
 						<Menu as="div" className="relative ml-3">
 							<div>
-								<MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
+								<MenuButton className="cursor-pointer relative flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
 									<span className="absolute -inset-1.5" />
 									<span className="sr-only">Open user menu</span>
 									<img

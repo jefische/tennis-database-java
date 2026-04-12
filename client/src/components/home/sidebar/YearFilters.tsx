@@ -49,7 +49,7 @@ export default function YearFilters({ formData, setFormData }: YearFilterProps) 
 		<div className="accordion-rjs pt-[10px]">
 			<div className="accordion-item-rjs">
 				<div
-					className="accordion-title-rjs flex justify-content-between border-top cursor-pointer pt-[10px]"
+					className="accordion-title-rjs flex justify-between border-top cursor-pointer pt-[10px]"
 					onClick={() => setIsActive(!isActive)}
 				>
 					<h6 className="hover:underline">Year</h6>

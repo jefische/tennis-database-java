@@ -14,34 +14,31 @@ import { Button } from "@/components/ui/button";
 import RHFVideoForm from "../RHFVideoForm";
 import { setVideosFunction, Videos } from "@/assets/types";
 import { useState } from "react";
+import { User } from "@/types";
+import { toast } from "sonner";
 
 interface AddVideoTypes {
 	setAllVideos: setVideosFunction;
 	setVideos: setVideosFunction;
+	user: User;
 }
 
-export default function ShadcnAddModal({ setAllVideos, setVideos }: AddVideoTypes) {
-	const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+export default function SCNAddModal({ setAllVideos, setVideos, user }: AddVideoTypes) {
+	// const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
 	function handleSubmit(data: Videos[]): void {
 		setVideos(data);
 		setAllVideos(data);
-		setIsSubmitted(true);
+		toast.success("Video added successfully");
 	}
 
 	return (
 		<>
-			{/* <div className="card-cover">
-				<div className="header-background card-add-new" onClick={openModal}>
-					<img src="/icons/add-100.png" alt="add new video icon" width={"100px"} height={"100px"} />
-				</div>
-			</div> */}
 			<Dialog>
-				<DialogTrigger className="cursor-pointer h-[235px] mb-[40px] max-w-[370px] w-full bg-center bg-cover bg-gray-300 rounded-[10px] flex justify-center items-center">
+				<DialogTrigger className="cursor-pointer h-[235px] max-w-[370px] w-full bg-center bg-cover bg-gray-300 rounded-[10px] flex justify-center items-center">
 					<img src="/icons/add-100.png" alt="add new video icon" width={"100px"} height={"100px"} />
-					{/* <button>Add New Video</button> */}
 				</DialogTrigger>
-				<DialogContent className="sm:max-w-3xl duration-200">
+				<DialogContent className="sm:max-w-3xl duration-200" onInteractOutside={(e) => e.preventDefault()}>
 					<DialogHeader>
 						<DialogTitle>Add New Video</DialogTitle>
 						<DialogDescription>Enter video details below.</DialogDescription>
@@ -52,11 +49,13 @@ export default function ShadcnAddModal({ setAllVideos, setVideos }: AddVideoType
 						HTTPmethod="POST"
 						endpoint="videos/add"
 						onFormSubmit={handleSubmit}
+						user={user}
 					/>
 					<DialogFooter>
 						<DialogClose asChild>
-							<Button>Submit</Button>
-							{/* <button>Submit</button> */}
+							<Button type="submit" form="video-form">
+								Submit
+							</Button>
 						</DialogClose>
 					</DialogFooter>
 				</DialogContent>

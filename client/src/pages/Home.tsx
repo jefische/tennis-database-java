@@ -6,9 +6,10 @@ import TagFilters from "../components/TagFilters";
 import { SearchBar } from "../components/SearchBar";
 import { useState, useEffect } from "react";
 import { VideoFilters, Videos, User } from "@/types";
+import SCNVideoCard from "@/components/home/modals/SCNVideoCard";
 
 import { sortVideos, setFilterData } from "../utils/helpers";
-import ShadcnAddModal from "@/components/home/modals/add/ShadcnAddModal";
+import SCNAddModal from "@/components/home/modals/add/SCNAddModal";
 
 export default function Home({ user }: { user: User }) {
 	const [activeVideos, setVideos] = useState<Videos[]>([]);
@@ -60,21 +61,21 @@ export default function Home({ user }: { user: User }) {
 				<section className="flex bg-gray-custom h-full">
 					<Sidebar allVideos={allVideos} setVideos={setVideos} initFilters={filterDataSorted} />
 					<main className="archives content-container w-full overflow-auto px-[50px] scrollbar-custom">
-						<div className="header-container py-[50px]">
-							<h1>Welcome to the Match Archive</h1>
+						<div className="flex flex-col items-center gap-[50px] py-[50px] xl:flex-row justify-center">
+							<h1 className="text-4xl text-center">Welcome to the Match Archive {user?.username}</h1>
 							<SearchBar allVideos={allVideos} setVideos={setVideos} />
 						</div>
 						<TagFilters></TagFilters>
-						<div className="video-container mb-[50px]">
+						<div className="grid grid-cols-[repeat(auto-fill,minmax(300px,370px))] gap-x-6 gap-y-20 mb-[50px] justify-center">
 							{user?.role === "ADMIN" && (
 								<>
-									<ShadcnAddModal setAllVideos={setAllVideos} setVideos={setVideos} />{" "}
+									<SCNAddModal setAllVideos={setAllVideos} setVideos={setVideos} user={user} />{" "}
 									{/* <AddModal setAllVideos={setAllVideos} setVideos={setVideos} /> */}
 								</>
 							)}
 							{activeVideos.sort(sortVideos).map((video: Videos) => {
 								return (
-									<VideoCard
+									<SCNVideoCard
 										key={video.videoId}
 										id={video.youtubeId}
 										title={video.title}

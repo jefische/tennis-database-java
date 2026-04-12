@@ -43,24 +43,28 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         // 3. Extract the token (everything after "Bearer ")
         String token = authHeader.substring(7);
 
-        // 4. Extract username from token
-        String username = jwtUtil.extractUsername(token);
+        try {
+            // 4. Extract username from token
+            String username = jwtUtil.extractUsername(token);
 
-        // 5. If username exists and no authentication is set yet
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            // 5. If username exists and no authentication is set yet
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            // 6. Load user from database
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                // 6. Load user from database
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-            // 7. Validate the token
-            if (jwtUtil.isTokenValid(token, userDetails.getUsername())) {
+                // 7. Validate the token
+                if (jwtUtil.isTokenValid(token, userDetails.getUsername())) {
 
-                // 8. Create authentication token and set it in the SecurityContext
-                UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                    // 8. Create authentication token and set it in the SecurityContext
+                    UsernamePasswordAuthenticationToken authToken =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
             }
+        } catch (io.jsonwebtoken.ExpiredJwtException e) {
+            // Token is expired — proceed unauthenticated, Spring Security will return 403
         }
 
         // 9. Continue the filter chain

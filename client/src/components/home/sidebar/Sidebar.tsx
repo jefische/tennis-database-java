@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import TournamentFilters from "./TournamentFilters";
 import YearFilters from "./YearFilters";
 import { Videos, setVideosFunction, VideoFilters } from "@/assets/types";
+import { Button } from "@/components/ui/button";
 
 interface SidebarProps {
 	allVideos: Videos[];
@@ -49,9 +50,9 @@ export default function Sidebar({ allVideos, setVideos, initFilters }: SidebarPr
 				Filter Match Results
 				<TournamentFilters formData={formData} setFormData={setFormData} />
 				<YearFilters formData={formData} setFormData={setFormData} />
-				<button className="applyFilter btn btn-primary my-1" type="submit">
+				<Button size="lg" className="my-1" type="submit">
 					Apply Filters
-				</button>
+				</Button>
 			</form>
 		</aside>
 	);

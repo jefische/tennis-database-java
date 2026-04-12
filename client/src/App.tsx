@@ -6,9 +6,13 @@ import Players from "./pages/Players";
 import Draws from "./pages/Draws";
 import FAQ from "./pages/FAQ";
 import Profile from "./pages/Profile";
-import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "./components/Navbar";
 import { User } from "@/types";
+import { Toaster } from "./components/ui/sonner";
+// bootstrap was used for the initial form and button components
+// these components still exist in the codebase as a legacy reference
+// the package and import remain in case of a review of the older components
+// import "bootstrap/dist/css/bootstrap.min.css";
 
 interface NavbarProps {
 	user: User;
@@ -20,6 +24,7 @@ function NavbarLayout({ user, setUser }: NavbarProps) {
 		<>
 			<Navbar user={user} setUser={setUser} />
 			<Outlet />
+			<Toaster />
 		</>
 	);
 }

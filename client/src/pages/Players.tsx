@@ -3,7 +3,7 @@ import PlayerVideoCard from "../components/players/PlayerVideoCard";
 
 export default function Players() {
 	// const isProduction = import.meta.env.PROD;
-	const isProduction = false;
+	const isProduction = true;
 	const myWidth = "200px";
 	return (
 		<>
