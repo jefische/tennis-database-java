@@ -56,44 +56,6 @@ select {
 	}
 }
 
-.landing-page {
-	div {
-		animation: mymove 3s;
-		animation-fill-mode: forwards;
-		image-rendering: pixelated;
-		position: relative;
-
-		h1 {
-			font-size: 32px;
-			font-weight: 800;
-			margin-bottom: 30px;
-		}
-
-		p {
-			margin-bottom: 50px;
-		}
-
-		.archive-link {
-			color: #000;
-			background-color: #f9f9f9;
-			border: 1px solid transparent;
-			border-radius: 8px;
-			padding: 10px 20px;
-			text-decoration: none;
-		}
-
-		.archive-link:hover {
-			font-weight: 700;
-		}
-	}
-}
-
-@media (min-width: 768px) {
-	.landing-page h1 {
-		font-size: 52px;
-	}
-}
-
 /* Archives Section ************************************************************/
 
 /*********** Sidebar filters **************/
@@ -128,73 +90,15 @@ select {
 
 /*********** Thumbnail cards **************/
 
-/*********** Modals **************/
-
-.modal-30w {
-	max-width: none !important;
-	width: 30% !important;
-}
-
-.modal-50w {
-	max-width: none !important;
-	width: 50% !important;
-}
-
-.modal-75w {
-	max-width: none !important;
-	width: 75% !important;
-}
-
-.modal-90w {
-	max-width: none !important;
-	width: 90% !important;
-}
-
-@media (min-width: 992px) {
-	.modal-30w {
-		max-width: none !important;
-		width: 30% !important;
-	}
-
-	.modal-50w {
-		max-width: none !important;
-		width: 50% !important;
-	}
-
-	.modal-75w {
-		max-width: none !important;
-		width: 75% !important;
-	}
-
-	.modal-90w {
-		max-width: none !important;
-		width: 90% !important;
-	}
-}
-
 /*********** Form Add **************/
 
 form.add-video {
-	display: flex;
-	flex-direction: column;
-	flex-grow: 1;
-	gap: 20px;
-
 	div {
 		/* display: flex;
 		gap: 20px;
 		justify-content: end; */
-		width: 100%;
+		/* width: 100%; */
 
-		label {
-			font-weight: 700;
-			margin-bottom: 5px;
-			padding-left: 10px;
-		}
-		input,
-		select {
-			flex-basis: 80%;
-		}
 		div.invalid-feedback {
 			padding-left: 10px;
 		}
@@ -420,6 +324,7 @@ form.add-video {
 } */
 
 @theme inline {
+	--animate-mymove: mymove 3s forwards;
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
 	--color-primary: var(--primary);

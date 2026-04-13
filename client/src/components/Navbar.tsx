@@ -12,6 +12,7 @@ import { NavLink, Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 
 import LoginModal from "./home/modals/login/LoginModal";
+import RegisterModal from "./home/modals/register/RegisterModal";
 import { User } from "@/types";
 
 const navigation = [
@@ -33,7 +34,8 @@ interface NavbarProps {
 export default function Navbar({ user, setUser }: NavbarProps) {
 	const [activeLink, setActiveLink] = useState(navigation);
 	const currentPath = useLocation().pathname;
-	const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+	const [loginOpen, setLoginOpen] = useState<boolean>(false);
+	const [registerOpen, setRegisterOpen] = useState<boolean>(false);
 
 	const handleActive = (e: React.MouseEvent<HTMLAnchorElement>) => {
 		const nextLinks = activeLink.map((link) => {
@@ -116,7 +118,10 @@ export default function Navbar({ user, setUser }: NavbarProps) {
 							>
 								{!user && (
 									<MenuItem>
-										<button className="block px-4 py-2 text-sm text-blue-600 underline data-focus:bg-gray-100">
+										<button
+											onClick={() => setRegisterOpen(true)}
+											className="cursor-pointer block px-4 py-2 text-sm text-blue-600 underline data-focus:bg-gray-100 rounded-sm ms-2 hover:font-semibold"
+										>
 											Register
 										</button>
 									</MenuItem>
@@ -124,15 +129,15 @@ export default function Navbar({ user, setUser }: NavbarProps) {
 								<MenuItem>
 									{!user ? (
 										<button
-											onClick={() => setDialogOpen(true)}
-											className="block px-4 py-2 text-sm text-blue-600 underline data-focus:bg-gray-100"
+											onClick={() => setLoginOpen(true)}
+											className="cursor-pointer block px-4 py-2 text-sm text-blue-600 underline data-focus:bg-gray-100 rounded-sm ms-2 hover:font-semibold"
 										>
 											Sign in
 										</button>
 									) : (
 										<button
 											onClick={handleLogout}
-											className="block px-4 py-2 text-sm text-blue-600 underline data-focus:bg-gray-100"
+											className="cursor-pointer block px-4 py-2 text-sm text-blue-600 underline data-focus:bg-gray-100 rounded-sm ms-2 hover:font-semibold"
 										>
 											Sign out
 										</button>
@@ -140,7 +145,8 @@ export default function Navbar({ user, setUser }: NavbarProps) {
 								</MenuItem>
 							</MenuItems>
 						</Menu>
-						<LoginModal dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} setUser={setUser} />
+						<RegisterModal dialogOpen={registerOpen} setDialogOpen={setRegisterOpen} setUser={setUser} />
+						<LoginModal dialogOpen={loginOpen} setDialogOpen={setLoginOpen} setUser={setUser} />
 					</div>
 				</div>
 			</div>

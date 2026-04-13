@@ -36,10 +36,18 @@ interface VideoFormProps {
 	endpoint: string;
 	onFormSubmit: (data: Videos[]) => void;
 	user: User;
+	setOpenModal: (open: boolean) => void;
 }
 
-export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, onFormSubmit, user }: VideoFormProps) {
-	const { formValidated, setDuration } = useVideoForm({
+export default function RHFVideoForm({
+	initialData,
+	HTTPmethod,
+	endpoint,
+	onFormSubmit,
+	user,
+	setOpenModal,
+}: VideoFormProps) {
+	const { setDuration } = useVideoForm({
 		initialData: initialData,
 		HTTPmethod: HTTPmethod,
 		endpoint: endpoint,
@@ -92,6 +100,7 @@ export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, onForm
 				}
 			})
 			.then((responseData) => {
+				setOpenModal(false);
 				onFormSubmit(responseData); // Calls parent function to reload video state
 			})
 			.catch((error) => console.error(error)); // Note this will only catch like server timeout errors,
@@ -133,11 +142,7 @@ export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, onForm
 	}
 
 	return (
-		<form
-			id="video-form"
-			className={`add-video ${formValidated ? "was-validated" : ""}`}
-			onSubmit={form.handleSubmit(saveVideo)}
-		>
+		<form id="video-form" className="flex flex-col gap-6" onSubmit={form.handleSubmit(saveVideo)}>
 			<div className="grid grid-cols-2 gap-6">
 				{/* Radix Select needs Controller */}
 
@@ -146,7 +151,9 @@ export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, onForm
 					control={form.control}
 					render={({ field, fieldState }) => (
 						<Field data-invalid={fieldState.invalid}>
-							<FieldLabel htmlFor={field.name}>Tournament</FieldLabel>
+							<FieldLabel htmlFor={field.name} className="ps-2">
+								Tournament
+							</FieldLabel>
 							<Select value={field.value} onValueChange={(val) => handleChanges(field, val)}>
 								<SelectTrigger id={field.name} className="w-full">
 									<SelectValue placeholder="Select a tournament" />
@@ -171,7 +178,9 @@ export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, onForm
 
 				{/* Native input uses register */}
 				<Field data-invalid={!!form.formState.errors.year}>
-					<FieldLabel htmlFor="year">Year</FieldLabel>
+					<FieldLabel htmlFor="year" className="ps-2">
+						Year
+					</FieldLabel>
 					<Input
 						type="number"
 						step={1}
@@ -183,7 +192,9 @@ export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, onForm
 
 			<div className="grid grid-cols-2 gap-6">
 				<Field data-invalid={!!form.formState.errors.year}>
-					<FieldLabel htmlFor="youtubeId">Youtube ID</FieldLabel>
+					<FieldLabel htmlFor="youtubeId" className="ps-2">
+						Youtube ID
+					</FieldLabel>
 					<Input
 						type="text"
 						placeholder="e.g. https://www.youtube.com/embed/{id}"
@@ -197,7 +208,9 @@ export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, onForm
 					control={form.control}
 					render={({ field, fieldState }) => (
 						<Field data-invalid={fieldState.invalid}>
-							<FieldLabel htmlFor={field.name}>Round</FieldLabel>
+							<FieldLabel htmlFor={field.name} className="ps-2">
+								Round
+							</FieldLabel>
 							<Select value={field.value} onValueChange={(val) => handleChanges(field, val)}>
 								<SelectTrigger id={field.name} className="w-full">
 									<SelectValue placeholder="Select a round" />
@@ -227,7 +240,9 @@ export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, onForm
 					control={form.control}
 					render={({ field, fieldState }) => (
 						<Field data-invalid={fieldState.invalid}>
-							<FieldLabel htmlFor={field.name}>Player 1</FieldLabel>
+							<FieldLabel htmlFor={field.name} className="ps-2">
+								Player 1
+							</FieldLabel>
 							<Input
 								{...field}
 								type="text"
@@ -245,7 +260,9 @@ export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, onForm
 					control={form.control}
 					render={({ field, fieldState }) => (
 						<Field data-invalid={fieldState.invalid}>
-							<FieldLabel htmlFor={field.name}>Player 2</FieldLabel>
+							<FieldLabel htmlFor={field.name} className="ps-2">
+								Player 2
+							</FieldLabel>
 							<Input
 								{...field}
 								type="text"
@@ -265,7 +282,9 @@ export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, onForm
 				render={({ field, fieldState }) => (
 					<Field data-invalid={fieldState.invalid}>
 						<div className="flex items-center gap-4">
-							<FieldLabel htmlFor={field.name}>Title</FieldLabel>
+							<FieldLabel htmlFor={field.name} className="ps-2">
+								Title
+							</FieldLabel>
 							<Button variant="outline" size="default" className="mx-4 mb-2" onClick={setDuration}>
 								YT API
 							</Button>

@@ -8,14 +8,12 @@ import {
 	DialogFooter,
 	DialogClose,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import RHFVideoForm from "../RHFVideoForm";
 import { setVideosFunction, Videos } from "@/assets/types";
-import { useState } from "react";
 import { User } from "@/types";
 import { toast } from "sonner";
+import { useState } from "react";
 
 interface AddVideoTypes {
 	setAllVideos: setVideosFunction;
@@ -24,8 +22,7 @@ interface AddVideoTypes {
 }
 
 export default function SCNAddModal({ setAllVideos, setVideos, user }: AddVideoTypes) {
-	// const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-
+	const [open, setOpen] = useState<boolean>(false);
 	function handleSubmit(data: Videos[]): void {
 		setVideos(data);
 		setAllVideos(data);
@@ -34,29 +31,36 @@ export default function SCNAddModal({ setAllVideos, setVideos, user }: AddVideoT
 
 	return (
 		<>
-			<Dialog>
+			<Dialog open={open} onOpenChange={setOpen}>
 				<DialogTrigger className="cursor-pointer h-[235px] max-w-[370px] w-full bg-center bg-cover bg-gray-300 rounded-[10px] flex justify-center items-center">
 					<img src="/icons/add-100.png" alt="add new video icon" width={"100px"} height={"100px"} />
 				</DialogTrigger>
 				<DialogContent className="sm:max-w-3xl duration-200" onInteractOutside={(e) => e.preventDefault()}>
 					<DialogHeader>
-						<DialogTitle>Add New Video</DialogTitle>
+						<DialogTitle className="text-3xl">Add New Video</DialogTitle>
 						<DialogDescription>Enter video details below.</DialogDescription>
 					</DialogHeader>
 					{/* your form fields go here */}
 					<RHFVideoForm
-						initialData={{}}
+						initialData={{
+							tournament: "Australian Open",
+							year: 2027,
+							youtubeId: "LEDgye02f1w",
+							round: "Finals",
+							player1: "Jannik Sinner",
+							player2: "Frances Tiafoe",
+							title: "Jannik Sinner vs. Frances Tiafoe | 2027 Cincinnati Open",
+						}}
 						HTTPmethod="POST"
 						endpoint="videos/add"
 						onFormSubmit={handleSubmit}
 						user={user}
+						setOpenModal={setOpen}
 					/>
 					<DialogFooter>
-						<DialogClose asChild>
-							<Button type="submit" form="video-form">
-								Submit
-							</Button>
-						</DialogClose>
+						<Button type="submit" form="video-form">
+							Submit
+						</Button>
 					</DialogFooter>
 				</DialogContent>
 			</Dialog>

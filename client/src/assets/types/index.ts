@@ -108,6 +108,7 @@ export interface VideoCards {
 
 export type User = {
 	username: string;
+	email?: string;
 	role: string;
 	token: string;
 } | null;

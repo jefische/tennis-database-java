@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Fragment, useState } from "react";
 import SCNEditModal from "./edit/SCNEditModal";
+import DeleteModal from "./delete/DeleteModal";
 import { generateMatchSummary } from "@/utils/matchSummaryAgent";
 import { VideoCards, Videos } from "@/types";
 import { Star } from "lucide-react";
-import { toast } from "sonner";
 
 import {
 	DropdownMenu,
@@ -47,6 +47,7 @@ export default function SCNVideoCard({
 }: VideoCards) {
 	const [editModal, setEditModal] = useState<boolean>(false);
 	const [editData, setEditData] = useState<Videos>({} as Videos);
+	const [deleteModal, setDeleteModal] = useState<boolean>(false);
 	const [aiSummary, setAiSummary] = useState<AISummary | null>(() => {
 		if (!summary) return null;
 		if (summary.startsWith("No transcript")) return null;
@@ -80,6 +81,25 @@ export default function SCNVideoCard({
 			});
 	};
 
+	const openDeleteModal = (): void => {
+		fetch(`${import.meta.env.VITE_API_URL}/videos/${id}`, {
+			method: "GET",
+		})
+			.then((res) => {
+				if (!res.ok) {
+					throw new Error(`HTTP error! status: ${res.status}`);
+				}
+				return res.json();
+			})
+			.then((data) => {
+				setDeleteModal(true);
+				setEditData(data);
+			})
+			.catch((error) => {
+				console.error("There was a problem with the fetch operation:\n", error);
+			});
+	};
+
 	async function handleTranscript(): Promise<void> {
 		// console.log("generating summary...");
 		setSummaryError(null);
@@ -97,73 +117,55 @@ export default function SCNVideoCard({
 		}
 	}
 
-	function handleDelete(): void {
-		fetch(`${import.meta.env.VITE_API_URL}/videos/${id}`, {
-			method: "DELETE",
-			headers: {
-				Authorization: `Bearer ${user?.token}`,
-			},
-		})
-			.then((res) => {
-				if (!res.ok) {
-					throw new Error(`HTTP error! status: ${res.status}`);
-				}
-				return res.json();
-			})
-			.then((data) => {
-				setAllVideos(data);
-				setVideos(data);
-			})
-			.catch((error) => {
-				console.error("There was a problem with the fetch operation:\n", error);
-			});
-
-		toast.success("Video deleted");
-	}
-
 	return (
 		<Fragment>
 			<Dialog>
-				<DialogTrigger
-					className={cn(
-						"cursor-pointer relative h-[235px] max-w-[370px] w-full bg-center bg-cover rounded-[10px]",
-						"hover:scale-105 transition-all duration-500 ease-in-out",
-						dropdownOpen && "scale-105",
-					)}
-					style={{
-						backgroundImage: `url(http://img.youtube.com/vi/${id}/0.jpg)`,
-					}}
-				>
-					{user?.role === "ADMIN" && (
-						<>
-							<DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
-								<DropdownMenuTrigger asChild>
-									<Button
-										variant="default"
-										className="absolute top-[10px] right-[10px] cursor-pointer"
+				<DialogTrigger asChild>
+					<div
+						role="button"
+						tabIndex={0}
+						className={cn(
+							"cursor-pointer relative h-[235px] max-w-[370px] w-full bg-center bg-cover rounded-[10px]",
+							"hover:scale-105 transition-all duration-500 ease-in-out",
+							dropdownOpen && "scale-105",
+						)}
+						style={{
+							backgroundImage: `url(http://img.youtube.com/vi/${id}/0.jpg)`,
+						}}
+					>
+						{user?.role === "ADMIN" && (
+							<>
+								<DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
+									<DropdownMenuTrigger asChild>
+										<Button
+											variant="default"
+											className="absolute top-[10px] right-[10px] cursor-pointer"
+											onClick={(e) => e.stopPropagation()}
+										>
+											Actions
+										</Button>
+									</DropdownMenuTrigger>
+									<DropdownMenuContent
+										className="w-40"
+										align="start"
 										onClick={(e) => e.stopPropagation()}
 									>
-										Actions
-									</Button>
-								</DropdownMenuTrigger>
-								<DropdownMenuContent
-									className="w-40"
-									align="start"
-									onClick={(e) => e.stopPropagation()}
-								>
-									<DropdownMenuGroup>
-										<DropdownMenuLabel>Video Options</DropdownMenuLabel>
-										<DropdownMenuItem onSelect={() => openEditModal()}>Edit </DropdownMenuItem>
-										<DropdownMenuItem onSelect={() => handleDelete()}>Delete</DropdownMenuItem>
-										<DropdownMenuItem disabled>Settings</DropdownMenuItem>
-									</DropdownMenuGroup>
-								</DropdownMenuContent>
-							</DropdownMenu>
-						</>
-					)}
-					<p className="absolute bottom-[-55px] font-semibold">
-						{title} ({duration})
-					</p>
+										<DropdownMenuGroup>
+											<DropdownMenuLabel>Video Options</DropdownMenuLabel>
+											<DropdownMenuItem onSelect={() => openEditModal()}>Edit </DropdownMenuItem>
+											<DropdownMenuItem onSelect={() => openDeleteModal()}>
+												Delete
+											</DropdownMenuItem>
+											<DropdownMenuItem disabled>Settings</DropdownMenuItem>
+										</DropdownMenuGroup>
+									</DropdownMenuContent>
+								</DropdownMenu>
+							</>
+						)}
+						<p className="absolute bottom-[-55px] font-semibold">
+							{title} ({duration})
+						</p>
+					</div>
 				</DialogTrigger>
 				<DialogContent className="sm:max-w-xl md:max-w-2xl xl:max-w-7xl duration-200">
 					<DialogHeader>
@@ -248,6 +250,14 @@ export default function SCNVideoCard({
 				setVideos={setVideos}
 				user={user}
 				editData={editData}
+			/>
+			<DeleteModal
+				open={deleteModal}
+				setDeleteModal={setDeleteModal}
+				setAllVideos={setAllVideos}
+				setVideos={setVideos}
+				editData={editData}
+				user={user}
 			/>
 		</Fragment>
 	);
