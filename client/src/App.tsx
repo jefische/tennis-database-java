@@ -32,7 +32,7 @@ function NavbarLayout({ user, setUser, darkMode, setDarkMode }: NavbarProps) {
 }
 export default function App() {
 	const [user, setUser] = useState<User>(null);
-	const [darkMode, setDarkMode] = useState<boolean>(() => localStorage.getItem("theme") === "dark");
+	const [darkMode, setDarkMode] = useState<boolean>(() => localStorage.getItem("theme") !== "light");
 
 	useEffect(() => {
 		document.documentElement.classList.toggle("dark", darkMode);
@@ -52,7 +52,11 @@ export default function App() {
 			<BrowserRouter>
 				<Routes>
 					<Route path="/" element={<Landing />} />
-					<Route element={<NavbarLayout user={user} setUser={setUser} darkMode={darkMode} setDarkMode={setDarkMode} />}>
+					<Route
+						element={
+							<NavbarLayout user={user} setUser={setUser} darkMode={darkMode} setDarkMode={setDarkMode} />
+						}
+					>
 						<Route path="/home" element={<Home user={user} />} />
 						<Route path="/players" element={<Players />} />
 						<Route path="/draws" element={<Draws />} />
