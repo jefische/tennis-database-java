@@ -17,12 +17,14 @@ import { Toaster } from "./components/ui/sonner";
 interface NavbarProps {
 	user: User;
 	setUser: (user: User) => void;
+	darkMode: boolean;
+	setDarkMode: (dark: boolean) => void;
 }
 
-function NavbarLayout({ user, setUser }: NavbarProps) {
+function NavbarLayout({ user, setUser, darkMode, setDarkMode }: NavbarProps) {
 	return (
 		<>
-			<Navbar user={user} setUser={setUser} />
+			<Navbar user={user} setUser={setUser} darkMode={darkMode} setDarkMode={setDarkMode} />
 			<Outlet />
 			<Toaster />
 		</>
@@ -30,6 +32,13 @@ function NavbarLayout({ user, setUser }: NavbarProps) {
 }
 export default function App() {
 	const [user, setUser] = useState<User>(null);
+	const [darkMode, setDarkMode] = useState<boolean>(() => localStorage.getItem("theme") === "dark");
+
+	useEffect(() => {
+		document.documentElement.classList.toggle("dark", darkMode);
+		localStorage.setItem("theme", darkMode ? "dark" : "light");
+	}, [darkMode]);
+
 	useEffect(() => {
 		const token = localStorage.getItem("token");
 		if (token) {
@@ -43,7 +52,7 @@ export default function App() {
 			<BrowserRouter>
 				<Routes>
 					<Route path="/" element={<Landing />} />
-					<Route element={<NavbarLayout user={user} setUser={setUser} />}>
+					<Route element={<NavbarLayout user={user} setUser={setUser} darkMode={darkMode} setDarkMode={setDarkMode} />}>
 						<Route path="/home" element={<Home user={user} />} />
 						<Route path="/players" element={<Players />} />
 						<Route path="/draws" element={<Draws />} />

@@ -8,8 +8,8 @@ export default function Players() {
 	return (
 		<>
 			{isProduction ? (
-				<div className="body-container bg-gray-custom">
-					<h1 style={{ textAlign: "center", paddingTop: "10%", color: "#fff" }}>
+				<div className="h-[calc(100%-64px)] mb-4 bg-background">
+					<h1 className="text-foreground" style={{ textAlign: "center", paddingTop: "10%" }}>
 						Player page is under development
 					</h1>
 				</div>

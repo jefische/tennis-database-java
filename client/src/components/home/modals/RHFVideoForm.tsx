@@ -25,8 +25,9 @@ const schema = z.object({
 	year: z.number({ message: "Please enter a year" }).min(1970).max(2027),
 	round: z.string(),
 	youtubeId: z.string(),
-	player1: z.string(),
-	player2: z.string(),
+	//Letters, hyphens, forward slash and apostrophes only
+	player1: z.string().regex(/^[a-zA-Z'\s\-\/]+$/, "Please enter valid characters only"),
+	player2: z.string().regex(/^[a-zA-Z'\s\-\/]+$/, "Please enter valid characters only"),
 	title: z.string(),
 });
 
@@ -142,7 +143,7 @@ export default function RHFVideoForm({
 	}
 
 	return (
-		<form id="video-form" className="flex flex-col gap-6" onSubmit={form.handleSubmit(saveVideo)}>
+		<form id="video-form" className="flex flex-col gap-6" onSubmit={form.handleSubmit(saveVideo)} noValidate>
 			<div className="grid grid-cols-2 gap-6">
 				{/* Radix Select needs Controller */}
 
@@ -249,8 +250,8 @@ export default function RHFVideoForm({
 								id={field.name}
 								placeholder="e.g. Carlos Alcaraz"
 								onChange={(e) => handleChanges(field, e.target.value)}
-								pattern="[a-zA-Z'\s\-\/]+" // Letters, hyphens, forward slash and apostrophes only
 							/>
+							{fieldState.error && <FieldError errors={[fieldState.error]} />}
 						</Field>
 					)}
 				/>
@@ -269,8 +270,8 @@ export default function RHFVideoForm({
 								id={field.name}
 								placeholder="e.g. Tommy Paul"
 								onChange={(e) => handleChanges(field, e.target.value)}
-								pattern="[a-zA-Z'\s\-\/]+" // Letters, hyphens, forward slash and apostrophes only
 							/>
+							{fieldState.error && <FieldError errors={[fieldState.error]} />}
 						</Field>
 					)}
 				/>
@@ -285,7 +286,12 @@ export default function RHFVideoForm({
 							<FieldLabel htmlFor={field.name} className="ps-2">
 								Title
 							</FieldLabel>
-							<Button variant="outline" size="default" className="mx-4 mb-2" onClick={setDuration}>
+							<Button
+								variant="secondary"
+								size="default"
+								className="mx-4 mb-2 cursor-pointer"
+								onClick={setDuration}
+							>
 								YT API
 							</Button>
 						</div>

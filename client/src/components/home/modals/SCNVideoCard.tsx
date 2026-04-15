@@ -152,11 +152,21 @@ export default function SCNVideoCard({
 									>
 										<DropdownMenuGroup>
 											<DropdownMenuLabel>Video Options</DropdownMenuLabel>
-											<DropdownMenuItem onSelect={() => openEditModal()}>Edit </DropdownMenuItem>
-											<DropdownMenuItem onSelect={() => openDeleteModal()}>
+											<DropdownMenuItem
+												onSelect={() => openEditModal()}
+												className="cursor-pointer"
+											>
+												Edit{" "}
+											</DropdownMenuItem>
+											<DropdownMenuItem
+												onSelect={() => openDeleteModal()}
+												className="cursor-pointer"
+											>
 												Delete
 											</DropdownMenuItem>
-											<DropdownMenuItem disabled>Settings</DropdownMenuItem>
+											<DropdownMenuItem disabled className="cursor-pointer">
+												Settings
+											</DropdownMenuItem>
 										</DropdownMenuGroup>
 									</DropdownMenuContent>
 								</DropdownMenu>
@@ -171,7 +181,11 @@ export default function SCNVideoCard({
 					<DialogHeader>
 						<DialogTitle className="flex items-center justify-center gap-6 text-2xl">
 							{title} ({duration})
-							{user?.role === "ADMIN" && <Button onClick={handleTranscript}>Create Transcript</Button>}
+							{user?.role === "ADMIN" && (
+								<Button onClick={handleTranscript} className="cursor-pointer">
+									Create Transcript
+								</Button>
+							)}
 						</DialogTitle>
 					</DialogHeader>
 

@@ -4,7 +4,7 @@ export default function Landing() {
 	return (
 		<>
 			<section className="landing-page flex items-center text-center h-full bg-center bg-cover bg-[url('/bgs/wawrinka.jpg')] px-6">
-				<div className="bg-black/70 p-10 rounded-3xl max-w-3xl mx-auto animate-mymove">
+				<div className="bg-black/70 p-10 rounded-3xl max-w-3xl mx-auto animate-landingPage">
 					<h1 className="text-4xl md:text-5xl font-bold md:tracking-wide mb-8">
 						Watch Full-Length Professional Tennis Matches
 					</h1>

@@ -49,7 +49,7 @@ export default function SCNEditModal({ setAllVideos, setVideos, user, editData, 
 					/>
 					<DialogFooter>
 						<DialogClose asChild>
-							<Button type="submit" form="video-form">
+							<Button type="submit" form="video-form" className="cursor-pointer">
 								Submit
 							</Button>
 						</DialogClose>

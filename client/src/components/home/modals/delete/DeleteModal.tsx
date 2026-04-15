@@ -69,10 +69,13 @@ export default function DeleteModal({
 					</DialogHeader>
 					<DialogFooter className="flex gap-3 sm:justify-end">
 						<DialogClose asChild>
-							<Button variant="outline">Cancel</Button>
+							<Button variant="outline" className="cursor-pointer">
+								Cancel
+							</Button>
 						</DialogClose>
 						<Button
 							variant="destructive"
+							className="cursor-pointer"
 							onClick={() => {
 								handleDelete();
 								setDeleteModal(false);

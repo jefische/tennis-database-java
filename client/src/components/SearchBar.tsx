@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Input } from "./ui/input";
 import { setVideosFunction, Videos } from "@/types";
 
 interface SearchBarProps {
@@ -31,7 +32,7 @@ export function SearchBar({ allVideos, setVideos }: SearchBarProps) {
 
 	return (
 		<>
-			<input
+			<Input
 				className="bg-white text-black min-w-3/4 xl:min-w-0 xl:basis-[500px] h-[50px]"
 				name="searchBar"
 				type="text"

@@ -29,6 +29,7 @@ export default function VideoForm({ initialData, HTTPmethod, endpoint, onFormSub
 	});
 
 	return (
+		// Use noValidate to turn off the native browser form validation (tooltips)
 		<form
 			id="video-form"
 			className={`add-video ${formValidated ? "was-validated" : ""}`}
