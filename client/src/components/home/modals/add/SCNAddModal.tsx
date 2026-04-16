@@ -41,7 +41,11 @@ export default function SCNAddModal({ setAllVideos, setVideos, user }: AddVideoT
 				>
 					<img src="/icons/add-100.png" alt="add new video icon" width={"100px"} height={"100px"} />
 				</DialogTrigger>
-				<DialogContent className="sm:max-w-3xl duration-200" onInteractOutside={(e) => e.preventDefault()}>
+				<DialogContent
+					className="sm:max-w-3xl duration-200"
+					mode="light"
+					onInteractOutside={(e) => e.preventDefault()}
+				>
 					<DialogHeader>
 						<DialogTitle className="text-3xl">Add New Video</DialogTitle>
 						<DialogDescription>Enter video details below.</DialogDescription>
@@ -64,7 +68,7 @@ export default function SCNAddModal({ setAllVideos, setVideos, user }: AddVideoT
 						setOpenModal={setOpen}
 					/>
 					<DialogFooter>
-						<Button type="submit" form="video-form" className="cursor-pointer">
+						<Button type="submit" form="video-form">
 							Submit
 						</Button>
 					</DialogFooter>

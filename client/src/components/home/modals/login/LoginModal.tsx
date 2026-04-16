@@ -49,7 +49,7 @@ export default function LoginModal({
 	};
 	return (
 		<Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-			<DialogContent className="sm:max-w-lg">
+			<DialogContent className="sm:max-w-lg" mode="light">
 				<DialogHeader>
 					<DialogTitle>Login</DialogTitle>
 					<DialogDescription>Enter your username and password below.</DialogDescription>

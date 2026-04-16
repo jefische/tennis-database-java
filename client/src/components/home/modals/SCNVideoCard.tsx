@@ -177,15 +177,11 @@ export default function SCNVideoCard({
 						</p>
 					</div>
 				</DialogTrigger>
-				<DialogContent className="sm:max-w-xl md:max-w-2xl xl:max-w-7xl duration-200">
+				<DialogContent className="sm:max-w-xl md:max-w-2xl xl:max-w-7xl duration-200" mode="light">
 					<DialogHeader>
 						<DialogTitle className="flex items-center justify-center gap-6 text-2xl">
 							{title} ({duration})
-							{user?.role === "ADMIN" && (
-								<Button onClick={handleTranscript} className="cursor-pointer">
-									Create Transcript
-								</Button>
-							)}
+							{user?.role === "ADMIN" && <Button onClick={handleTranscript}>Create Transcript</Button>}
 						</DialogTitle>
 					</DialogHeader>
 
@@ -252,7 +248,7 @@ export default function SCNVideoCard({
 
 					<DialogFooter>
 						<DialogClose asChild>
-							<Button className="cursor-pointer">Close</Button>
+							<Button>Close</Button>
 						</DialogClose>
 					</DialogFooter>
 				</DialogContent>

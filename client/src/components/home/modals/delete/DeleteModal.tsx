@@ -59,7 +59,11 @@ export default function DeleteModal({
 	return (
 		<>
 			<Dialog open={open} onOpenChange={setDeleteModal}>
-				<DialogContent className="sm:max-w-md duration-200" onInteractOutside={(e) => e.preventDefault()}>
+				<DialogContent
+					className="sm:max-w-md duration-200"
+					mode="light"
+					onInteractOutside={(e) => e.preventDefault()}
+				>
 					<DialogHeader>
 						<DialogTitle className="text-2xl">Delete Video</DialogTitle>
 						<DialogDescription>
@@ -75,7 +79,6 @@ export default function DeleteModal({
 						</DialogClose>
 						<Button
 							variant="destructive"
-							className="cursor-pointer"
 							onClick={() => {
 								handleDelete();
 								setDeleteModal(false);

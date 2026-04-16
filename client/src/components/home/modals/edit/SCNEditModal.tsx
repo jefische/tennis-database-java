@@ -33,7 +33,11 @@ export default function SCNEditModal({ setAllVideos, setVideos, user, editData, 
 		<>
 			<Dialog open={open} onOpenChange={setEditModal}>
 				{/* <DialogTrigger className="cursor-pointer rounded-[10px]">Edit</DialogTrigger> */}
-				<DialogContent className="sm:max-w-3xl duration-200" onInteractOutside={(e) => e.preventDefault()}>
+				<DialogContent
+					className="sm:max-w-3xl duration-200"
+					mode="light"
+					onInteractOutside={(e) => e.preventDefault()}
+				>
 					<DialogHeader>
 						<DialogTitle className="text-3xl">Edit Video</DialogTitle>
 						<DialogDescription>Enter video details below.</DialogDescription>
@@ -49,7 +53,7 @@ export default function SCNEditModal({ setAllVideos, setVideos, user, editData, 
 					/>
 					<DialogFooter>
 						<DialogClose asChild>
-							<Button type="submit" form="video-form" className="cursor-pointer">
+							<Button type="submit" form="video-form">
 								Submit
 							</Button>
 						</DialogClose>
