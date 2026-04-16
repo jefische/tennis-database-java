@@ -58,11 +58,13 @@ export default function Home({ user }: { user: User }) {
 	return (
 		<>
 			<div className="h-[calc(100%-64px)] mb-4">
-				<section className="flex bg-gray-800 h-full">
+				<section className="flex bg-background h-full">
 					<Sidebar allVideos={allVideos} setVideos={setVideos} initFilters={filterDataSorted} />
 					<main className="w-full md:w-[calc(100%-245px)] overflow-auto px-[50px] pb-[500px] scrollbar-custom">
 						<div className="flex flex-col items-center gap-[50px] py-[50px] xl:flex-row justify-center">
-							<h1 className="text-4xl text-center">Welcome to the Match Archive {user?.username}</h1>
+							<h1 className="text-4xl text-center text-foreground font-semibold">
+								Welcome to the Match Archive {user?.username}
+							</h1>
 							<SearchBar allVideos={allVideos} setVideos={setVideos} />
 						</div>
 						<TagFilters></TagFilters>

@@ -45,7 +45,7 @@ export default function Sidebar({ allVideos, setVideos, initFilters }: SidebarPr
 	}, [allVideos]); // This dependency allows setFormData to run twice. Initially allVideos is empty on first render while the data is fetched from our API.
 
 	return (
-		<aside className="hidden md:flex flex-col items-center w-3xs p-4 border-r-2 border-gray-600 overflow-y-scroll scrollbar-custom">
+		<aside className="hidden md:flex flex-col items-center w-3xs p-4 bg-sidebar border-r-1 border-gray-400 text-foreground overflow-y-scroll scrollbar-custom">
 			<form action="" className="w-[180px]" onSubmit={handleSubmit}>
 				Filter Match Results
 				<TournamentFilters formData={formData} setFormData={setFormData} />

@@ -172,7 +172,7 @@ export default function SCNVideoCard({
 								</DropdownMenu>
 							</>
 						)}
-						<p className="absolute bottom-[-55px] font-semibold">
+						<p className="absolute bottom-[-55px] font-semibold text-foreground">
 							{title} ({duration})
 						</p>
 					</div>
