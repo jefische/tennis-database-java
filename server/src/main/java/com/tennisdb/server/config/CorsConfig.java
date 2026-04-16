@@ -16,7 +16,12 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(@NonNull CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:5173", "https://tennis-database-java.fly.dev")
+                .allowedOrigins(
+                        "http://localhost:5173",
+                        "https://tennis-database-java.fly.dev",
+                        "https://tennisreplay.tv",
+                        "https://www.tennisreplay.tv"
+                )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
