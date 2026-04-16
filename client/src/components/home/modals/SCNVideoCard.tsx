@@ -125,54 +125,57 @@ export default function SCNVideoCard({
 						role="button"
 						tabIndex={0}
 						className={cn(
-							"cursor-pointer relative h-[235px] max-w-[370px] w-full bg-center bg-cover rounded-[10px]",
-							"hover:scale-105 transition-all duration-500 ease-in-out",
+							"cursor-pointer hover:scale-105 transition-all duration-500 ease-in-out",
 							dropdownOpen && "scale-105",
 						)}
-						style={{
-							backgroundImage: `url(http://img.youtube.com/vi/${id}/0.jpg)`,
-						}}
 					>
-						{user?.role === "ADMIN" && (
-							<>
-								<DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
-									<DropdownMenuTrigger asChild>
-										<Button
-											variant="default"
-											className="absolute top-[10px] right-[10px] cursor-pointer"
+						<div
+							className={cn("relative h-[235px] max-w-[370px] w-full bg-center bg-cover rounded-[10px]")}
+							style={{
+								backgroundImage: `url(http://img.youtube.com/vi/${id}/0.jpg)`,
+							}}
+						>
+							{user?.role === "ADMIN" && (
+								<>
+									<DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
+										<DropdownMenuTrigger asChild>
+											<Button
+												variant="default"
+												className="absolute top-[10px] right-[10px] cursor-pointer"
+												onClick={(e) => e.stopPropagation()}
+											>
+												Actions
+											</Button>
+										</DropdownMenuTrigger>
+										<DropdownMenuContent
+											className="w-40"
+											align="start"
 											onClick={(e) => e.stopPropagation()}
 										>
-											Actions
-										</Button>
-									</DropdownMenuTrigger>
-									<DropdownMenuContent
-										className="w-40"
-										align="start"
-										onClick={(e) => e.stopPropagation()}
-									>
-										<DropdownMenuGroup>
-											<DropdownMenuLabel>Video Options</DropdownMenuLabel>
-											<DropdownMenuItem
-												onSelect={() => openEditModal()}
-												className="cursor-pointer"
-											>
-												Edit{" "}
-											</DropdownMenuItem>
-											<DropdownMenuItem
-												onSelect={() => openDeleteModal()}
-												className="cursor-pointer"
-											>
-												Delete
-											</DropdownMenuItem>
-											<DropdownMenuItem disabled className="cursor-pointer">
-												Settings
-											</DropdownMenuItem>
-										</DropdownMenuGroup>
-									</DropdownMenuContent>
-								</DropdownMenu>
-							</>
-						)}
-						<p className="absolute bottom-[-55px] font-semibold text-foreground">
+											<DropdownMenuGroup>
+												<DropdownMenuLabel>Video Options</DropdownMenuLabel>
+												<DropdownMenuItem
+													onSelect={() => openEditModal()}
+													className="cursor-pointer"
+												>
+													Edit{" "}
+												</DropdownMenuItem>
+												<DropdownMenuItem
+													onSelect={() => openDeleteModal()}
+													className="cursor-pointer"
+												>
+													Delete
+												</DropdownMenuItem>
+												<DropdownMenuItem disabled className="cursor-pointer">
+													Settings
+												</DropdownMenuItem>
+											</DropdownMenuGroup>
+										</DropdownMenuContent>
+									</DropdownMenu>
+								</>
+							)}
+						</div>
+						<p className="mt-2 ms-1 font-semibold text-foreground">
 							{title} ({duration})
 						</p>
 					</div>

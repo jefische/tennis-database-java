@@ -68,7 +68,7 @@ export default function Home({ user }: { user: User }) {
 							<SearchBar allVideos={allVideos} setVideos={setVideos} />
 						</div>
 						<TagFilters></TagFilters>
-						<div className="grid grid-cols-[repeat(auto-fill,minmax(300px,370px))] gap-x-6 gap-y-20 mb-[50px] justify-center">
+						<div className="grid grid-cols-[repeat(auto-fill,minmax(300px,370px))] gap-x-6 gap-y-8 mb-[50px] justify-center">
 							{user?.role === "ADMIN" && (
 								<>
 									<SCNAddModal setAllVideos={setAllVideos} setVideos={setVideos} user={user} />{" "}
