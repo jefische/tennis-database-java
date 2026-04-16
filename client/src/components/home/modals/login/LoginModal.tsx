@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { User } from "@/types";
+import { cn } from "@/lib/utils";
 
 export default function LoginModal({
 	dialogOpen,
@@ -49,7 +50,7 @@ export default function LoginModal({
 	};
 	return (
 		<Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-			<DialogContent className="sm:max-w-lg" mode="light">
+			<DialogContent className={cn("w-[calc(100%-2rem)] sm:max-w-lg rounded-lg h-auto")} mode="light">
 				<DialogHeader>
 					<DialogTitle>Login</DialogTitle>
 					<DialogDescription>Enter your username and password below.</DialogDescription>

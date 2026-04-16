@@ -50,7 +50,7 @@ export default function RegisterModal({
 
 	return (
 		<Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-			<DialogContent className="sm:max-w-md" mode="light">
+			<DialogContent className="w-[calc(100%-2rem)] rounded-lg max-w-md h-auto" mode="light">
 				<DialogHeader>
 					<DialogTitle>Register</DialogTitle>
 					<DialogDescription>Account registration</DialogDescription>
