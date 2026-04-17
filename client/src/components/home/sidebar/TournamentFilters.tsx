@@ -1,5 +1,8 @@
 import { setFiltersFunction, VideoFilters, TournamentFilterItem } from "@/assets/types";
 import { useState } from "react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { ChevronDown } from "lucide-react";
 
 interface TournamentFilterProps {
 	formData: VideoFilters;
@@ -29,14 +32,13 @@ export default function TournamentFilters({ formData, setFormData }: TournamentF
 		});
 	}
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-		const { name, checked } = e.target;
+	const handleChange = (key: string, checked: boolean): void => {
 		setFormData({
 			...formData,
 			tournament: {
 				...formData.tournament,
-				[name]: {
-					...formData.tournament[name],
+				[key]: {
+					...formData.tournament[key],
 					include: checked,
 				},
 			},
@@ -46,44 +48,52 @@ export default function TournamentFilters({ formData, setFormData }: TournamentF
 	};
 
 	return (
-		<div className="accordion-rjs pt-[10px]">
-			<div className="accordion-item-rjs">
+		<div className="accordion pt-[10px]">
+			<div className="accordion-item">
 				<div
-					className="accordion-title-rjs flex justify-between border-top cursor-pointer pt-[10px]"
+					className="accordion-title flex justify-between border-top cursor-pointer pt-[10px]"
 					onClick={() => setIsActive(!isActive)}
 				>
-					<h6 className="hover:underline">Tournament</h6>
-					<div className="expand pe-[10px]">{isActive ? "-" : "+"}</div>
+					<h6 className="hover:underline text-lg">Tournament</h6>
+					<ChevronDown
+						className={`size-4 transition-transform duration-300 ${isActive ? "rotate-180" : ""}`}
+					/>
 				</div>
 				<div
 					className={`grid transition-[grid-template-rows] duration-350 ease-in-out ${isActive ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
 				>
 					<div className="overflow-hidden">
 						<ul className="filter py-2 px-0">
-							<li className="p-1">
-								<input type="checkbox" checked={select} onChange={selectAll} />
-								<label htmlFor="selectAll" className="ps-[10px]">
+							<li className="flex items-center p-1">
+								<Checkbox
+									id="selectAll"
+									className="size-4"
+									checked={select}
+									onCheckedChange={() => selectAll()}
+								/>
+								<Label htmlFor="selectAll" className="ps-[10px] text-base">
 									Select All ({numTournaments})
-								</label>
+								</Label>
 							</li>
 							{tournaments.map(([key, val], idx) => {
 								let title = val.title;
 								let count = val.count;
 								return (
-									<li key={idx} className="p-1">
-										<input
-											type="checkbox"
+									<li key={idx} className="flex items-center p-1">
+										<Checkbox
 											name={key}
+											className="size-4"
 											checked={
 												formData.tournament[key] == undefined
 													? true
 													: formData.tournament[key].include
 											}
-											onChange={handleChange}
+											onCheckedChange={(checked) => handleChange(key, checked as boolean)}
 										/>
-										<label htmlFor={key} className="ps-[10px]">
+
+										<Label htmlFor={key} className="ps-[10px] text-base">
 											{title} ({count})
-										</label>
+										</Label>
 									</li>
 								);
 							})}

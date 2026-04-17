@@ -17,6 +17,7 @@ export default function Home({ user }: { user: User }) {
 	const [allVideos, setAllVideos] = useState<Videos[]>([]);
 	// formData is used to manage the checkboxes and pass them to form submit for ytVideo filtering and rendering in Home.jsx
 	const [formData, setFormData] = useState<VideoFilters>({ tournament: {}, year: {} });
+	const [filterOpen, setFilterOpen] = useState<boolean>(false);
 
 	// import.meta is a runtime metadata object available in ES modules
 	// Vite injects an env object on import.meta
@@ -26,6 +27,33 @@ export default function Home({ user }: { user: User }) {
 	const requestOptions: RequestInit = {
 		method: "GET",
 		mode: "cors",
+	};
+
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+		e.preventDefault();
+		let filterVideos: Videos[] = [];
+
+		// First extract years to include for filtering
+		const yearsToInclude: number[] = Object.entries(formData.year)
+			.filter(([key, val]) => {
+				return val.include === true;
+			})
+			.map(([key, value]) => Number(key));
+
+		// Then, filter formData for tournaments to include by years selected from above.
+		for (var key in formData.tournament) {
+			if (formData.tournament[key].include == true) {
+				const temp: Videos[] = allVideos.filter(
+					(x) => formData.tournament[key].title === x.tournament && yearsToInclude.includes(x.year),
+				);
+
+				if (temp.length > 0) {
+					filterVideos = filterVideos.concat(temp);
+				}
+			}
+		}
+		setVideos(filterVideos);
+		setFilterOpen(false);
 	};
 
 	useEffect(() => {
@@ -61,12 +89,7 @@ export default function Home({ user }: { user: User }) {
 		<>
 			<div className="h-[calc(100%-64px)] mb-4">
 				<section className="flex bg-background h-full">
-					<Sidebar
-						allVideos={allVideos}
-						setVideos={setVideos}
-						formData={formData}
-						setFormData={setFormData}
-					/>
+					<Sidebar formData={formData} setFormData={setFormData} handleFilter={handleSubmit} />
 					<main className="w-full md:w-[calc(100%-245px)] overflow-auto px-[50px] pb-[500px] scrollbar-custom">
 						<div className="flex flex-col items-center gap-[50px] py-[50px] xl:flex-row justify-center">
 							<h1 className="text-4xl text-center text-foreground font-semibold">
@@ -96,26 +119,31 @@ export default function Home({ user }: { user: User }) {
 								);
 							})}
 						</div>
-						<Sheet>
-							<SheetTrigger asChild className="md:hidden">
-								<Button
-									variant="outline"
-									size="icon"
-									disabled
-									className="fixed bottom-5 right-4 z-30 rounded-full shadow-lg"
-								>
-									<SlidersHorizontal className="size-5" />
-								</Button>
-							</SheetTrigger>
-							<SheetContent side="right" className="w-72 ps-2 overflow-y-auto">
-								<SheetHeader>
-									<SheetTitle>Filters</SheetTitle>
-								</SheetHeader>
+					</main>
+					<Sheet open={filterOpen} onOpenChange={setFilterOpen}>
+						<SheetTrigger asChild className="md:hidden">
+							<Button
+								variant="outline"
+								size="icon"
+								className="fixed bottom-5 right-2 sm:right-4 z-30 rounded-full shadow-lg"
+							>
+								<SlidersHorizontal className="size-5" />
+							</Button>
+						</SheetTrigger>
+						<SheetContent side="right" className="w-72 ps-2 overflow-y-auto">
+							<SheetHeader>
+								<SheetTitle>Filters</SheetTitle>
+							</SheetHeader>
+							<form className="w-auto px-4" onSubmit={handleSubmit}>
+								<h2 className="text-xl">Filter Match Results</h2>
 								<TournamentFilters formData={formData} setFormData={setFormData} />
 								<YearFilters formData={formData} setFormData={setFormData} />
-							</SheetContent>
-						</Sheet>
-					</main>
+								<Button size="lg" className="my-1" type="submit">
+									Apply Filters
+								</Button>
+							</form>
+						</SheetContent>
+					</Sheet>
 				</section>
 			</div>
 		</>
