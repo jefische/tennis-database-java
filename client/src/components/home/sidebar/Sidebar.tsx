@@ -1,19 +1,16 @@
-import { useEffect, useState } from "react";
 import TournamentFilters from "./TournamentFilters";
 import YearFilters from "./YearFilters";
-import { Videos, setVideosFunction, VideoFilters } from "@/assets/types";
+import { Videos, setVideosFunction, VideoFilters, setFiltersFunction } from "@/assets/types";
 import { Button } from "@/components/ui/button";
 
 interface SidebarProps {
 	allVideos: Videos[];
 	setVideos: setVideosFunction;
-	initFilters: VideoFilters;
+	formData: VideoFilters;
+	setFormData: setFiltersFunction;
 }
 
-export default function Sidebar({ allVideos, setVideos, initFilters }: SidebarProps) {
-	// formData is used to manage the checkboxes and pass them to form submit for ytVideo filtering and rendering in Home.jsx
-	const [formData, setFormData] = useState<VideoFilters>(initFilters);
-
+export default function Sidebar({ allVideos, setVideos, formData, setFormData }: SidebarProps) {
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
 		e.preventDefault();
 		let filterVideos: Videos[] = [];
@@ -39,10 +36,6 @@ export default function Sidebar({ allVideos, setVideos, initFilters }: SidebarPr
 		}
 		setVideos(filterVideos);
 	};
-
-	useEffect(() => {
-		setFormData(initFilters);
-	}, [allVideos]); // This dependency allows setFormData to run twice. Initially allVideos is empty on first render while the data is fetched from our API.
 
 	return (
 		<aside className="hidden md:flex flex-col items-center w-3xs p-4 bg-sidebar border-r-1 border-gray-400 text-foreground overflow-y-scroll scrollbar-custom">

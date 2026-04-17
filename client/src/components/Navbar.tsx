@@ -1,13 +1,9 @@
-import {
-	Disclosure,
-	DisclosureButton,
-	DisclosurePanel,
-	Menu,
-	MenuButton,
-	MenuItem,
-	MenuItems,
-} from "@headlessui/react";
-import { Bars3Icon, XMarkIcon, SunIcon, MoonIcon, UserCircleIcon } from "@heroicons/react/24/outline";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+
+import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+
+import { Bars3Icon, SunIcon, MoonIcon, UserCircleIcon } from "@heroicons/react/24/outline";
+
 import { NavLink, Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 
@@ -63,18 +59,40 @@ export default function Navbar({ user, setUser, darkMode, setDarkMode }: NavbarP
 	};
 
 	return (
-		<Disclosure as="nav" className="bg-background border-b-1 border-gray-400">
+		<nav className="bg-background border-b-1 border-gray-400">
 			<div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
 				<div className="relative flex h-16 items-center justify-between">
-					<div className="inset-y-0 flex items-center sm:hidden">
-						{/* Mobile menu button*/}
-						<DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:bg-accent hover:text-foreground focus:ring-2 focus:ring-ring focus:outline-hidden focus:ring-inset">
-							<span className="absolute -inset-0.5" />
-							<span className="sr-only">Open main menu</span>
-							<Bars3Icon aria-hidden="true" className="block size-6 group-data-open:hidden" />
-							<XMarkIcon aria-hidden="true" className="hidden size-6 group-data-open:block" />
-						</DisclosureButton>
-					</div>
+					<Sheet>
+						<SheetTrigger asChild className="sm:hidden">
+							<Button variant="ghost" size="icon">
+								<Bars3Icon aria-hidden="true" className="size-6" />
+								<span className="sr-only">Open menu</span>
+							</Button>
+						</SheetTrigger>
+						<SheetContent side="left" className="w-64">
+							<SheetHeader>
+								<SheetTitle>Menu</SheetTitle>
+							</SheetHeader>
+							<nav className="flex flex-col gap-2 mt-4">
+								{activeLink.map((item) => (
+									<NavLink
+										key={item.name}
+										to={item.href}
+										className={classNames(
+											item.href === currentPath
+												? "bg-accent text-foreground"
+												: "text-muted-foreground hover:bg-accent hover:text-foreground",
+											"rounded-md px-3 py-2 mx-3 text-sm font-medium",
+										)}
+										onClick={handleActive}
+									>
+										{item.name}
+									</NavLink>
+								))}
+							</nav>
+						</SheetContent>
+					</Sheet>
+
 					<Link to="/" className="ms-10">
 						<img alt="Site Logo" src="/icons/tennis-ball-dark-96.png" className="h-8 w-auto" />
 					</Link>
@@ -155,27 +173,6 @@ export default function Navbar({ user, setUser, darkMode, setDarkMode }: NavbarP
 					</div>
 				</div>
 			</div>
-
-			<DisclosurePanel className="sm:hidden">
-				<div className="space-y-1 px-2 pt-2 pb-3">
-					{activeLink.map((item) => (
-						<NavLink
-							key={item.name}
-							to={item.href}
-							aria-current={item.current ? "page" : undefined}
-							className={classNames(
-								item.current
-									? "bg-accent text-foreground"
-									: "text-muted-foreground hover:bg-accent hover:text-foreground",
-								"block rounded-md px-3 py-2 text-base font-medium",
-							)}
-							onClick={handleActive}
-						>
-							{item.name}
-						</NavLink>
-					))}
-				</div>
-			</DisclosurePanel>
-		</Disclosure>
+		</nav>
 	);
 }
