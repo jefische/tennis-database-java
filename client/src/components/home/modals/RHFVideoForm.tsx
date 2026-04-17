@@ -1,9 +1,8 @@
 import { Videos, User } from "@/types";
 // import Button from "react-bootstrap/Button";
-import { useVideoForm } from "@/hooks/useVideoForm";
+// import { useVideoForm } from "@/hooks/useVideoForm";
 import { Tournaments } from "@/assets/data/tournaments";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
 	Select,
 	SelectContent,
@@ -19,6 +18,8 @@ import { Controller, useForm } from "react-hook-form";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { z } from "zod";
 import { checkThumbnail } from "@/utils/helpers";
+import { pullDuration } from "@/utils/callbacks";
+import { useState } from "react";
 
 const schema = z.object({
 	tournament: z.string().min(1, "Please select a tournament"),
@@ -29,6 +30,7 @@ const schema = z.object({
 	player1: z.string().regex(/^[a-zA-Z'\s\-\/]+$/, "Please enter valid characters only"),
 	player2: z.string().regex(/^[a-zA-Z'\s\-\/]+$/, "Please enter valid characters only"),
 	title: z.string(),
+	duration: z.string().optional(),
 });
 
 interface VideoFormProps {
@@ -48,13 +50,7 @@ export default function RHFVideoForm({
 	user,
 	setOpenModal,
 }: VideoFormProps) {
-	const { setDuration } = useVideoForm({
-		initialData: initialData,
-		HTTPmethod: HTTPmethod,
-		endpoint: endpoint,
-		onFormSubmit: onFormSubmit,
-	});
-
+	const [dur, setDur] = useState<boolean>(false);
 	const form = useForm<z.infer<typeof schema>>({
 		resolver: zodResolver(schema),
 		defaultValues: {
@@ -65,8 +61,15 @@ export default function RHFVideoForm({
 			player1: initialData.player1 ?? "",
 			player2: initialData.player2 ?? "",
 			title: initialData.title ?? "",
+			duration: initialData.duration ?? "",
 		},
 	});
+
+	const setDuration = async () => {
+		const duration = await pullDuration(form.getValues("youtubeId") ?? "");
+		form.setValue("duration", duration);
+		setDur(true);
+	};
 
 	const saveVideo = async (data: z.infer<typeof schema>) => {
 		form.clearErrors("youtubeId"); // reset any previous manual error
@@ -162,7 +165,7 @@ export default function RHFVideoForm({
 								<SelectContent>
 									<SelectGroup>
 										<SelectLabel>Choose...</SelectLabel>
-										{Tournaments.map((name) => {
+										{[...Tournaments].sort().map((name) => {
 											return (
 												<SelectItem key={name} value={name}>
 													{name}
@@ -289,11 +292,14 @@ export default function RHFVideoForm({
 							<Button
 								variant="secondary"
 								size="default"
-								className="mx-4 mb-2 cursor-pointer"
+								className="mx-4"
+								type="button"
+								disabled={dur}
 								onClick={setDuration}
 							>
 								YT API
 							</Button>
+							{dur && <p className="text-foreground">Duration set!</p>}
 						</div>
 						<Input
 							{...field}

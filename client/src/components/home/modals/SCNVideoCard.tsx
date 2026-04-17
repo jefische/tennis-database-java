@@ -180,7 +180,10 @@ export default function SCNVideoCard({
 						</p>
 					</div>
 				</DialogTrigger>
-				<DialogContent className="sm:max-w-xl md:max-w-2xl lg:max-w-4xl xl:max-w-7xl duration-200" mode="light">
+				<DialogContent
+					className="sm:max-w-xl md:max-w-2xl lg:max-w-4xl xl:max-w-7xl duration-200 grid-rows-[auto_1fr] sm:min-h-2/3 lg:min-h-3/4"
+					mode="light"
+				>
 					<DialogHeader>
 						<DialogTitle className="flex items-center justify-center gap-6 text-2xl">
 							{title} ({duration})

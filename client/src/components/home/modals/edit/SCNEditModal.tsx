@@ -45,7 +45,7 @@ export default function SCNEditModal({ setAllVideos, setVideos, user, editData, 
 					{/* your form fields go here */}
 					<RHFVideoForm
 						initialData={editData}
-						HTTPmethod="POST"
+						HTTPmethod="PUT"
 						endpoint="videos/edit"
 						onFormSubmit={handleSubmit}
 						user={user}
