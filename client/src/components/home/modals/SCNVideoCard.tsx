@@ -3,7 +3,7 @@ import { Fragment, useState } from "react";
 import SCNEditModal from "./edit/SCNEditModal";
 import DeleteModal from "./delete/DeleteModal";
 import { generateMatchSummary } from "@/utils/matchSummaryAgent";
-import { VideoCards, Videos } from "@/types";
+import { VideoCards, Videos, User } from "@/types";
 import { Star } from "lucide-react";
 
 import {
@@ -104,7 +104,7 @@ export default function SCNVideoCard({
 		// console.log("generating summary...");
 		setSummaryError(null);
 		try {
-			const summary: string = await generateMatchSummary(`${id}`);
+			const summary: string = await generateMatchSummary(id, user);
 			// console.log(JSON.parse(summary));
 			setAiSummary(JSON.parse(summary));
 		} catch (error) {

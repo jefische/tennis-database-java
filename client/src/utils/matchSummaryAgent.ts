@@ -1,7 +1,7 @@
 /**
  * Frontend utility for requesting match summaries from the backend API
  */
-
+import { User } from "@/assets/types";
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
 /**
@@ -9,10 +9,13 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
  * @param youtubeUrl - Full YouTube URL or video ID
  * @returns Promise<string> - The generated match summary
  */
-export async function generateMatchSummary(youtubeId: string): Promise<string> {
+export async function generateMatchSummary(youtubeId: string, user: User): Promise<string> {
 	try {
 		const response = await fetch(`${API_URL}/api/summary/${youtubeId}`, {
 			method: "POST",
+			headers: {
+				Authorization: `Bearer ${user?.token}`,
+			},
 		});
 
 		if (!response.ok) {
