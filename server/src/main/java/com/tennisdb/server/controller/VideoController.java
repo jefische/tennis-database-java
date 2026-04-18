@@ -12,7 +12,9 @@ import com.tennisdb.server.model.Video;
 
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +28,9 @@ public class VideoController {
 
 	private VideoService videoService;
 	private SummaryService summaryService;
+
+	@Value("${GOOGLE_API_KEY}")
+	private String googleApiKey;
 
 	public VideoController(VideoService videoService, SummaryService summaryService) {
 		this.videoService = videoService;
@@ -57,6 +62,22 @@ public class VideoController {
 			ErrorResponse error = new ErrorResponse(404, "Video not found");
 			return ResponseEntity.status(404).body(error);
 		}
+	}
+
+	@GetMapping(value="videos/duration/{youtubeId}")
+	public ResponseEntity<?> getDurationById(@PathVariable String youtubeId) {
+		RestClient restClient = RestClient.create();
+		try {
+			String response = restClient.get()
+				.uri("https://www.googleapis.com/youtube/v3/videos?id={id}&key={key}&part=snippet,contentDetails,statistics,status", youtubeId, googleApiKey)
+				.retrieve()
+				.body(String.class);
+	
+			return ResponseEntity.status(200).body(response);
+		} catch (Exception e) {
+			return ResponseEntity.status(400).body(e.getMessage());
+		}
+		
 	}
 
 	@DeleteMapping(value = "videos/{youtubeId}")

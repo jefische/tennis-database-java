@@ -5,4 +5,5 @@ export const Tournaments: string[] = [
 	"Wimbledon",
 	"Indian Wells",
 	"Nitto ATP Finals",
+	"Cincinnati Open",
 ];

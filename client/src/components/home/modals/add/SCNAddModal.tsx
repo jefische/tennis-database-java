@@ -53,13 +53,13 @@ export default function SCNAddModal({ setAllVideos, setVideos, user }: AddVideoT
 					{/* your form fields go here */}
 					<RHFVideoForm
 						initialData={{
-							tournament: "Australian Open",
-							year: 2027,
+							tournament: "Cincinnati Open",
+							year: 2024,
 							youtubeId: "LEDgye02f1w",
 							round: "Finals",
 							player1: "Jannik Sinner",
 							player2: "Frances Tiafoe",
-							title: "Jannik Sinner vs. Frances Tiafoe | 2027 Cincinnati Open",
+							title: "Jannik Sinner vs. Frances Tiafoe | Cincinnati Open 2024 Finals",
 						}}
 						HTTPmethod="POST"
 						endpoint="videos/add"

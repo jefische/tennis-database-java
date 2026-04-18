@@ -93,7 +93,7 @@ export default function Home({ user }: { user: User }) {
 					<main className="w-full md:w-[calc(100%-245px)] overflow-auto px-[50px] pb-[500px] scrollbar-custom">
 						<div className="flex flex-col items-center gap-[50px] py-[50px] xl:flex-row justify-center">
 							<h1 className="text-4xl text-center text-foreground font-semibold">
-								Welcome to the Match Archive {user?.username}
+								Welcome to the Match Archive{user?.username && `, ${user?.username}`}
 							</h1>
 							<SearchBar allVideos={allVideos} setVideos={setVideos} />
 						</div>

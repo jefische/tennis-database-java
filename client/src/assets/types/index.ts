@@ -41,7 +41,7 @@ import { Dispatch, SetStateAction } from "react";
 
 export interface Videos {
 	videoId: number;
-	tournament: "Australian Open" | "French Open" | "Wimbledon" | "US Open" | "Indian Wells";
+	tournament: string;
 	year: number;
 	youtubeId: string;
 	player1: string;
