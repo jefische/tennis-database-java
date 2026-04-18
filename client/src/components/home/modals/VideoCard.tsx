@@ -79,7 +79,7 @@ export default function VideoCard({
 		// console.log("generating summary...");
 		setSummaryError(null);
 		try {
-			const summary: string = await generateMatchSummary(`${id}`);
+			const summary: string = await generateMatchSummary(id, user);
 			// console.log(JSON.parse(summary));
 			setAiSummary(JSON.parse(summary));
 		} catch (error) {
