@@ -23,7 +23,7 @@ public class SummaryService {
     private final VideoRepository videoRepository;
     private final RestTemplate restTemplate;
 
-    @Value("${summary.service.url:http://localhost:3001}")
+    @Value("${SUMMARY_SERVICE_URL:http://localhost:3001}")
     private String summaryServiceUrl;
 
     public SummaryService(VideoRepository videoRepository, RestTemplate restTemplate) {
