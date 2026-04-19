@@ -2,6 +2,7 @@ package com.tennisdb.server.controller;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 
 import com.tennisdb.server.service.VideoService;
 import com.tennisdb.server.service.SummaryService;
@@ -128,15 +129,20 @@ public class VideoController {
 			String youtubeUrl = "https://www.youtube.com/watch?v=" + youtubeId;
 
 			// Generate summary from Python service
-			String summary = summaryService.generateSummary(youtubeUrl, video);
+			Map<String, String> result = summaryService.generateSummary(youtubeUrl, video);
 
 			// Save summary to video entity
-			summaryService.saveSummaryToVideo(youtubeId, summary);
+			summaryService.saveSummaryToVideo(youtubeId, result.get("summary"), result.get("status"));
 
-			return ResponseEntity.ok(summary);
-		} catch(Exception e) {
+			return ResponseEntity.ok(Map.of("summary", result.get("summary"), "status", result.get("status")));
+
+		} catch (org.springframework.web.client.HttpClientErrorException e) {
+			return ResponseEntity.status(e.getStatusCode())
+				.body(new ErrorResponse(e.getStatusCode().value(), "Rate limit exceeded. Please try again later."));
+		} catch (Exception e) {
 			return ResponseEntity.status(500)
 				.body(new ErrorResponse(500, "Failed to generate summary: " + e.getMessage()));
 		}
+
 	}
 }

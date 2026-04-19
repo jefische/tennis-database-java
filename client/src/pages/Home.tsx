@@ -112,6 +112,7 @@ export default function Home({ user }: { user: User }) {
 										title={video.title}
 										duration={video.duration}
 										summary={video.summary}
+										summaryStatus={video.summaryStatus}
 										setAllVideos={setAllVideos}
 										setVideos={setVideos}
 										user={user}

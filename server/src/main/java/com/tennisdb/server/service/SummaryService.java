@@ -31,8 +31,9 @@ public class SummaryService {
         this.restTemplate = restTemplate;
     }
 
-    public String generateSummary(String youtubeUrl, Video video) {
+    public Map<String, String> generateSummary(String youtubeUrl, Video video) {
         String endpoint = summaryServiceUrl + "/agent/summary";
+        Map<String, String> res = new HashMap<>();
 
         // Debug: print video details
         System.out.println("Video object: " + video);
@@ -71,29 +72,43 @@ public class SummaryService {
             // Extract summary from response
             Map<String, Object> responseBody = response.getBody();
             if (responseBody != null && responseBody.containsKey("summary")) {
-                return (String) responseBody.get("summary");
+                String r1 = (String) responseBody.get("summary");
+                res.put("summary", r1);
+                res.put("status", "yes");
+                return res;
+
             }
 
             throw new RuntimeException("No summary returned from service");
 
-        } catch (org.springframework.web.client.HttpServerErrorException e) {
-            // Check if the error response contains "No transcript available"
-            String responseBody = e.getResponseBodyAsString();
-            System.out.println("Python service error response: " + responseBody);
-            if (responseBody.toLowerCase().contains("no transcript available")) {
-                return "No transcript available for this video";
+        } catch (org.springframework.web.client.HttpClientErrorException e) {
+
+            if (e.getStatusCode().value() == 429) {
+                throw e;
             }
-            throw new RuntimeException("Failed to generate summary: " + e.getMessage(), e);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to generate summary: " + e.getMessage(), e);
+            String responseBody = e.getResponseBodyAsString();
+            System.out.println("Python service client error response: " + responseBody);
+            String errorMsg = responseBody;
+            try {
+                var json = new com.fasterxml.jackson.databind.ObjectMapper().readTree(responseBody);
+                if (json.has("error")) {
+                    errorMsg = json.get("error").asText();
+                }
+            } catch (Exception ignored) {}
+
+            String r1 = "{\"winner\":\"\",\"score\":\"\",\"matchRating\":0,\"overview\":\"" + errorMsg + "\",\"highlights\":[\"\"],\"tags\":[\"\"]}";
+            res.put("summary", r1);
+            res.put("status", "no_transcript");
+            return res;
         }
     }
 
-    public void saveSummaryToVideo(String youtubeId, String summary) {
+    public void saveSummaryToVideo(String youtubeId, String summary, String summaryStatus) {
         Video video = videoRepository.findByYoutubeId(youtubeId)
             .orElseThrow(() -> new RuntimeException("Video not found with youtubeId: " + youtubeId));
 
         video.setSummary(summary);
+        video.setSummaryStatus(summaryStatus);
         videoRepository.save(video);
     }
 }

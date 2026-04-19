@@ -49,6 +49,7 @@ export interface Videos {
 	title: string;
 	round: Rounds;
 	summary?: string;
+	summaryStatus: "yes" | "no_transcript" | null;
 	duration?: string;
 }
 
@@ -100,7 +101,8 @@ export interface VideoCards {
 	title: string;
 	duration?: string;
 	maxWidth?: number;
-	summary?: string;
+	summary?: string | null;
+	summaryStatus: "yes" | "no_transcript" | null;
 	setAllVideos: setVideosFunction;
 	setVideos: setVideosFunction;
 	user: User;
@@ -112,3 +114,55 @@ export type User = {
 	role: string;
 	token: string;
 } | null;
+
+/* AISummary examples:
+{
+	"winner": "Jannik Sinner",
+    "score": "6-3, 6-4, 6-4",
+    "matchRating": 3.8,
+    "overview": "Jannik Sinner defeated Ben Shelton in straight sets, 6-3, 6-4, 6-4, in a commanding performance at the Australian Open Quarterfinals. Sinner's relentless pressure and exceptional returning proved too much for Shelton, who fought valiantly but couldn't secure a set. The Italian advances to the semifinals.",
+    "highlights": [
+        "Jannik Sinner delivered a 'master class' performance, showcasing power, precision, and poise throughout the match.",
+        "Ben Shelton unleashed a tournament-fastest serve at 232 km/h, highlighting his immense power.",
+        "Sinner's exceptional return game and defensive skills maintained 'unyielding baseline pressure' on Shelton.",
+        "Shelton showed improved backhand play and effective net approaches, winning 14 of 21 points at the net.",
+        "Sinner extended his impressive head-to-head streak to 22 consecutive sets won against Shelton."
+    ],
+    "tags": [
+        "straight-sets victory",
+        "dominant performance",
+        "quarterfinal",
+        "rivalry"
+    ],
+	status: "yes"
+}
+
+{
+	"winner": "",
+    "score": "",
+    "matchRating": 0,
+    "overview": "No transcript available for this video",
+    "highlights": [""],
+    "tags": [""],
+	status: "no_transcript"
+}
+
+{
+	"winner": "",
+    "score": "",
+    "matchRating": 0,
+    "overview": "Login as an admin to generate a summary for this video",
+    "highlights": [""],
+    "tags": [""],
+	status: null
+}
+*/
+export interface AISummary {
+	winner: string;
+	score: string;
+	matchRating: number;
+	overview: string;
+	highlights: string[];
+	tags: string[];
+	status: "yes" | "no_transcript" | null;
+}

@@ -5,6 +5,7 @@ load_dotenv()
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from summary_service import generate_match_summary
+from google.api_core.exceptions import ResourceExhausted
 
 app = Flask(__name__)
 CORS(app)
@@ -38,9 +39,21 @@ def summary():
     try:
         summary_text = generate_match_summary(youtube_url, video_info)
         return jsonify({"summary": summary_text})
+    
+    except ValueError as e:
+        print(f"Invalid input: {e}")
+        return jsonify({"error": str(e)}), 400
+    
+    except ResourceExhausted as e:
+        print(f"Rate limit hit: {e}")
+        return jsonify({"error": "Rate limit exceeded. Please try again later."}), 429
+
     except Exception as e:
+        error_msg = str(e)
         print(f"Error generating summary: {e}")
-        return jsonify({"error": f"Failed to generate summary: {str(e)}"}), 500
+        if "No transcript available" in error_msg or "Failed to get transcript" in error_msg:
+            return jsonify({"error": error_msg}), 400
+        return jsonify({"error": f"Failed to generate summary: {error_msg}"}), 500
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 3001))

@@ -3,8 +3,9 @@ import { Fragment, useState } from "react";
 import SCNEditModal from "./edit/SCNEditModal";
 import DeleteModal from "./delete/DeleteModal";
 import { generateMatchSummary } from "@/utils/matchSummaryAgent";
-import { VideoCards, Videos, User } from "@/types";
+import { VideoCards, Videos, User, AISummary } from "@/types";
 import { Star } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 
 import {
 	DropdownMenu,
@@ -25,14 +26,15 @@ import {
 	DialogClose,
 } from "@/components/ui/dialog";
 
-interface AISummary {
-	winner: string;
-	score: string;
-	matchRating: number;
-	overview: string;
-	highlights: string[];
-	tags: string[];
-}
+const emptySummary: AISummary = {
+	winner: "",
+	score: "",
+	matchRating: 0,
+	overview: "",
+	highlights: [""],
+	tags: [""],
+	status: null,
+};
 
 import { cn } from "@/lib/utils";
 export default function SCNVideoCard({
@@ -40,7 +42,7 @@ export default function SCNVideoCard({
 	title,
 	duration,
 	summary,
-	maxWidth,
+	summaryStatus,
 	setAllVideos,
 	setVideos,
 	user,
@@ -48,19 +50,19 @@ export default function SCNVideoCard({
 	const [editModal, setEditModal] = useState<boolean>(false);
 	const [editData, setEditData] = useState<Videos>({} as Videos);
 	const [deleteModal, setDeleteModal] = useState<boolean>(false);
-	const [aiSummary, setAiSummary] = useState<AISummary | null>(() => {
-		if (!summary) return null;
-		if (summary.startsWith("No transcript")) return null;
+	const [aiSummary, setAiSummary] = useState<AISummary>(() => {
+		if (!summary) return emptySummary;
 		try {
-			return JSON.parse(summary) as AISummary;
+			const parsed = JSON.parse(summary);
+			parsed.status = summaryStatus ?? "default";
+			return parsed;
 		} catch {
-			return null;
+			return emptySummary;
 		}
 	});
-	const [summaryError, setSummaryError] = useState<string | null>(
-		summary?.startsWith("No transcript") ? summary : null,
-	);
+	const [summaryError, setSummaryError] = useState<string | null>(null);
 	const [dropdownOpen, setDropdownOpen] = useState(false);
+	const [loading, setLoading] = useState(false);
 
 	const openEditModal = (): void => {
 		fetch(`${import.meta.env.VITE_API_URL}/videos/${id}`, {
@@ -101,19 +103,15 @@ export default function SCNVideoCard({
 	};
 
 	async function handleTranscript(): Promise<void> {
-		// console.log("generating summary...");
-		setSummaryError(null);
+		setLoading(true);
 		try {
-			const summary: string = await generateMatchSummary(id, user);
-			// console.log(JSON.parse(summary));
-			setAiSummary(JSON.parse(summary));
+			const summary: AISummary = await generateMatchSummary(id, user);
+			setAiSummary(summary);
 		} catch (error) {
 			const message = error instanceof Error ? error.message : "Unknown error";
-			if (message.includes("No transcript available")) {
-				setSummaryError("No transcript available for this video.");
-			} else {
-				setSummaryError("Failed to generate summary.");
-			}
+			setSummaryError(message);
+		} finally {
+			setLoading(false);
 		}
 	}
 
@@ -187,7 +185,12 @@ export default function SCNVideoCard({
 					<DialogHeader>
 						<DialogTitle className="flex items-center justify-center gap-6 text-2xl">
 							{title} ({duration})
-							{user?.role === "ADMIN" && <Button onClick={handleTranscript}>Create Transcript</Button>}
+							{user?.role === "ADMIN" && (
+								<Button onClick={handleTranscript}>
+									<Spinner className={cn(loading ? "block" : "hidden")} data-icon="inline-start" />{" "}
+									Create Transcript
+								</Button>
+							)}
 						</DialogTitle>
 					</DialogHeader>
 
@@ -203,7 +206,7 @@ export default function SCNVideoCard({
 								allowFullScreen
 							></iframe>
 						</div>
-						{aiSummary && (
+						{aiSummary.status === "yes" ? (
 							<div className="ai-summary flex flex-col gap-3 p-4 font-[500] overflow-y-scroll">
 								{/* <h5 className="text-gray-500 font-normal">Winner:</h5> */}
 								<div className="flex items-center justify-between">
@@ -246,9 +249,12 @@ export default function SCNVideoCard({
 									))}
 								</div>
 							</div>
-						)}
-						{summaryError && (
-							<div className="ai-summary p-4 text-md text-red-600 font-[600]">{summaryError}</div>
+						) : aiSummary.status === "no_transcript" ? (
+							<div className="ai-summary p-4 text-md text-red-600 font-[600]">{aiSummary.overview}</div>
+						) : (
+							<div className="ai-summary p-4 text-md text-red-600 font-[600]">
+								Login as an admin to generate a summary for this video
+							</div>
 						)}
 					</div>
 

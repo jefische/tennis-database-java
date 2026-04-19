@@ -8,3 +8,4 @@ python-dotenv>=1.0.0
 dotenv
 yt-dlp>=2024.0.0
 gunicorn>=22.0.0
+google-api-core
