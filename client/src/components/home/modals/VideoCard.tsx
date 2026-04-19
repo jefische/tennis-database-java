@@ -5,17 +5,8 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import { Fragment, useState } from "react";
 import EditModal from "./edit/EditModal";
 import { generateMatchSummary } from "@/utils/matchSummaryAgent";
-import { VideoCards, Videos } from "@/types";
+import { VideoCards, Videos, AISummary } from "@/types";
 import { Star } from "lucide-react";
-
-interface AISummary {
-	winner: string;
-	score: string;
-	matchRating: number;
-	overview: string;
-	highlights: string[];
-	tags: string[];
-}
 
 export default function VideoCard({
 	id,
@@ -79,9 +70,9 @@ export default function VideoCard({
 		// console.log("generating summary...");
 		setSummaryError(null);
 		try {
-			const summary: string = await generateMatchSummary(id, user);
+			const summary = await generateMatchSummary(id, user);
 			// console.log(JSON.parse(summary));
-			setAiSummary(JSON.parse(summary));
+			setAiSummary(summary);
 		} catch (error) {
 			const message = error instanceof Error ? error.message : "Unknown error";
 			if (message.includes("No transcript available")) {
