@@ -7,31 +7,25 @@ import Draws from "./pages/Draws";
 import FAQ from "./pages/FAQ";
 import Profile from "./pages/Profile";
 import Navbar from "./components/Navbar";
-import { User } from "@/types";
+import { NavbarProps } from "@/types";
+import { useStore } from "./hooks/useStore";
 import { Toaster } from "./components/ui/sonner";
 // bootstrap was used for the initial form and button components
 // these components still exist in the codebase as a legacy reference
 // the package and import remain in case of a review of the older components
 // import "bootstrap/dist/css/bootstrap.min.css";
 
-interface NavbarProps {
-	user: User;
-	setUser: (user: User) => void;
-	darkMode: boolean;
-	setDarkMode: (dark: boolean) => void;
-}
-
-function NavbarLayout({ user, setUser, darkMode, setDarkMode }: NavbarProps) {
+function NavbarLayout({ darkMode, setDarkMode }: NavbarProps) {
 	return (
 		<>
-			<Navbar user={user} setUser={setUser} darkMode={darkMode} setDarkMode={setDarkMode} />
+			<Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
 			<Outlet />
 			<Toaster />
 		</>
 	);
 }
 export default function App() {
-	const [user, setUser] = useState<User>(null);
+	const { setUser } = useStore();
 	const [darkMode, setDarkMode] = useState<boolean>(() => localStorage.getItem("theme") !== "light");
 
 	useEffect(() => {
@@ -52,12 +46,8 @@ export default function App() {
 			<BrowserRouter>
 				<Routes>
 					<Route path="/" element={<Landing />} />
-					<Route
-						element={
-							<NavbarLayout user={user} setUser={setUser} darkMode={darkMode} setDarkMode={setDarkMode} />
-						}
-					>
-						<Route path="/home" element={<Home user={user} />} />
+					<Route element={<NavbarLayout darkMode={darkMode} setDarkMode={setDarkMode} />}>
+						<Route path="/home" element={<Home />} />
 						<Route path="/players" element={<Players />} />
 						<Route path="/draws" element={<Draws />} />
 						<Route path="/faq" element={<FAQ />} />

@@ -10,8 +10,10 @@ import lombok.Data;
 public class SummaryResponse {
     private String summary;
     // Future: private List<Timestamp> timestamps;
-    private String overview;
+    private String winner;
     private String score;
+    private int matchRating;
+    private String overview;
     private String[] highlights;
     private String[] tags;
 }

@@ -6,6 +6,7 @@ import { generateMatchSummary } from "@/utils/matchSummaryAgent";
 import { VideoCards, Videos, User, AISummary } from "@/types";
 import { Star } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
+import { useStore } from "@/hooks/useStore";
 
 import {
 	DropdownMenu,
@@ -43,9 +44,9 @@ export default function SCNVideoCard({
 	duration,
 	summary,
 	summaryStatus,
+	allVideos,
 	setAllVideos,
 	setVideos,
-	user,
 }: VideoCards) {
 	const [editModal, setEditModal] = useState<boolean>(false);
 	const [editData, setEditData] = useState<Videos>({} as Videos);
@@ -63,6 +64,7 @@ export default function SCNVideoCard({
 	const [summaryError, setSummaryError] = useState<string | null>(null);
 	const [dropdownOpen, setDropdownOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
+	const { user } = useStore();
 
 	const openEditModal = (): void => {
 		fetch(`${import.meta.env.VITE_API_URL}/videos/${id}`, {
@@ -251,6 +253,10 @@ export default function SCNVideoCard({
 							</div>
 						) : aiSummary.status === "no_transcript" ? (
 							<div className="ai-summary p-4 text-md text-red-600 font-[600]">{aiSummary.overview}</div>
+						) : summaryError ? (
+							<div>
+								<div className="ai-summary p-4 text-md text-red-600 font-[600]">{summaryError}</div>
+							</div>
 						) : (
 							<div className="ai-summary p-4 text-md text-red-600 font-[600]">
 								Login as an admin to generate a summary for this video
@@ -268,9 +274,9 @@ export default function SCNVideoCard({
 			<SCNEditModal
 				open={editModal}
 				setEditModal={setEditModal}
+				allVideos={allVideos}
 				setAllVideos={setAllVideos}
 				setVideos={setVideos}
-				user={user}
 				editData={editData}
 			/>
 			<DeleteModal
@@ -279,7 +285,6 @@ export default function SCNVideoCard({
 				setAllVideos={setAllVideos}
 				setVideos={setVideos}
 				editData={editData}
-				user={user}
 			/>
 		</Fragment>
 	);

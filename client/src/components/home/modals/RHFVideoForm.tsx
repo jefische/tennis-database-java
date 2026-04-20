@@ -1,7 +1,6 @@
 import { Videos, User } from "@/types";
 // import Button from "react-bootstrap/Button";
 // import { useVideoForm } from "@/hooks/useVideoForm";
-import { Tournaments } from "@/assets/data/tournaments";
 import { Input } from "@/components/ui/input";
 import {
 	Select,
@@ -20,6 +19,7 @@ import { z } from "zod";
 import { checkThumbnail } from "@/utils/helpers";
 import { pullDuration } from "@/utils/callbacks";
 import { useState } from "react";
+import { useStore } from "@/hooks/useStore";
 
 const schema = z.object({
 	tournament: z.string().min(1, "Please select a tournament"),
@@ -35,22 +35,24 @@ const schema = z.object({
 
 interface VideoFormProps {
 	initialData: Partial<Omit<Videos, "videoId">>;
+	allVideos: Videos[];
 	HTTPmethod: string;
 	endpoint: string;
 	onFormSubmit: (data: Videos[]) => void;
-	user: User;
 	setOpenModal: (open: boolean) => void;
 }
 
 export default function RHFVideoForm({
 	initialData,
+	allVideos,
 	HTTPmethod,
 	endpoint,
 	onFormSubmit,
-	user,
 	setOpenModal,
 }: VideoFormProps) {
 	const [dur, setDur] = useState<boolean>(false);
+	const [addNewTournament, setAddNewTournament] = useState(false);
+	const { user } = useStore();
 	const form = useForm<z.infer<typeof schema>>({
 		resolver: zodResolver(schema),
 		defaultValues: {
@@ -145,6 +147,8 @@ export default function RHFVideoForm({
 		form.setValue("title", `${player1} vs. ${player2} | ${tournament} ${year} ${rounds}`);
 	}
 
+	const tournaments = [...new Set(allVideos.map((video) => video.tournament))];
+
 	return (
 		<form id="video-form" className="flex flex-col gap-6" onSubmit={form.handleSubmit(saveVideo)} noValidate>
 			<div className="grid grid-cols-2 gap-6">
@@ -154,18 +158,31 @@ export default function RHFVideoForm({
 					name="tournament"
 					control={form.control}
 					render={({ field, fieldState }) => (
-						<Field data-invalid={fieldState.invalid}>
+						<Field mode="light" data-invalid={fieldState.invalid}>
 							<FieldLabel htmlFor={field.name} className="ps-2">
 								Tournament
 							</FieldLabel>
-							<Select value={field.value} onValueChange={(val) => handleChanges(field, val)}>
+							<Select
+								mode="light"
+								value={field.value}
+								onValueChange={(val) => {
+									if (val === "add-new") {
+										setAddNewTournament(true);
+										field.onChange(""); // clear the field so they can type
+									} else {
+										setAddNewTournament(false);
+										handleChanges(field, val);
+									}
+								}}
+							>
 								<SelectTrigger id={field.name} className="w-full">
 									<SelectValue placeholder="Select a tournament" />
 								</SelectTrigger>
 								<SelectContent>
 									<SelectGroup>
 										<SelectLabel>Choose...</SelectLabel>
-										{[...Tournaments].sort().map((name) => {
+										<SelectItem value="add-new">Add New</SelectItem>
+										{[...tournaments].sort().map((name) => {
 											return (
 												<SelectItem key={name} value={name}>
 													{name}
@@ -175,6 +192,15 @@ export default function RHFVideoForm({
 									</SelectGroup>
 								</SelectContent>
 							</Select>
+							{addNewTournament && (
+								<Input
+									type="text"
+									placeholder="Enter new tournament name"
+									onChange={(e) => handleChanges(field, e.target.value)}
+									autoFocus
+								/>
+							)}
+
 							{fieldState.error && <FieldError errors={[fieldState.error]} />}
 						</Field>
 					)}

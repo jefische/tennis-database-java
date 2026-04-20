@@ -10,21 +10,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { User } from "@/types";
 import { cn } from "@/lib/utils";
+import { useStore } from "@/hooks/useStore";
 
 export default function LoginModal({
 	dialogOpen,
 	setDialogOpen,
-	setUser,
 }: {
 	dialogOpen: boolean;
 	setDialogOpen: (open: boolean) => void;
-	setUser: (user: User) => void;
 }) {
 	const [username, setUsername] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 	const [error, setError] = useState<string>("");
+	const { setUser } = useStore();
 
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();

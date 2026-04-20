@@ -11,18 +11,17 @@ import {
 import { Button } from "@/components/ui/button";
 import RHFVideoForm from "../RHFVideoForm";
 import { setVideosFunction, Videos } from "@/assets/types";
-import { User } from "@/types";
 import { toast } from "sonner";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface AddVideoTypes {
+	allVideos: Videos[];
 	setAllVideos: setVideosFunction;
 	setVideos: setVideosFunction;
-	user: User;
 }
 
-export default function SCNAddModal({ setAllVideos, setVideos, user }: AddVideoTypes) {
+export default function SCNAddModal({ allVideos, setAllVideos, setVideos }: AddVideoTypes) {
 	const [open, setOpen] = useState<boolean>(false);
 	function handleSubmit(data: Videos[]): void {
 		setVideos(data);
@@ -61,10 +60,10 @@ export default function SCNAddModal({ setAllVideos, setVideos, user }: AddVideoT
 							player2: "Frances Tiafoe",
 							title: "Jannik Sinner vs. Frances Tiafoe | Cincinnati Open 2024 Finals",
 						}}
+						allVideos={allVideos}
 						HTTPmethod="POST"
 						endpoint="videos/add"
 						onFormSubmit={handleSubmit}
-						user={user}
 						setOpenModal={setOpen}
 					/>
 					<DialogFooter>

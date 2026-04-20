@@ -1,6 +1,5 @@
 import {
 	Dialog,
-	DialogTrigger,
 	DialogContent,
 	DialogHeader,
 	DialogTitle,
@@ -9,11 +8,9 @@ import {
 	DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import RHFVideoForm from "../RHFVideoForm";
 import { setVideosFunction, Videos } from "@/assets/types";
-import { User } from "@/types";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useStore } from "@/hooks/useStore";
 
 interface DeleteModalProps {
 	open: boolean;
@@ -21,17 +18,11 @@ interface DeleteModalProps {
 	editData: Videos;
 	setAllVideos: setVideosFunction;
 	setVideos: setVideosFunction;
-	user: User;
 }
 
-export default function DeleteModal({
-	open,
-	setDeleteModal,
-	setAllVideos,
-	setVideos,
-	editData,
-	user,
-}: DeleteModalProps) {
+export default function DeleteModal({ open, setDeleteModal, setAllVideos, setVideos, editData }: DeleteModalProps) {
+	const { user } = useStore();
+
 	function handleDelete(): void {
 		fetch(`${import.meta.env.VITE_API_URL}/videos/${editData.youtubeId}`, {
 			method: "DELETE",

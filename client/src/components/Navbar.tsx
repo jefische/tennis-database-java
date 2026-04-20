@@ -10,7 +10,8 @@ import { useState } from "react";
 import LoginModal from "./home/modals/login/LoginModal";
 import RegisterModal from "./home/modals/register/RegisterModal";
 import { Button } from "./ui/button";
-import { User } from "@/types";
+import { NavbarProps } from "@/types";
+import { useStore } from "@/hooks/useStore";
 
 const navigation = [
 	{ name: "Full Matches", href: "/home", current: true },
@@ -23,18 +24,12 @@ function classNames(...classes: string[]) {
 	return classes.filter(Boolean).join(" ");
 }
 
-interface NavbarProps {
-	user: User;
-	setUser: (user: User) => void;
-	darkMode: boolean;
-	setDarkMode: (option: boolean) => void;
-}
-
-export default function Navbar({ user, setUser, darkMode, setDarkMode }: NavbarProps) {
+export default function Navbar({ darkMode, setDarkMode }: NavbarProps) {
 	const [activeLink, setActiveLink] = useState(navigation);
 	const currentPath = useLocation().pathname;
 	const [loginOpen, setLoginOpen] = useState<boolean>(false);
 	const [registerOpen, setRegisterOpen] = useState<boolean>(false);
+	const { user, setUser } = useStore();
 
 	const handleActive = (e: React.MouseEvent<HTMLAnchorElement>) => {
 		const nextLinks = activeLink.map((link) => {
@@ -169,7 +164,7 @@ export default function Navbar({ user, setUser, darkMode, setDarkMode }: NavbarP
 							</MenuItems>
 						</Menu>
 						<RegisterModal dialogOpen={registerOpen} setDialogOpen={setRegisterOpen} setUser={setUser} />
-						<LoginModal dialogOpen={loginOpen} setDialogOpen={setLoginOpen} setUser={setUser} />
+						<LoginModal dialogOpen={loginOpen} setDialogOpen={setLoginOpen} />
 					</div>
 				</div>
 			</div>

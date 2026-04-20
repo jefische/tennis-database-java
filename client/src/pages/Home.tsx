@@ -11,13 +11,15 @@ import { sortVideos, setFilterData } from "../utils/helpers";
 import SCNAddModal from "@/components/home/modals/add/SCNAddModal";
 import TournamentFilters from "@/components/home/sidebar/TournamentFilters";
 import YearFilters from "@/components/home/sidebar/YearFilters";
+import { useStore } from "@/hooks/useStore";
 
-export default function Home({ user }: { user: User }) {
+export default function Home() {
 	const [activeVideos, setVideos] = useState<Videos[]>([]);
 	const [allVideos, setAllVideos] = useState<Videos[]>([]);
 	// formData is used to manage the checkboxes and pass them to form submit for ytVideo filtering and rendering in Home.jsx
 	const [formData, setFormData] = useState<VideoFilters>({ tournament: {}, year: {} });
 	const [filterOpen, setFilterOpen] = useState<boolean>(false);
+	const { user } = useStore();
 
 	// import.meta is a runtime metadata object available in ES modules
 	// Vite injects an env object on import.meta
@@ -101,7 +103,11 @@ export default function Home({ user }: { user: User }) {
 						<div className="grid grid-cols-[repeat(auto-fill,minmax(300px,370px))] gap-x-6 gap-y-8 mb-[50px] justify-center">
 							{user?.role === "ADMIN" && (
 								<>
-									<SCNAddModal setAllVideos={setAllVideos} setVideos={setVideos} user={user} />
+									<SCNAddModal
+										allVideos={allVideos}
+										setAllVideos={setAllVideos}
+										setVideos={setVideos}
+									/>
 								</>
 							)}
 							{activeVideos.sort(sortVideos).map((video: Videos) => {
@@ -113,9 +119,9 @@ export default function Home({ user }: { user: User }) {
 										duration={video.duration}
 										summary={video.summary}
 										summaryStatus={video.summaryStatus}
+										allVideos={allVideos}
 										setAllVideos={setAllVideos}
 										setVideos={setVideos}
-										user={user}
 									/>
 								);
 							})}

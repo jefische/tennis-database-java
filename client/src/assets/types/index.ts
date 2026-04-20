@@ -103,9 +103,9 @@ export interface VideoCards {
 	maxWidth?: number;
 	summary?: string | null;
 	summaryStatus: "yes" | "no_transcript" | null;
+	allVideos: Videos[];
 	setAllVideos: setVideosFunction;
 	setVideos: setVideosFunction;
-	user: User;
 }
 
 export type User = {
@@ -165,4 +165,9 @@ export interface AISummary {
 	highlights: string[];
 	tags: string[];
 	status: "yes" | "no_transcript" | null;
+}
+
+export interface NavbarProps {
+	darkMode: boolean;
+	setDarkMode: (option: boolean) => void;
 }
