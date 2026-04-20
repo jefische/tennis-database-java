@@ -7,17 +7,9 @@ import EditModal from "./edit/EditModal";
 import { generateMatchSummary } from "@/utils/matchSummaryAgent";
 import { VideoCards, Videos, AISummary } from "@/types";
 import { Star } from "lucide-react";
+import { useStore } from "@/hooks/useStore";
 
-export default function VideoCard({
-	id,
-	title,
-	duration,
-	summary,
-	maxWidth,
-	setAllVideos,
-	setVideos,
-	user,
-}: VideoCards) {
+export default function VideoCard({ id, title, duration, summary, maxWidth, setAllVideos, setVideos }: VideoCards) {
 	const [modalIsOpen, setIsOpen] = useState<boolean>(false);
 	const [editModal, setEditModal] = useState<boolean>(false);
 	const [editData, setEditData] = useState<Videos>({} as Videos);
@@ -33,6 +25,7 @@ export default function VideoCard({
 	const [summaryError, setSummaryError] = useState<string | null>(
 		summary?.startsWith("No transcript") ? summary : null,
 	);
+	const { user } = useStore();
 
 	const openModal = () => setIsOpen(true);
 	const closeModal = () => setIsOpen(false);
