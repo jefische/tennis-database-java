@@ -45,8 +45,7 @@ export default function SCNVideoCard({
 	summary,
 	summaryStatus,
 	allVideos,
-	setAllVideos,
-	setVideos,
+	setActiveVideos,
 }: VideoCards) {
 	const [editModal, setEditModal] = useState<boolean>(false);
 	const [editData, setEditData] = useState<Videos>({} as Videos);
@@ -275,15 +274,13 @@ export default function SCNVideoCard({
 				open={editModal}
 				setEditModal={setEditModal}
 				allVideos={allVideos}
-				setAllVideos={setAllVideos}
-				setVideos={setVideos}
+				setActiveVideos={setActiveVideos}
 				editData={editData}
 			/>
 			<DeleteModal
 				open={deleteModal}
 				setDeleteModal={setDeleteModal}
-				setAllVideos={setAllVideos}
-				setVideos={setVideos}
+				setActiveVideos={setActiveVideos}
 				editData={editData}
 			/>
 		</Fragment>

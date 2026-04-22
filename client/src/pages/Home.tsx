@@ -7,19 +7,19 @@ import SCNVideoCard from "@/components/home/modals/SCNVideoCard";
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { SlidersHorizontal } from "lucide-react";
-import { sortVideos, setFilterData } from "../utils/helpers";
+import { sortVideos, initFilterData } from "../utils/helpers";
 import SCNAddModal from "@/components/home/modals/add/SCNAddModal";
 import TournamentFilters from "@/components/home/sidebar/TournamentFilters";
 import YearFilters from "@/components/home/sidebar/YearFilters";
 import { useStore } from "@/hooks/useStore";
 
 export default function Home() {
-	const [activeVideos, setVideos] = useState<Videos[]>([]);
-	const [allVideos, setAllVideos] = useState<Videos[]>([]);
+	const [activeVideos, setActiveVideos] = useState<Videos[]>([]);
+	// const [allVideos, setAllVideos] = useState<Videos[]>([]);
 	// formData is used to manage the checkboxes and pass them to form submit for ytVideo filtering and rendering in Home.jsx
-	const [formData, setFormData] = useState<VideoFilters>({ tournament: {}, year: {} });
+	const [filterData, setFilterData] = useState<VideoFilters>({ tournament: {}, year: {} });
 	const [filterOpen, setFilterOpen] = useState<boolean>(false);
-	const { user } = useStore();
+	const { user, allVideos, setAllVideos, filterVideos, addFilterVideos, resetFilterVideos } = useStore();
 
 	// import.meta is a runtime metadata object available in ES modules
 	// Vite injects an env object on import.meta
@@ -33,28 +33,30 @@ export default function Home() {
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
 		e.preventDefault();
-		let filterVideos: Videos[] = [];
+		let filteredVideos: Videos[] = [];
 
 		// First extract years to include for filtering
-		const yearsToInclude: number[] = Object.entries(formData.year)
+		const yearsToInclude: number[] = Object.entries(filterData.year)
 			.filter(([key, val]) => {
 				return val.include === true;
 			})
 			.map(([key, value]) => Number(key));
 
 		// Then, filter formData for tournaments to include by years selected from above.
-		for (var key in formData.tournament) {
-			if (formData.tournament[key].include == true) {
+		for (var key in filterData.tournament) {
+			if (filterData.tournament[key].include == true) {
 				const temp: Videos[] = allVideos.filter(
-					(x) => formData.tournament[key].title === x.tournament && yearsToInclude.includes(x.year),
+					(x) => filterData.tournament[key].title === x.tournament && yearsToInclude.includes(x.year),
 				);
 
 				if (temp.length > 0) {
-					filterVideos = filterVideos.concat(temp);
+					filteredVideos = filteredVideos.concat(temp);
 				}
 			}
 		}
-		setVideos(filterVideos);
+		resetFilterVideos();
+		addFilterVideos(filteredVideos);
+		setActiveVideos(filteredVideos);
 		setFilterOpen(false);
 	};
 
@@ -62,7 +64,7 @@ export default function Home() {
 		fetch(`${baseURL}/videos`, requestOptions)
 			.then((response) => response.json())
 			.then((data) => {
-				setVideos(data);
+				setActiveVideos(data);
 				setAllVideos(data);
 			})
 			.catch((error) => {
@@ -72,42 +74,38 @@ export default function Home() {
 
 	useEffect(() => {
 		// Sort the initial data object by keys
-		const filterData: VideoFilters = allVideos.reduce(setFilterData, { tournament: {}, year: {} });
+		const initData: VideoFilters = allVideos.reduce(initFilterData, { tournament: {}, year: {} });
 		const sorted: VideoFilters = { tournament: {}, year: {} };
 
-		const tournamentKeys: string[] = Object.keys(filterData.tournament).sort();
-		const yearKeys: string[] = Object.keys(filterData.year).sort();
+		const tournamentKeys: string[] = Object.keys(initData.tournament).sort();
+		const yearKeys: string[] = Object.keys(initData.year).sort();
 
 		tournamentKeys.forEach((key) => {
-			sorted.tournament[key] = filterData.tournament[key];
+			sorted.tournament[key] = initData.tournament[key];
 		});
 		yearKeys.forEach((key) => {
-			sorted.year[key] = filterData.year[key];
+			sorted.year[key] = initData.year[key];
 		});
-		setFormData(sorted);
+		setFilterData(sorted);
 	}, [allVideos]);
 
 	return (
 		<>
 			<div className="h-[calc(100%-64px)] mb-4">
 				<section className="flex bg-background h-full">
-					<Sidebar formData={formData} setFormData={setFormData} handleFilter={handleSubmit} />
+					<Sidebar formData={filterData} setFormData={setFilterData} handleFilter={handleSubmit} />
 					<main className="w-full md:w-[calc(100%-245px)] overflow-auto px-[50px] pb-[500px] scrollbar-custom">
 						<div className="flex flex-col items-center gap-[50px] py-[50px] xl:flex-row justify-center">
 							<h1 className="text-4xl text-center text-foreground font-semibold">
 								Welcome to the Match Archive{user?.username && `, ${user?.username}`}
 							</h1>
-							<SearchBar allVideos={allVideos} setVideos={setVideos} />
+							<SearchBar setActiveVideos={setActiveVideos} />
 						</div>
 						<TagFilters></TagFilters>
 						<div className="grid grid-cols-[repeat(auto-fill,minmax(300px,370px))] gap-x-6 gap-y-8 mb-[50px] justify-center">
 							{user?.role === "ADMIN" && (
 								<>
-									<SCNAddModal
-										allVideos={allVideos}
-										setAllVideos={setAllVideos}
-										setVideos={setVideos}
-									/>
+									<SCNAddModal allVideos={allVideos} setVideos={setActiveVideos} />
 								</>
 							)}
 							{activeVideos.sort(sortVideos).map((video: Videos) => {
@@ -120,8 +118,7 @@ export default function Home() {
 										summary={video.summary}
 										summaryStatus={video.summaryStatus}
 										allVideos={allVideos}
-										setAllVideos={setAllVideos}
-										setVideos={setVideos}
+										setActiveVideos={setActiveVideos}
 									/>
 								);
 							})}
@@ -143,8 +140,8 @@ export default function Home() {
 							</SheetHeader>
 							<form className="w-auto px-4" onSubmit={handleSubmit}>
 								<h2 className="text-xl">Filter Match Results</h2>
-								<TournamentFilters formData={formData} setFormData={setFormData} />
-								<YearFilters formData={formData} setFormData={setFormData} />
+								<TournamentFilters formData={filterData} setFormData={setFilterData} />
+								<YearFilters formData={filterData} setFormData={setFilterData} />
 								<Button size="lg" className="my-1" type="submit">
 									Apply Filters
 								</Button>

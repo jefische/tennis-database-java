@@ -42,7 +42,7 @@ export function sortVideos(a: Videos, b: Videos): number {
 	return 0;
 }
 
-export function setFilterData(acc: VideoFilters, x: Videos): VideoFilters {
+export function initFilterData(acc: VideoFilters, x: Videos): VideoFilters {
 	// console.log(x);
 	const key: string = x.tournament.replace(/\s/g, "");
 	if (!acc.tournament[key]) {

@@ -11,26 +11,20 @@ import { Button } from "@/components/ui/button";
 import RHFVideoForm from "../RHFVideoForm";
 import { setVideosFunction, Videos } from "@/assets/types";
 import { toast } from "sonner";
+import { useStore } from "@/hooks/useStore";
 
 interface EditModalProps {
 	open: boolean;
 	setEditModal: (open: boolean) => void;
 	editData: Videos;
 	allVideos: Videos[];
-	setAllVideos: setVideosFunction;
-	setVideos: setVideosFunction;
+	setActiveVideos: (video: Videos[]) => void;
 }
 
-export default function SCNEditModal({
-	allVideos,
-	setAllVideos,
-	setVideos,
-	editData,
-	open,
-	setEditModal,
-}: EditModalProps) {
+export default function SCNEditModal({ allVideos, setActiveVideos, editData, open, setEditModal }: EditModalProps) {
+	const { setAllVideos } = useStore();
 	function handleSubmit(data: Videos[]): void {
-		setVideos(data);
+		setActiveVideos(data);
 		setAllVideos(data);
 		toast.success("Video edited successfully");
 	}

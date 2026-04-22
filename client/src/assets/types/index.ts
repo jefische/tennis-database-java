@@ -48,10 +48,12 @@ export interface Videos {
 	player2: string;
 	title: string;
 	round: Rounds;
-	summary?: string;
+	summary: string | null;
 	summaryStatus: "yes" | "no_transcript" | null;
 	duration?: string;
 }
+
+// export type Videos = Video | null;
 
 type Rounds = "1st" | "2nd" | "3rd" | "4th" | "Quarterfinals" | "Semifinals" | "Finals" | "Exhibition";
 // export interface VideoFilters {
@@ -104,8 +106,8 @@ export interface VideoCards {
 	summary?: string | null;
 	summaryStatus: "yes" | "no_transcript" | null;
 	allVideos: Videos[];
-	setAllVideos: setVideosFunction;
-	setVideos: setVideosFunction;
+	// setAllVideos: (videos: Videos[]) => void;
+	setActiveVideos: (videos: Videos[]) => void;
 }
 
 export type User = {

@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { Input } from "./ui/input";
-import { setVideosFunction, Videos } from "@/types";
+import { setVideosFunction, Videos, VideoFilters } from "@/types";
+import { useStore } from "@/hooks/useStore";
 
 interface SearchBarProps {
-	allVideos: Videos[];
-	setVideos: setVideosFunction;
+	setActiveVideos: setVideosFunction;
 }
 
-export function SearchBar({ allVideos, setVideos }: SearchBarProps) {
+export function SearchBar({ setActiveVideos }: SearchBarProps) {
 	const [query, setQuery] = useState<string>("");
+	const { filterVideos } = useStore();
 
 	// Search filter is run against the video title/description field
 	function filterItems(items: Videos[], query: string) {
@@ -23,10 +24,11 @@ export function SearchBar({ allVideos, setVideos }: SearchBarProps) {
 	function handleSearchInput(e: React.ChangeEvent<HTMLInputElement>): void {
 		const value = e.target.value;
 		setQuery(value);
+
 		if (value === "") {
-			setVideos(allVideos);
+			setActiveVideos(filterVideos);
 		} else {
-			setVideos(filterItems(allVideos, value));
+			setActiveVideos(filterItems(filterVideos, value));
 		}
 	}
 

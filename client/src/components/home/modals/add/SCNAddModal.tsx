@@ -14,15 +14,16 @@ import { setVideosFunction, Videos } from "@/assets/types";
 import { toast } from "sonner";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useStore } from "@/hooks/useStore";
 
 interface AddVideoTypes {
 	allVideos: Videos[];
-	setAllVideos: setVideosFunction;
 	setVideos: setVideosFunction;
 }
 
-export default function SCNAddModal({ allVideos, setAllVideos, setVideos }: AddVideoTypes) {
+export default function SCNAddModal({ allVideos, setVideos }: AddVideoTypes) {
 	const [open, setOpen] = useState<boolean>(false);
+	const { setAllVideos } = useStore();
 	function handleSubmit(data: Videos[]): void {
 		setVideos(data);
 		setAllVideos(data);

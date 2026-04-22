@@ -5,11 +5,31 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import { Fragment, useState } from "react";
 import EditModal from "./edit/EditModal";
 import { generateMatchSummary } from "@/utils/matchSummaryAgent";
-import { VideoCards, Videos, AISummary } from "@/types";
+import { Videos, AISummary, setVideosFunction } from "@/types";
 import { Star } from "lucide-react";
 import { useStore } from "@/hooks/useStore";
 
-export default function VideoCard({ id, title, duration, summary, maxWidth, setAllVideos, setVideos }: VideoCards) {
+interface VideoCards {
+	id: string;
+	title: string;
+	duration?: string;
+	maxWidth?: number;
+	summary?: string | null;
+	summaryStatus: "yes" | "no_transcript" | null;
+	allVideos: Videos[];
+	setAllVideos: setVideosFunction;
+	setActiveVideos: setVideosFunction;
+}
+
+export default function VideoCard({
+	id,
+	title,
+	duration,
+	summary,
+	maxWidth,
+	setAllVideos,
+	setActiveVideos,
+}: VideoCards) {
 	const [modalIsOpen, setIsOpen] = useState<boolean>(false);
 	const [editModal, setEditModal] = useState<boolean>(false);
 	const [editData, setEditData] = useState<Videos>({} as Videos);
@@ -88,7 +108,7 @@ export default function VideoCard({ id, title, duration, summary, maxWidth, setA
 			})
 			.then((data) => {
 				setAllVideos(data);
-				setVideos(data);
+				setActiveVideos(data);
 			})
 			.catch((error) => {
 				console.error("There was a problem with the fetch operation:\n", error);
@@ -118,7 +138,7 @@ export default function VideoCard({ id, title, duration, summary, maxWidth, setA
 							closeEditModal={closeEditModal}
 							editData={editData}
 							setAllVideos={setAllVideos}
-							setVideos={setVideos}
+							setVideos={setActiveVideos}
 						/>
 					</DropdownButton>
 				)}
