@@ -1,31 +1,28 @@
-import { setFiltersFunction, VideoFilters, YearFilterItem } from "@/assets/types";
+import { YearFilterItem } from "@/assets/types";
 import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { ChevronDown } from "lucide-react";
+import { useStore } from "@/hooks/useStore";
 
-interface YearFilterProps {
-	formData: VideoFilters;
-	setFormData: setFiltersFunction;
-}
-
-export default function YearFilters({ formData, setFormData }: YearFilterProps) {
+export default function YearFilters() {
 	// isActive state is used to manage the accordion dropdown filters in the sidebar
 	const [isActive, setIsActive] = useState(true);
 	const [select, setSelect] = useState(true);
+	const { filterData, setFilterData } = useStore();
 
 	let numYears: number = 0; // for Select All count
-	const years: [string, YearFilterItem][] = Object.entries(formData.year).filter(([key, val]) => {
+	const years: [string, YearFilterItem][] = Object.entries(filterData.year).filter(([key, val]) => {
 		numYears += val.count;
 		return key;
 	});
 
 	function selectAll(): void {
 		setSelect(!select);
-		setFormData({
-			...formData,
+		setFilterData({
+			...filterData,
 			year: Object.fromEntries(
-				Object.entries(formData.year).map(([key, val]) => {
+				Object.entries(filterData.year).map(([key, val]) => {
 					return [key, { ...val, include: !select }];
 				}),
 			),
@@ -33,12 +30,12 @@ export default function YearFilters({ formData, setFormData }: YearFilterProps) 
 	}
 
 	const handleChange = (key: string, checked: boolean): void => {
-		setFormData({
-			...formData,
+		setFilterData({
+			...filterData,
 			year: {
-				...formData.year,
+				...filterData.year,
 				[key]: {
-					...formData.year[key],
+					...filterData.year[key],
 					include: checked,
 				},
 			},
@@ -84,7 +81,9 @@ export default function YearFilters({ formData, setFormData }: YearFilterProps) 
 											name={name}
 											className="size-4"
 											checked={
-												formData.year[name] === undefined ? true : formData.year[name].include
+												filterData.year[name] === undefined
+													? true
+													: filterData.year[name].include
 											}
 											onCheckedChange={(checked) => handleChange(key, checked as boolean)}
 										/>

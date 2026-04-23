@@ -1,31 +1,28 @@
-import { setFiltersFunction, VideoFilters, TournamentFilterItem } from "@/assets/types";
+import { TournamentFilterItem } from "@/assets/types";
 import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { ChevronDown } from "lucide-react";
+import { useStore } from "@/hooks/useStore";
 
-interface TournamentFilterProps {
-	formData: VideoFilters;
-	setFormData: setFiltersFunction;
-}
-
-export default function TournamentFilters({ formData, setFormData }: TournamentFilterProps) {
+export default function TournamentFilters() {
 	// isActive state is used to manage the accordion dropdown filters in the sidebar
 	const [isActive, setIsActive] = useState(true);
 	const [select, setSelect] = useState(true);
+	const { filterData, setFilterData } = useStore();
 
 	let numTournaments: number = 0; // for Select All count
-	const tournaments: [string, TournamentFilterItem][] = Object.entries(formData.tournament).filter(([key, val]) => {
+	const tournaments: [string, TournamentFilterItem][] = Object.entries(filterData.tournament).filter(([key, val]) => {
 		numTournaments += val.count;
 		return key;
 	});
 
 	function selectAll(): void {
 		setSelect(!select);
-		setFormData({
-			...formData,
+		setFilterData({
+			...filterData,
 			tournament: Object.fromEntries(
-				Object.entries(formData.tournament).map(([key, val]) => {
+				Object.entries(filterData.tournament).map(([key, val]) => {
 					return [key, { ...val, include: !select }];
 				}),
 			),
@@ -33,12 +30,12 @@ export default function TournamentFilters({ formData, setFormData }: TournamentF
 	}
 
 	const handleChange = (key: string, checked: boolean): void => {
-		setFormData({
-			...formData,
+		setFilterData({
+			...filterData,
 			tournament: {
-				...formData.tournament,
+				...filterData.tournament,
 				[key]: {
-					...formData.tournament[key],
+					...filterData.tournament[key],
 					include: checked,
 				},
 			},
@@ -84,9 +81,9 @@ export default function TournamentFilters({ formData, setFormData }: TournamentF
 											name={key}
 											className="size-4"
 											checked={
-												formData.tournament[key] == undefined
+												filterData.tournament[key] == undefined
 													? true
-													: formData.tournament[key].include
+													: filterData.tournament[key].include
 											}
 											onCheckedChange={(checked) => handleChange(key, checked as boolean)}
 										/>

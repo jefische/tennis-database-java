@@ -17,9 +17,9 @@ export default function Home() {
 	const [activeVideos, setActiveVideos] = useState<Videos[]>([]);
 	// const [allVideos, setAllVideos] = useState<Videos[]>([]);
 	// formData is used to manage the checkboxes and pass them to form submit for ytVideo filtering and rendering in Home.jsx
-	const [filterData, setFilterData] = useState<VideoFilters>({ tournament: {}, year: {} });
-	const [filterOpen, setFilterOpen] = useState<boolean>(false);
-	const { user, allVideos, setAllVideos, filterVideos, addFilterVideos, resetFilterVideos } = useStore();
+	// const [filterData, setFilterData] = useState<VideoFilters>({ tournament: {}, year: {} });
+	const [mobileFilterOpen, setMobileFilterOpen] = useState<boolean>(false);
+	const { user, allVideos, setAllVideos, filterData, setFilterData, addFilterVideos, resetFilterVideos } = useStore();
 
 	// import.meta is a runtime metadata object available in ES modules
 	// Vite injects an env object on import.meta
@@ -57,7 +57,7 @@ export default function Home() {
 		resetFilterVideos();
 		addFilterVideos(filteredVideos);
 		setActiveVideos(filteredVideos);
-		setFilterOpen(false);
+		setMobileFilterOpen(false);
 	};
 
 	useEffect(() => {
@@ -93,7 +93,7 @@ export default function Home() {
 		<>
 			<div className="h-[calc(100%-64px)] mb-4">
 				<section className="flex bg-background h-full">
-					<Sidebar formData={filterData} setFormData={setFilterData} handleFilter={handleSubmit} />
+					<Sidebar handleFilter={handleSubmit} />
 					<main className="w-full md:w-[calc(100%-245px)] overflow-auto px-[50px] pb-[500px] scrollbar-custom">
 						<div className="flex flex-col items-center gap-[50px] py-[50px] xl:flex-row justify-center">
 							<h1 className="text-4xl text-center text-foreground font-semibold">
@@ -124,7 +124,7 @@ export default function Home() {
 							})}
 						</div>
 					</main>
-					<Sheet open={filterOpen} onOpenChange={setFilterOpen}>
+					<Sheet open={mobileFilterOpen} onOpenChange={setMobileFilterOpen}>
 						<SheetTrigger asChild className="md:hidden">
 							<Button
 								variant="outline"
@@ -140,8 +140,8 @@ export default function Home() {
 							</SheetHeader>
 							<form className="w-auto px-4" onSubmit={handleSubmit}>
 								<h2 className="text-xl">Filter Match Results</h2>
-								<TournamentFilters formData={filterData} setFormData={setFilterData} />
-								<YearFilters formData={filterData} setFormData={setFilterData} />
+								<TournamentFilters />
+								<YearFilters />
 								<Button size="lg" className="my-1" type="submit">
 									Apply Filters
 								</Button>

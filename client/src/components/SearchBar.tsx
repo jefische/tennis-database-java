@@ -9,7 +9,7 @@ interface SearchBarProps {
 
 export function SearchBar({ setActiveVideos }: SearchBarProps) {
 	const [query, setQuery] = useState<string>("");
-	const { filterVideos } = useStore();
+	const { filteredVideos } = useStore();
 
 	// Search filter is run against the video title/description field
 	function filterItems(items: Videos[], query: string) {
@@ -26,9 +26,9 @@ export function SearchBar({ setActiveVideos }: SearchBarProps) {
 		setQuery(value);
 
 		if (value === "") {
-			setActiveVideos(filterVideos);
+			setActiveVideos(filteredVideos);
 		} else {
-			setActiveVideos(filterItems(filterVideos, value));
+			setActiveVideos(filterItems(filteredVideos, value));
 		}
 	}
 
