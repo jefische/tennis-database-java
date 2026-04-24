@@ -16,16 +16,11 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/hooks/useStore";
 
-interface AddVideoTypes {
-	allVideos: Videos[];
-	setVideos: setVideosFunction;
-}
-
-export default function SCNAddModal({ allVideos, setVideos }: AddVideoTypes) {
+export default function SCNAddModal() {
 	const [open, setOpen] = useState<boolean>(false);
-	const { setAllVideos } = useStore();
+	const { setAllVideos, setActiveVideos } = useStore();
 	function handleSubmit(data: Videos[]): void {
-		setVideos(data);
+		setActiveVideos(data);
 		setAllVideos(data);
 		toast.success("Video added successfully");
 	}
@@ -53,15 +48,14 @@ export default function SCNAddModal({ allVideos, setVideos }: AddVideoTypes) {
 					{/* your form fields go here */}
 					<RHFVideoForm
 						initialData={{
-							tournament: "Cincinnati Open",
-							year: 2024,
-							youtubeId: "LEDgye02f1w",
+							tournament: "Australian Open",
+							year: 2027,
+							youtubeId: "pHljyAd8aAI",
 							round: "Finals",
-							player1: "Jannik Sinner",
-							player2: "Frances Tiafoe",
-							title: "Jannik Sinner vs. Frances Tiafoe | Cincinnati Open 2024 Finals",
+							player1: "Iga Swiatek",
+							player2: "Coco Gauff",
+							title: "Iga Swiatek vs. Coco Gauff | Australian Open 2027 Finals",
 						}}
-						allVideos={allVideos}
 						HTTPmethod="POST"
 						endpoint="videos/add"
 						onFormSubmit={handleSubmit}

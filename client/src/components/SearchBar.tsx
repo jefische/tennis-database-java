@@ -1,15 +1,11 @@
 import { useState } from "react";
 import { Input } from "./ui/input";
-import { setVideosFunction, Videos, VideoFilters } from "@/types";
+import { Videos } from "@/types";
 import { useStore } from "@/hooks/useStore";
 
-interface SearchBarProps {
-	setActiveVideos: setVideosFunction;
-}
-
-export function SearchBar({ setActiveVideos }: SearchBarProps) {
+export function SearchBar() {
 	const [query, setQuery] = useState<string>("");
-	const { filteredVideos } = useStore();
+	const { filteredVideos, setActiveVideos } = useStore();
 
 	// Search filter is run against the video title/description field
 	function filterItems(items: Videos[], query: string) {

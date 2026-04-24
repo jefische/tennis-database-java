@@ -105,9 +105,9 @@ export interface VideoCards {
 	maxWidth?: number;
 	summary?: string | null;
 	summaryStatus: "yes" | "no_transcript" | null;
-	allVideos: Videos[];
+	// allVideos: Videos[];
 	// setAllVideos: (videos: Videos[]) => void;
-	setActiveVideos: (videos: Videos[]) => void;
+	// setActiveVideos: (videos: Videos[]) => void;
 }
 
 export type User = {

@@ -14,12 +14,22 @@ import YearFilters from "@/components/home/sidebar/YearFilters";
 import { useStore } from "@/hooks/useStore";
 
 export default function Home() {
-	const [activeVideos, setActiveVideos] = useState<Videos[]>([]);
+	// const [activeVideos, setActiveVideos] = useState<Videos[]>([]);
 	// const [allVideos, setAllVideos] = useState<Videos[]>([]);
 	// formData is used to manage the checkboxes and pass them to form submit for ytVideo filtering and rendering in Home.jsx
 	// const [filterData, setFilterData] = useState<VideoFilters>({ tournament: {}, year: {} });
 	const [mobileFilterOpen, setMobileFilterOpen] = useState<boolean>(false);
-	const { user, allVideos, setAllVideos, filterData, setFilterData, addFilterVideos, resetFilterVideos } = useStore();
+	const {
+		user,
+		allVideos,
+		setAllVideos,
+		activeVideos,
+		setActiveVideos,
+		filterData,
+		setFilterData,
+		addFilterVideos,
+		resetFilterVideos,
+	} = useStore();
 
 	// import.meta is a runtime metadata object available in ES modules
 	// Vite injects an env object on import.meta
@@ -99,15 +109,11 @@ export default function Home() {
 							<h1 className="text-4xl text-center text-foreground font-semibold">
 								Welcome to the Match Archive{user?.username && `, ${user?.username}`}
 							</h1>
-							<SearchBar setActiveVideos={setActiveVideos} />
+							<SearchBar />
 						</div>
 						<TagFilters></TagFilters>
 						<div className="grid grid-cols-[repeat(auto-fill,minmax(300px,370px))] gap-x-6 gap-y-8 mb-[50px] justify-center">
-							{user?.role === "ADMIN" && (
-								<>
-									<SCNAddModal allVideos={allVideos} setVideos={setActiveVideos} />
-								</>
-							)}
+							{user?.role === "ADMIN" && <SCNAddModal />}
 							{activeVideos.sort(sortVideos).map((video: Videos) => {
 								return (
 									<SCNVideoCard
@@ -117,8 +123,6 @@ export default function Home() {
 										duration={video.duration}
 										summary={video.summary}
 										summaryStatus={video.summaryStatus}
-										allVideos={allVideos}
-										setActiveVideos={setActiveVideos}
 									/>
 								);
 							})}

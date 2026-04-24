@@ -38,17 +38,9 @@ const emptySummary: AISummary = {
 };
 
 import { cn } from "@/lib/utils";
-export default function SCNVideoCard({
-	id,
-	title,
-	duration,
-	summary,
-	summaryStatus,
-	allVideos,
-	setActiveVideos,
-}: VideoCards) {
-	const [editModal, setEditModal] = useState<boolean>(false);
+export default function SCNVideoCard({ id, title, duration, summary, summaryStatus }: VideoCards) {
 	const [editData, setEditData] = useState<Videos>({} as Videos);
+	const [editModal, setEditModal] = useState<boolean>(false);
 	const [deleteModal, setDeleteModal] = useState<boolean>(false);
 	const [aiSummary, setAiSummary] = useState<AISummary>(() => {
 		if (!summary) return emptySummary;
@@ -270,19 +262,8 @@ export default function SCNVideoCard({
 					</DialogFooter>
 				</DialogContent>
 			</Dialog>
-			<SCNEditModal
-				open={editModal}
-				setEditModal={setEditModal}
-				allVideos={allVideos}
-				setActiveVideos={setActiveVideos}
-				editData={editData}
-			/>
-			<DeleteModal
-				open={deleteModal}
-				setDeleteModal={setDeleteModal}
-				setActiveVideos={setActiveVideos}
-				editData={editData}
-			/>
+			<SCNEditModal open={editModal} setEditModal={setEditModal} editData={editData} />
+			<DeleteModal open={deleteModal} setDeleteModal={setDeleteModal} editData={editData} />
 		</Fragment>
 	);
 }

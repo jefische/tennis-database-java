@@ -17,12 +17,10 @@ interface EditModalProps {
 	open: boolean;
 	setEditModal: (open: boolean) => void;
 	editData: Videos;
-	allVideos: Videos[];
-	setActiveVideos: (video: Videos[]) => void;
 }
 
-export default function SCNEditModal({ allVideos, setActiveVideos, editData, open, setEditModal }: EditModalProps) {
-	const { setAllVideos } = useStore();
+export default function SCNEditModal({ editData, open, setEditModal }: EditModalProps) {
+	const { setAllVideos, setActiveVideos } = useStore();
 	function handleSubmit(data: Videos[]): void {
 		setActiveVideos(data);
 		setAllVideos(data);
@@ -45,7 +43,6 @@ export default function SCNEditModal({ allVideos, setActiveVideos, editData, ope
 					{/* your form fields go here */}
 					<RHFVideoForm
 						initialData={editData}
-						allVideos={allVideos}
 						HTTPmethod="PUT"
 						endpoint="videos/edit"
 						onFormSubmit={handleSubmit}

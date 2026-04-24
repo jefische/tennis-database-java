@@ -16,11 +16,10 @@ interface DeleteModalProps {
 	open: boolean;
 	setDeleteModal: (open: boolean) => void;
 	editData: Videos;
-	setActiveVideos: (video: Videos[]) => void;
 }
 
-export default function DeleteModal({ open, setDeleteModal, setActiveVideos, editData }: DeleteModalProps) {
-	const { user, setAllVideos } = useStore();
+export default function DeleteModal({ open, setDeleteModal, editData }: DeleteModalProps) {
+	const { user, setAllVideos, setActiveVideos } = useStore();
 
 	function handleDelete(): void {
 		fetch(`${import.meta.env.VITE_API_URL}/videos/${editData.youtubeId}`, {

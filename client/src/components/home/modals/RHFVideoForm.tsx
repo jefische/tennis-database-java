@@ -35,7 +35,6 @@ const schema = z.object({
 
 interface VideoFormProps {
 	initialData: Partial<Omit<Videos, "videoId">>;
-	allVideos: Videos[];
 	HTTPmethod: string;
 	endpoint: string;
 	onFormSubmit: (data: Videos[]) => void;
@@ -44,7 +43,6 @@ interface VideoFormProps {
 
 export default function RHFVideoForm({
 	initialData,
-	allVideos,
 	HTTPmethod,
 	endpoint,
 	onFormSubmit,
@@ -52,7 +50,7 @@ export default function RHFVideoForm({
 }: VideoFormProps) {
 	const [dur, setDur] = useState<boolean>(false);
 	const [addNewTournament, setAddNewTournament] = useState(false);
-	const { user } = useStore();
+	const { user, allVideos } = useStore();
 	const form = useForm<z.infer<typeof schema>>({
 		resolver: zodResolver(schema),
 		defaultValues: {
@@ -120,7 +118,7 @@ export default function RHFVideoForm({
 		const rawRound = field.name === "round" ? val : form.getValues("round");
 
 		let rounds: string = rawRound;
-		switch (val) {
+		switch (rawRound) {
 			case "1st":
 				rounds = "Round 1";
 				break;
@@ -164,7 +162,7 @@ export default function RHFVideoForm({
 							</FieldLabel>
 							<Select
 								mode="light"
-								value={field.value}
+								value={addNewTournament ? "add-new" : field.value}
 								onValueChange={(val) => {
 									if (val === "add-new") {
 										setAddNewTournament(true);
