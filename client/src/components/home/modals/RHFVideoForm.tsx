@@ -12,6 +12,7 @@ import {
 	SelectLabel,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
@@ -37,20 +38,14 @@ interface VideoFormProps {
 	initialData: Partial<Omit<Videos, "videoId">>;
 	HTTPmethod: string;
 	endpoint: string;
-	onFormSubmit: (data: Videos[]) => void;
 	setOpenModal: (open: boolean) => void;
 }
 
-export default function RHFVideoForm({
-	initialData,
-	HTTPmethod,
-	endpoint,
-	onFormSubmit,
-	setOpenModal,
-}: VideoFormProps) {
+export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, setOpenModal }: VideoFormProps) {
 	const [dur, setDur] = useState<boolean>(false);
 	const [addNewTournament, setAddNewTournament] = useState(false);
-	const { user, allVideos } = useStore();
+	const { user, allVideos, setAllVideos, setActiveVideos } = useStore();
+
 	const form = useForm<z.infer<typeof schema>>({
 		resolver: zodResolver(schema),
 		defaultValues: {
@@ -105,7 +100,13 @@ export default function RHFVideoForm({
 			})
 			.then((responseData) => {
 				setOpenModal(false);
-				onFormSubmit(responseData); // Calls parent function to reload video state
+				setAllVideos(responseData);
+				setActiveVideos(responseData);
+				if (endpoint === "videos/add") {
+					toast.success("Video added successfully");
+				} else if (endpoint === "videos/edit") {
+					toast.success("Video edited successfully");
+				}
 			})
 			.catch((error) => console.error(error)); // Note this will only catch like server timeout errors,
 		// a response status of 400 or 500 even though an error code, fetch doesn't consider these as errors in terms of the promise being rejected.

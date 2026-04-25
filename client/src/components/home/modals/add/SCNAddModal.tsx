@@ -6,24 +6,14 @@ import {
 	DialogTitle,
 	DialogDescription,
 	DialogFooter,
-	DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import RHFVideoForm from "../RHFVideoForm";
-import { setVideosFunction, Videos } from "@/assets/types";
-import { toast } from "sonner";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { useStore } from "@/hooks/useStore";
 
 export default function SCNAddModal() {
 	const [open, setOpen] = useState<boolean>(false);
-	const { setAllVideos, setActiveVideos } = useStore();
-	function handleSubmit(data: Videos[]): void {
-		setActiveVideos(data);
-		setAllVideos(data);
-		toast.success("Video added successfully");
-	}
 
 	return (
 		<>
@@ -48,17 +38,16 @@ export default function SCNAddModal() {
 					{/* your form fields go here */}
 					<RHFVideoForm
 						initialData={{
-							tournament: "Australian Open",
-							year: 2027,
-							youtubeId: "pHljyAd8aAI",
-							round: "Finals",
-							player1: "Iga Swiatek",
-							player2: "Coco Gauff",
-							title: "Iga Swiatek vs. Coco Gauff | Australian Open 2027 Finals",
+							tournament: "Monte Carlo",
+							year: 2022,
+							youtubeId: "jb18sKSCH2w",
+							round: "2nd",
+							player1: "Carlos Alcaraz",
+							player2: "Sebastian Korda",
+							title: "Carlos Alcaraz vs. Sebastian Korda | Monte Carlo 2022 Round 2",
 						}}
 						HTTPmethod="POST"
 						endpoint="videos/add"
-						onFormSubmit={handleSubmit}
 						setOpenModal={setOpen}
 					/>
 					<DialogFooter>

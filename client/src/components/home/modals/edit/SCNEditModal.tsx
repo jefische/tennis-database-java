@@ -9,9 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import RHFVideoForm from "../RHFVideoForm";
-import { setVideosFunction, Videos } from "@/assets/types";
-import { toast } from "sonner";
-import { useStore } from "@/hooks/useStore";
+import { Videos } from "@/assets/types";
 
 interface EditModalProps {
 	open: boolean;
@@ -20,13 +18,6 @@ interface EditModalProps {
 }
 
 export default function SCNEditModal({ editData, open, setEditModal }: EditModalProps) {
-	const { setAllVideos, setActiveVideos } = useStore();
-	function handleSubmit(data: Videos[]): void {
-		setActiveVideos(data);
-		setAllVideos(data);
-		toast.success("Video edited successfully");
-	}
-
 	return (
 		<>
 			<Dialog open={open} onOpenChange={setEditModal}>
@@ -45,7 +36,6 @@ export default function SCNEditModal({ editData, open, setEditModal }: EditModal
 						initialData={editData}
 						HTTPmethod="PUT"
 						endpoint="videos/edit"
-						onFormSubmit={handleSubmit}
 						setOpenModal={setEditModal}
 					/>
 					<DialogFooter>
