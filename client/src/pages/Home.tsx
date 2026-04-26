@@ -21,7 +21,7 @@ export default function Home() {
 	// const [filterData, setFilterData] = useState<VideoFilters>({ tournament: {}, year: {} });
 	const [mobileFilterOpen, setMobileFilterOpen] = useState<boolean>(false);
 	const [isLoading, setLoading] = useState<boolean>(true);
-	const pageLoadingSkeletons = new Array(10);
+	const pageLoadingSkeletons = Array.from({ length: 10 });
 
 	const {
 		user,
