@@ -1,9 +1,6 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-
 import { Bars3Icon, SunIcon, MoonIcon, UserCircleIcon } from "@heroicons/react/24/outline";
-
 import { NavLink, Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 

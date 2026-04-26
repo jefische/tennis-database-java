@@ -1,7 +1,7 @@
 import Sidebar from "../components/home/sidebar/Sidebar";
 import TagFilters from "../components/TagFilters";
 import { SearchBar } from "../components/SearchBar";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { VideoFilters, Videos, User } from "@/types";
 import SCNVideoCard from "@/components/home/modals/SCNVideoCard";
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -11,6 +11,7 @@ import { sortVideos, initFilterData } from "../utils/helpers";
 import SCNAddModal from "@/components/home/modals/add/SCNAddModal";
 import TournamentFilters from "@/components/home/sidebar/TournamentFilters";
 import YearFilters from "@/components/home/sidebar/YearFilters";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useStore } from "@/hooks/useStore";
 
 export default function Home() {
@@ -19,6 +20,9 @@ export default function Home() {
 	// formData is used to manage the checkboxes and pass them to form submit for ytVideo filtering and rendering in Home.jsx
 	// const [filterData, setFilterData] = useState<VideoFilters>({ tournament: {}, year: {} });
 	const [mobileFilterOpen, setMobileFilterOpen] = useState<boolean>(false);
+	const [isLoading, setLoading] = useState<boolean>(true);
+	const pageLoadingSkeletons = new Array(10);
+
 	const {
 		user,
 		allVideos,
@@ -79,7 +83,8 @@ export default function Home() {
 			})
 			.catch((error) => {
 				console.error("Error fetching data:", error);
-			});
+			})
+			.finally(() => setLoading(false));
 	}, [baseURL]);
 
 	useEffect(() => {
@@ -114,6 +119,19 @@ export default function Home() {
 						<TagFilters></TagFilters>
 						<div className="grid grid-cols-[repeat(auto-fill,minmax(300px,370px))] gap-x-6 gap-y-8 mb-[50px] justify-center">
 							{user?.role === "ADMIN" && <SCNAddModal />}
+							{isLoading && (
+								<>
+									{pageLoadingSkeletons.map((_, i) => {
+										return (
+											<Skeleton
+												key={i}
+												className="relative h-[235px] max-w-[370px] w-full bg-center bg-cover rounded-[10px]"
+											/>
+										);
+									})}
+								</>
+							)}
+
 							{activeVideos.sort(sortVideos).map((video: Videos) => {
 								return (
 									<SCNVideoCard

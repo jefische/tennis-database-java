@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Loader2 } from "lucide-react";
 import {
 	Dialog,
 	DialogContent,
@@ -23,6 +24,7 @@ export default function LoginModal({
 	const [username, setUsername] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 	const [error, setError] = useState<string>("");
+	const [isLoading, setLoading] = useState<boolean>(false);
 	const { setUser } = useStore();
 
 	const handleSubmit = async (event: React.FormEvent) => {
@@ -40,9 +42,12 @@ export default function LoginModal({
 			localStorage.setItem("token", data.token);
 			// Update user state (pass setUser as a prop)
 			const payload = JSON.parse(atob(data.token.split(".")[1]));
-			setUser({ username: payload.sub, role: payload.role, token: data.token });
-
-			setDialogOpen(false);
+			setLoading(true);
+			setTimeout(() => {
+				setUser({ username: payload.sub, role: payload.role, token: data.token });
+				setDialogOpen(false);
+				setLoading(false);
+			}, 3000);
 		} else {
 			setError("Invalid username or password");
 		}
@@ -66,7 +71,10 @@ export default function LoginModal({
 					{error && <p className="text-sm text-red-500">{error}</p>}
 					<DialogFooter>
 						{/* Add event handler */}
-						<Button type="submit">Submit</Button>
+						<Button disabled={isLoading} type="submit">
+							{isLoading && <Loader2 className="animate-spin mr-2" />}
+							Login
+						</Button>
 					</DialogFooter>
 				</form>
 			</DialogContent>

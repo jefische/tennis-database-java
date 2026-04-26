@@ -44,7 +44,7 @@ interface VideoFormProps {
 export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, setOpenModal }: VideoFormProps) {
 	const [dur, setDur] = useState<boolean>(false);
 	const [addNewTournament, setAddNewTournament] = useState(false);
-	const { user, allVideos, setAllVideos, setActiveVideos } = useStore();
+	const { user, setUser, allVideos, setAllVideos, setActiveVideos } = useStore();
 
 	const form = useForm<z.infer<typeof schema>>({
 		resolver: zodResolver(schema),
@@ -92,6 +92,14 @@ export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, setOpe
 					if (response.status === 409) {
 						form.setError("youtubeId", { message: "Duplicate youtube URL Id found." });
 						throw new Error(`${response.status} — Duplicate youtube URL Id found`);
+					}
+					if (response.status === 401) {
+						setUser(null);
+						localStorage.removeItem("token");
+						toast.error("Admin session expired, please login again.");
+						return response.json().then((data) => {
+							throw new Error(`${response.status} — ${data.message}`);
+						});
 					}
 					throw new Error(`${response.status} — Network response was not ok`);
 				} else {

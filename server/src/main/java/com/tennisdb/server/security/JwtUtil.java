@@ -16,6 +16,7 @@ public class JwtUtil {
     private final SecretKey secretKey;
     private final long expiration;
 
+    // Expiration is 24 hours (86,400,000 milliseconds)
     public JwtUtil(@Value("${JWT_SECRET}") String secret,
                    @Value("${JWT_EXPIRATION:86400000}") long expiration) {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes());
