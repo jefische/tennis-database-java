@@ -78,6 +78,7 @@ export default function Home() {
 		if (allVideos.length > 0) {
 			// Don't refetch videos and rely on zustand store if populated.
 			setActiveVideos(allVideos);
+			resetFilterVideos();
 			addFilterVideos(allVideos);
 			setLoading(false);
 			return;
@@ -85,8 +86,10 @@ export default function Home() {
 		fetch(`${baseURL}/videos`, requestOptions)
 			.then((response) => response.json())
 			.then((data) => {
-				setActiveVideos(data);
 				setAllVideos(data);
+				resetFilterVideos();
+				addFilterVideos(data);
+				setActiveVideos(data);
 			})
 			.catch((error) => {
 				console.error("Error fetching data:", error);
