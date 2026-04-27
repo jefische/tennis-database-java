@@ -1,4 +1,4 @@
-import { Videos, User } from "@/types";
+import { Videos } from "@/types";
 // import Button from "react-bootstrap/Button";
 // import { useVideoForm } from "@/hooks/useVideoForm";
 import { Input } from "@/components/ui/input";

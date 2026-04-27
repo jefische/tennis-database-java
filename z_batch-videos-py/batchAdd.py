@@ -9,6 +9,9 @@ API_URL = f"{BASE_URL}/videos/add"
 SUMMARY_URL = f"{BASE_URL}/api/summary"
 VIDEO_URL = f"{BASE_URL}/videos"
 
+# Auth headers (set via --token flag)
+HEADERS = {}
+
 
 def normalize_title(title: str) -> str:
     """Normalize title to handle edge cases before parsing."""
@@ -46,8 +49,8 @@ def parse_title(title: str) -> dict:
     """
     title_normalized = normalize_title(title)
 
-    # Split on ' | ' to separate players from tournament info
-    parts = title_normalized.split(" | ", 1)
+    # Split on ' | ' or ' - ' to separate players from tournament info
+    parts = re.split(r"\s+[|\-]\s+", title_normalized, maxsplit=1)
     if len(parts) != 2:
         return None
 
@@ -66,17 +69,17 @@ def parse_title(title: str) -> dict:
     player1 = re.sub(r"(\w)/(\w)", r"\1 / \2", player1)
     player2 = re.sub(r"(\w)/(\w)", r"\1 / \2", player2)
 
-    # Parse tournament info: 'Year Tournament Round'
+    # Parse tournament info
     # Remove parenthetical notes like '(Radio Commentary)'
     tournament_clean = re.sub(r"\s*\(.*?\)", "", tournament_part).strip()
+    # Remove trailing 'Full Match' and variants like 'Full Match HD'
+    tournament_clean = re.sub(r"\s*Full Match.*$", "", tournament_clean).strip()
 
-    # Extract year (4-digit number)
-    year_match = re.match(r"(\d{4})\s+(.*)", tournament_clean)
-    if not year_match:
-        return None
-
-    year = int(year_match.group(1))
-    rest = year_match.group(2).strip()
+    # Known round abbreviations to expand
+    round_abbrevs = {
+        "R1": "Round 1", "R2": "Round 2", "R3": "Round 3", "R4": "Round 4",
+        "QF": "Quarterfinal", "SF": "Semifinal", "F": "Final",
+    }
 
     # Known round names to look for at the end
     round_patterns = [
@@ -84,13 +87,43 @@ def parse_title(title: str) -> dict:
         "Quarterfinal", "Semifinal", "Final",
     ]
 
-    round_name = None
-    tournament = rest
-    for rp in round_patterns:
-        if rest.endswith(rp):
-            round_name = rp
-            tournament = rest[: -len(rp)].strip()
-            break
+    # Try 'Year Tournament Round' format (e.g. '2014 US Open Round 4')
+    year_match = re.match(r"(\d{4})\s+(.*)", tournament_clean)
+    if not year_match:
+        # Try 'Tournament Year Round' format (e.g. 'Australian Open 2012 QF')
+        year_match = re.search(r"(\d{4})", tournament_clean)
+        if not year_match:
+            return None
+        year = int(year_match.group(1))
+        before_year = tournament_clean[: year_match.start()].strip()
+        after_year = tournament_clean[year_match.end() :].strip()
+        # after_year is the round abbreviation or name
+        rest = before_year
+        round_name = None
+        if after_year:
+            # Check for abbreviations first
+            if after_year in round_abbrevs:
+                round_name = round_abbrevs[after_year]
+            else:
+                for rp in round_patterns:
+                    if after_year == rp:
+                        round_name = rp
+                        break
+                if not round_name:
+                    # Unknown round text, append to tournament
+                    rest = f"{before_year} {after_year}"
+        tournament = rest
+    else:
+        year = int(year_match.group(1))
+        rest = year_match.group(2).strip()
+
+        round_name = None
+        tournament = rest
+        for rp in round_patterns:
+            if rest.endswith(rp):
+                round_name = rp
+                tournament = rest[: -len(rp)].strip()
+                break
 
     return {
         "player1": player1,
@@ -105,7 +138,7 @@ def parse_title(title: str) -> dict:
 def generate_summary(youtube_id: str) -> bool:
     """Call the summary API for a video. Returns True if summary was generated."""
     try:
-        resp = requests.post(f"{SUMMARY_URL}/{youtube_id}", timeout=120)
+        resp = requests.post(f"{SUMMARY_URL}/{youtube_id}", headers=HEADERS, timeout=120)
         if resp.status_code == 200:
             return True
         else:
@@ -119,7 +152,7 @@ def generate_summary(youtube_id: str) -> bool:
 def has_summary(youtube_id: str) -> bool:
     """Check if a video already has a summary in the database."""
     try:
-        resp = requests.get(f"{VIDEO_URL}/{youtube_id}")
+        resp = requests.get(f"{VIDEO_URL}/{youtube_id}", headers=HEADERS)
         if resp.status_code == 200:
             video = resp.json()
             return video.get("summary") is not None
@@ -167,7 +200,7 @@ def batch_add(json_file: str, dry_run: bool = False, with_summaries: bool = Fals
             continue
 
         try:
-            resp = requests.post(API_URL, json=payload)
+            resp = requests.post(API_URL, json=payload, headers=HEADERS)
             if resp.status_code == 200:
                 print(f"  ADDED: {parsed['player1']} vs {parsed['player2']} | {parsed['year']} {parsed['tournament']} {parsed['round'] or ''}")
                 success += 1
@@ -202,11 +235,25 @@ def batch_add(json_file: str, dry_run: bool = False, with_summaries: bool = Fals
 
 
 if __name__ == "__main__":
-    json_file = "youtube_ids.json"
+    json_file = "youtube_ids_partial.json"
     dry_run = "--dry-run" in sys.argv
     with_summaries = "--with-summaries" in sys.argv
+
+    # Parse --token flag
+    for arg in sys.argv:
+        if arg.startswith("--token="):
+            HEADERS["Authorization"] = f"Bearer {arg.split('=', 1)[1]}"
+
+    if not HEADERS.get("Authorization") and not dry_run:
+        print("WARNING: No --token provided. Authenticated endpoints will return 403.\n")
 
     if dry_run:
         print("=== DRY RUN MODE (no API calls) ===\n")
 
     batch_add(json_file, dry_run=dry_run, with_summaries=with_summaries)
+
+# Preview which videos are to be added:
+# python batchAdd.py --dry-run
+
+# Run with auth token:
+# python batchAdd.py --token=eyJhbGciOi...

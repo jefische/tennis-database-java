@@ -60,3 +60,10 @@ if __name__ == "__main__":
     with open(output_file, "w") as f:
         json.dump(videos, f, indent=2)
     print(f"Saved to {output_file}")
+
+# Create youtube_ids.json for input into batchAdd.py
+# python youtubeUrls.py <playlist_url>
+
+# Example:
+# https://www.youtube.com/watch?v=u5LLU8swG_k&list=PLxESD4zmEEYeuq-iiDpLZn3qdzwmomZzn&index=1&pp=iAQB0gcJCdQKAYcqIYzv
+# python youtubeUrls.py "https://www.youtube.com/watch?v=u5LLU8swG_k&list=PLxESD4zmEEYeuq-iiDpLZn3qdzwmomZzn"

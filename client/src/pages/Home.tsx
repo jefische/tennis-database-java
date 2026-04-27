@@ -21,7 +21,7 @@ export default function Home() {
 	// const [filterData, setFilterData] = useState<VideoFilters>({ tournament: {}, year: {} });
 	const [mobileFilterOpen, setMobileFilterOpen] = useState<boolean>(false);
 	const [isLoading, setLoading] = useState<boolean>(true);
-	const pageLoadingSkeletons = Array.from({ length: 10 });
+	const pageLoadingSkeletons = Array.from({ length: 12 });
 
 	const {
 		user,
@@ -75,6 +75,11 @@ export default function Home() {
 	};
 
 	useEffect(() => {
+		if (allVideos.length > 0) {
+			// Don't refetch videos and rely on zustand store if populated.
+			setLoading(false);
+			return;
+		}
 		fetch(`${baseURL}/videos`, requestOptions)
 			.then((response) => response.json())
 			.then((data) => {
