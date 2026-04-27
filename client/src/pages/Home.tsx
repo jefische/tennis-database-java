@@ -77,6 +77,8 @@ export default function Home() {
 	useEffect(() => {
 		if (allVideos.length > 0) {
 			// Don't refetch videos and rely on zustand store if populated.
+			setActiveVideos(allVideos);
+			addFilterVideos(allVideos);
 			setLoading(false);
 			return;
 		}
