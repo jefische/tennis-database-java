@@ -63,12 +63,12 @@ export default function YearFilters() {
 						<ul className="filter py-2 px-0">
 							<li className="flex items-center p-1">
 								<Checkbox
-									id="selectAll"
+									id="selectAllYears"
 									className="size-4"
 									checked={select}
 									onCheckedChange={() => selectAll()}
 								/>
-								<Label htmlFor="selectAll" className="ps-[10px] text-base">
+								<Label htmlFor="selectAllYears" className="ps-[10px] text-base">
 									Select All ({numYears})
 								</Label>
 							</li>
@@ -78,7 +78,7 @@ export default function YearFilters() {
 								return (
 									<li key={name} className="flex items-center p-1">
 										<Checkbox
-											name={name}
+											id={name}
 											className="size-4"
 											checked={
 												filterData.year[name] === undefined

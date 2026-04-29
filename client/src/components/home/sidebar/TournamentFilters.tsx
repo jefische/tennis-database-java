@@ -63,12 +63,12 @@ export default function TournamentFilters() {
 						<ul className="filter py-2 px-0">
 							<li className="flex items-center p-1">
 								<Checkbox
-									id="selectAll"
+									id="selectAllTournaments"
 									className="size-4"
 									checked={select}
 									onCheckedChange={() => selectAll()}
 								/>
-								<Label htmlFor="selectAll" className="ps-[10px] text-base">
+								<Label htmlFor="selectAllTournaments" className="ps-[10px] text-base">
 									Select All ({numTournaments})
 								</Label>
 							</li>
@@ -78,7 +78,7 @@ export default function TournamentFilters() {
 								return (
 									<li key={idx} className="flex items-center p-1">
 										<Checkbox
-											name={key}
+											id={key}
 											className="size-4"
 											checked={
 												filterData.tournament[key] == undefined
