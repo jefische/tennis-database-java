@@ -1,5 +1,5 @@
 import { YearFilterItem } from "@/assets/types";
-import { useState } from "react";
+import { useState, useId } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { ChevronDown } from "lucide-react";
@@ -8,8 +8,9 @@ import { useStore } from "@/hooks/useStore";
 export default function YearFilters() {
 	// isActive state is used to manage the accordion dropdown filters in the sidebar
 	const [isActive, setIsActive] = useState(true);
-	const [select, setSelect] = useState(true);
+	const [selectAll, setSelectAll] = useState(true);
 	const { filterData, setFilterData } = useStore();
+	const uid = useId();
 
 	let numYears: number = 0; // for Select All count
 	const years: [string, YearFilterItem][] = Object.entries(filterData.year).filter(([key, val]) => {
@@ -17,13 +18,15 @@ export default function YearFilters() {
 		return key;
 	});
 
-	function selectAll(): void {
-		setSelect(!select);
+	// const select = Object.values(filterData.year).every((val) => val.include);
+
+	function handleSelectAll(): void {
+		setSelectAll(!selectAll);
 		setFilterData({
 			...filterData,
 			year: Object.fromEntries(
 				Object.entries(filterData.year).map(([key, val]) => {
-					return [key, { ...val, include: !select }];
+					return [key, { ...val, include: !selectAll }];
 				}),
 			),
 		});
@@ -40,8 +43,7 @@ export default function YearFilters() {
 				},
 			},
 		});
-		// If any individual year is unchecked, uncheck the select all input field
-		if (checked === false) setSelect(false);
+		if (checked === false) setSelectAll(false);
 	};
 
 	return (
@@ -63,12 +65,12 @@ export default function YearFilters() {
 						<ul className="filter py-2 px-0">
 							<li className="flex items-center p-1">
 								<Checkbox
-									id="selectAllYears"
+									id={`${uid}-selectAllYears`}
 									className="size-4"
-									checked={select}
-									onCheckedChange={() => selectAll()}
+									checked={selectAll}
+									onCheckedChange={() => handleSelectAll()}
 								/>
-								<Label htmlFor="selectAllYears" className="ps-[10px] text-base">
+								<Label htmlFor={`${uid}-selectAllYears`} className="ps-[10px] text-base">
 									Select All ({numYears})
 								</Label>
 							</li>
@@ -78,7 +80,7 @@ export default function YearFilters() {
 								return (
 									<li key={name} className="flex items-center p-1">
 										<Checkbox
-											id={name}
+											id={`${uid}-${name}`}
 											className="size-4"
 											checked={
 												filterData.year[name] === undefined
@@ -87,7 +89,7 @@ export default function YearFilters() {
 											}
 											onCheckedChange={(checked) => handleChange(key, checked as boolean)}
 										/>
-										<Label htmlFor={name} className="ps-[10px] text-base">
+										<Label htmlFor={`${uid}-${name}`} className="ps-[10px] text-base">
 											{name} ({count})
 										</Label>
 									</li>

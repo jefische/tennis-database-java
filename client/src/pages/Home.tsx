@@ -174,7 +174,7 @@ export default function Home() {
 								<h2 className="text-xl">Filter Match Results</h2>
 								<TournamentFilters />
 								<YearFilters />
-								<Button size="lg" className="my-1" type="submit">
+								<Button size="lg" className="mt-4 mb-8" type="submit">
 									Apply Filters
 								</Button>
 							</form>

@@ -13,7 +13,7 @@ export default function Sidebar({ handleFilter }: SidebarProps) {
 				<h2 className="text-xl">Filter Match Results</h2>
 				<TournamentFilters />
 				<YearFilters />
-				<Button size="lg" className="my-1" type="submit">
+				<Button size="lg" className="my-4" type="submit">
 					Apply Filters
 				</Button>
 			</form>

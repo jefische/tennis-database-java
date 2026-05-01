@@ -1,5 +1,5 @@
 import { TournamentFilterItem } from "@/assets/types";
-import { useState } from "react";
+import { useState, useId } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { ChevronDown } from "lucide-react";
@@ -8,8 +8,9 @@ import { useStore } from "@/hooks/useStore";
 export default function TournamentFilters() {
 	// isActive state is used to manage the accordion dropdown filters in the sidebar
 	const [isActive, setIsActive] = useState(true);
-	const [select, setSelect] = useState(true);
+	const [selectAll, setSelectAll] = useState(true);
 	const { filterData, setFilterData } = useStore();
+	const uid = useId();
 
 	let numTournaments: number = 0; // for Select All count
 	const tournaments: [string, TournamentFilterItem][] = Object.entries(filterData.tournament).filter(([key, val]) => {
@@ -17,13 +18,15 @@ export default function TournamentFilters() {
 		return key;
 	});
 
-	function selectAll(): void {
-		setSelect(!select);
+	// const select = Object.values(filterData.tournament).every((val) => val.include);
+
+	function handleSelectAll(): void {
+		setSelectAll(!selectAll);
 		setFilterData({
 			...filterData,
 			tournament: Object.fromEntries(
 				Object.entries(filterData.tournament).map(([key, val]) => {
-					return [key, { ...val, include: !select }];
+					return [key, { ...val, include: !selectAll }];
 				}),
 			),
 		});
@@ -41,7 +44,7 @@ export default function TournamentFilters() {
 			},
 		});
 		// If any individual year is unchecked, uncheck the select all input field
-		if (checked === false) setSelect(false);
+		if (checked === false) setSelectAll(false);
 	};
 
 	return (
@@ -63,12 +66,12 @@ export default function TournamentFilters() {
 						<ul className="filter py-2 px-0">
 							<li className="flex items-center p-1">
 								<Checkbox
-									id="selectAllTournaments"
+									id={`${uid}-selectAllTournaments`}
 									className="size-4"
-									checked={select}
-									onCheckedChange={() => selectAll()}
+									checked={selectAll}
+									onCheckedChange={() => handleSelectAll()}
 								/>
-								<Label htmlFor="selectAllTournaments" className="ps-[10px] text-base">
+								<Label htmlFor={`${uid}-selectAllTournaments`} className="ps-[10px] text-base">
 									Select All ({numTournaments})
 								</Label>
 							</li>
@@ -78,7 +81,7 @@ export default function TournamentFilters() {
 								return (
 									<li key={idx} className="flex items-center p-1">
 										<Checkbox
-											id={key}
+											id={`${uid}-${key}`}
 											className="size-4"
 											checked={
 												filterData.tournament[key] == undefined
@@ -88,7 +91,7 @@ export default function TournamentFilters() {
 											onCheckedChange={(checked) => handleChange(key, checked as boolean)}
 										/>
 
-										<Label htmlFor={key} className="ps-[10px] text-base">
+										<Label htmlFor={`${uid}-${key}`} className="ps-[10px] text-base">
 											{title} ({count})
 										</Label>
 									</li>
