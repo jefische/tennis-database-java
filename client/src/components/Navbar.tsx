@@ -26,6 +26,7 @@ export default function Navbar({ darkMode, setDarkMode }: NavbarProps) {
 	const currentPath = useLocation().pathname;
 	const [loginOpen, setLoginOpen] = useState<boolean>(false);
 	const [registerOpen, setRegisterOpen] = useState<boolean>(false);
+	const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 	const { user, setUser } = useStore();
 
 	const handleActive = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -43,6 +44,7 @@ export default function Navbar({ darkMode, setDarkMode }: NavbarProps) {
 			}
 		});
 		setActiveLink(nextLinks);
+		setMobileMenuOpen(false);
 	};
 
 	const handleLogout = () => {
@@ -54,8 +56,8 @@ export default function Navbar({ darkMode, setDarkMode }: NavbarProps) {
 		<nav className="bg-background border-b-1 border-gray-400">
 			<div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
 				<div className="relative flex h-16 items-center justify-between">
-					<Sheet>
-						<SheetTrigger asChild className="sm:hidden">
+					<Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+						<SheetTrigger asChild className="lg:hidden">
 							<Button variant="ghost" size="icon">
 								<Bars3Icon aria-hidden="true" className="size-6" />
 								<span className="sr-only">Open menu</span>
@@ -88,7 +90,7 @@ export default function Navbar({ darkMode, setDarkMode }: NavbarProps) {
 					<Link to="/" className="ms-10">
 						<img alt="Site Logo" src="/icons/tennis-ball-dark-96.png" className="h-8 w-auto" />
 					</Link>
-					<div className="hidden sm:ml-6 sm:block">
+					<div className="hidden sm:ml-6 lg:block">
 						<div className="flex space-x-4">
 							{activeLink.map((item) => (
 								<NavLink

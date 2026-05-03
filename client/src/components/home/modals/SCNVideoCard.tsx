@@ -172,7 +172,7 @@ export default function SCNVideoCard({ id, title, duration, summary, summaryStat
 					</div>
 				</DialogTrigger>
 				<DialogContent
-					className="sm:max-w-xl md:max-w-2xl lg:max-w-4xl xl:max-w-7xl duration-200 grid-rows-[auto_1fr] sm:min-h-2/3 lg:min-h-3/4"
+					className="sm:max-w-xl md:max-w-2xl lg:max-w-4xl 2xl:max-w-7xl duration-200 grid-rows-[auto_1fr] sm:min-h-2/3 lg:min-h-3/4 lg:max-h-4/5"
 					mode="light"
 				>
 					<DialogHeader>
@@ -187,7 +187,7 @@ export default function SCNVideoCard({ id, title, duration, summary, summaryStat
 						</DialogTitle>
 					</DialogHeader>
 
-					<div className="flex flex-col xl:flex-row gap-[15px]">
+					<div className="flex flex-col xl:flex-row gap-[15px] overflow-y-auto">
 						<div className="basis-2/3 shrink-0">
 							<iframe
 								height="100%"

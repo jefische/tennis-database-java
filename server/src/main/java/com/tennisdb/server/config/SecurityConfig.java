@@ -38,6 +38,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/videos/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/videosAI").permitAll()
                 .requestMatchers("/auth/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/contact").permitAll()
                 // Protected endpoints — require authentication
                 .requestMatchers(HttpMethod.POST, "/videos/**").authenticated()
                 .requestMatchers(HttpMethod.PUT, "/videos/**").authenticated()

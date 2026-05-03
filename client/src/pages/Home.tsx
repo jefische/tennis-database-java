@@ -119,7 +119,7 @@ export default function Home() {
 			<div className="h-[calc(100%-64px)] mb-4">
 				<section className="flex bg-background h-full">
 					<Sidebar handleFilter={handleSubmit} />
-					<main className="w-full md:w-[calc(100%-245px)] overflow-auto px-[50px] pb-[200px] scrollbar-custom">
+					<main className="w-full lg:w-[calc(100%-245px)] overflow-auto px-[50px] pb-[200px] scrollbar-custom">
 						<div className="flex flex-col items-center gap-[50px] py-[50px] xl:flex-row justify-center">
 							<h1 className="text-4xl text-center text-foreground font-semibold">
 								Welcome to the Match Archive{user?.username && `, ${user?.username}`}
@@ -157,7 +157,7 @@ export default function Home() {
 						</div>
 					</main>
 					<Sheet open={mobileFilterOpen} onOpenChange={setMobileFilterOpen}>
-						<SheetTrigger asChild className="md:hidden">
+						<SheetTrigger asChild className="lg:hidden">
 							<Button
 								variant="outline"
 								size="icon"

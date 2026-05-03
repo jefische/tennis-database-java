@@ -52,7 +52,7 @@ function DialogContent({
 				data-mode={mode}
 				className={cn(
 					"fixed top-1/2 left-1/2 z-50 grid w-full sm:max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 sm:rounded-xl bg-popover p-4 text-sm text-popover-foreground ring-1 ring-foreground/10 duration-100 outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-20 data-open:slide-in-from-top-8 data-closed:animate-out data-closed:fade-out-20 data-closed:slide-out-to-top-8",
-					"h-full sm:h-auto overflow-y-auto",
+					"h-full sm:h-auto",
 					className,
 				)}
 				{...props}

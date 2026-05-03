@@ -7,31 +7,33 @@ import { toast } from "sonner";
 const faqs = [
 	{
 		question: "What is the Tennis Match Archive?",
-		answer: "The Tennis Match Archive is a curated video database of professional tennis matches. Browse full matches from major tournaments, organized by event, year, round, and player.",
+		answer: "The Tennis Match Archive is a curated video database of full length professional tennis matches. Browse full matches from major tournaments, organized by event, year, round, and player.",
 	},
 	{
-		question: "How do I search for a specific match?",
-		answer: "Use the search bar at the top of the Match Archives page to find matches by player name, tournament, or year. You can also use the sidebar filters to narrow results by tournament and year.",
+		question: "Is the archive free to use?",
+		answer: "Yes, all content in the archive is completely free. Matches are sourced from copyright friendly videos on YoutTube. Future enchancements such as adding favorites or engaging with chat features will require account sign up.",
 	},
-	// {
-	// 	question: "Can I add my own match videos?",
-	// 	answer: "Registered users can submit YouTube links to add matches to the archive. Simply log in, click the Add Video card, and fill out the match details including tournament, year, round, and players.",
-	// },
 	{
 		question: "Can I add my own match videos?",
 		answer: "Not currently. Please use the form below to suggest matches to add to the archive. Make sure to include the Youtube link.",
 	},
 	{
+		question: "How do I search for a specific match?",
+		answer: "Use the search bar at the top of the Match Archives page to find matches by player name, tournament, or year. You can also use the sidebar filters to narrow results by tournament and year.",
+	},
+
+	// {
+	// 	question: "Can I add my own match videos?",
+	// 	answer: "Registered users can submit YouTube links to add matches to the archive. Simply log in, click the Add Video card, and fill out the match details including tournament, year, round, and players.",
+	// },
+
+	{
 		question: "What tournaments are available?",
 		answer: "The archive includes matches from Grand Slams (Australian Open, Roland Garros, Wimbledon, US Open), Masters 1000 events, ATP Finals, and other notable tournaments. New events are added regularly.",
 	},
 	{
-		question: "How are matches organized?",
-		answer: "Matches are organized by tournament and year. Each match card displays the tournament name, round, players, and year. Use the sidebar filters to browse by tournament or year, and tag filters for quick access.",
-	},
-	{
-		question: "Is the archive free to use?",
-		answer: "Yes, browsing and searching the archive is completely free. You only need an account if you want to contribute by adding new match videos to the database.",
+		question: "What is the AI-generated match summary?",
+		answer: "Each match includes an AI-generated summary that provides a brief overview of the match highlights, key moments, and outcome. These summaries are created to give you quick context about the match before watching the full video.",
 	},
 ];
 
@@ -43,10 +45,22 @@ export default function FAQ() {
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!question.trim()) return;
-		toast.success("Question submitted! We'll get back to you soon.");
-		setName("");
-		setEmail("");
-		setQuestion("");
+		fetch(`${import.meta.env.VITE_API_URL}/contact`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ name: `${name}`, email: `${email}`, message: `${question}` }),
+		})
+			.then((response) => {
+				if (response.ok) {
+					toast.success("Question submitted! We'll get back to you soon.");
+					setName("");
+					setEmail("");
+					setQuestion("");
+				}
+			})
+			.catch((error) => console.error(error));
 	};
 
 	return (
@@ -81,13 +95,17 @@ export default function FAQ() {
 						<div className="w-full border-t border-border" />
 					</div>
 					<div className="relative flex justify-center">
-						<span className="bg-background px-4 text-sm text-muted-foreground">Still have questions?</span>
+						<span className="bg-background px-4 text-md text-muted-foreground">
+							Still have questions or feedback?
+						</span>
 					</div>
 				</div>
 
 				{/* Submit a Question Form */}
 				<div className="rounded-lg border border-border bg-card p-6 sm:p-8 shadow-sm mb-12">
-					<h2 className="text-xl font-semibold text-card-foreground mb-1">Ask a Question</h2>
+					<h2 className="text-xl font-semibold text-card-foreground mb-1">
+						Ask a Question or Provide Feedback
+					</h2>
 					<p className="text-sm text-muted-foreground mb-6">
 						Send us your question and we'll get back to you.
 					</p>
@@ -101,6 +119,7 @@ export default function FAQ() {
 								<Input
 									id="faq-name"
 									placeholder="Your name"
+									className="md:text-base"
 									value={name}
 									onChange={(e) => setName(e.target.value)}
 								/>
@@ -113,6 +132,7 @@ export default function FAQ() {
 									id="faq-email"
 									type="email"
 									placeholder="you@example.com"
+									className="md:text-base"
 									value={email}
 									onChange={(e) => setEmail(e.target.value)}
 								/>
@@ -129,7 +149,7 @@ export default function FAQ() {
 								placeholder="What would you like to know?"
 								value={question}
 								onChange={(e) => setQuestion(e.target.value)}
-								className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-none"
+								className="w-full rounded-md border border-input bg-background px-3 py-2 md:text-base text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-none"
 								required
 							/>
 						</div>
