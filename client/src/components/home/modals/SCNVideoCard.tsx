@@ -176,7 +176,7 @@ export default function SCNVideoCard({ id, title, duration, summary, summaryStat
 					mode="light"
 				>
 					<DialogHeader>
-						<DialogTitle className="flex items-center justify-center gap-6 text-2xl">
+						<DialogTitle className="flex items-center justify-center gap-6 text-2xl me-4">
 							{title} ({duration})
 							{user?.role === "ADMIN" && (
 								<Button onClick={handleTranscript}>
@@ -202,28 +202,30 @@ export default function SCNVideoCard({ id, title, duration, summary, summaryStat
 						{aiSummary.status === "yes" ? (
 							<div className="ai-summary flex flex-col gap-3 p-4 font-[500] overflow-y-scroll">
 								{/* <h5 className="text-gray-500 font-normal">Winner:</h5> */}
-								<div className="flex items-center justify-between">
-									<h5 className="m-0 font-semibold">{aiSummary.winner} wins</h5>
+								{/* <div className="flex items-center justify-between"> */}
+								<h5 className="m-0 font-semibold">{aiSummary.winner} wins</h5>
+								{/* </div> */}
+								<div className="flex justify-between">
+									<div className="flex gap-0.5 items-center">
+										{Array.from({ length: 5 }, (_, i) => {
+											const fill = Math.min(1, Math.max(0, aiSummary.matchRating - i));
+											return (
+												<span key={i} className="relative inline-block w-4 h-4">
+													<Star size={16} className="absolute text-gray-300" />
+													<span
+														className="absolute overflow-hidden"
+														style={{ width: `${fill * 100}%` }}
+													>
+														<Star size={16} className="text-yellow-400 fill-yellow-400" />
+													</span>
+												</span>
+											);
+										})}
+										<span className="text-xs text-gray-500 ml-1">{aiSummary.matchRating}</span>
+									</div>
 									<span className="text-sm font-medium bg-gray-200 rounded-full px-3 py-1">
 										{aiSummary.score}
 									</span>
-								</div>
-								<div className="flex gap-0.5 items-center">
-									{Array.from({ length: 5 }, (_, i) => {
-										const fill = Math.min(1, Math.max(0, aiSummary.matchRating - i));
-										return (
-											<span key={i} className="relative inline-block w-4 h-4">
-												<Star size={16} className="absolute text-gray-300" />
-												<span
-													className="absolute overflow-hidden"
-													style={{ width: `${fill * 100}%` }}
-												>
-													<Star size={16} className="text-yellow-400 fill-yellow-400" />
-												</span>
-											</span>
-										);
-									})}
-									<span className="text-xs text-gray-500 ml-1">{aiSummary.matchRating}</span>
 								</div>
 								<p className="m-0 text-sm leading-relaxed">{aiSummary.overview}</p>
 								<ul className="m-0 ps-4 text-sm flex flex-col gap-1 list-disc marker">

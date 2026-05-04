@@ -33,7 +33,7 @@ public class SummaryService {
 
     public Map<String, String> generateSummary(String youtubeUrl, Video video) {
         String endpoint = summaryServiceUrl + "/agent/summary";
-        Map<String, String> res = new HashMap<>();
+        Map<String, String> result = new HashMap<>();
 
         // Debug: print video details
         System.out.println("Video object: " + video);
@@ -73,9 +73,9 @@ public class SummaryService {
             Map<String, Object> responseBody = response.getBody();
             if (responseBody != null && responseBody.containsKey("summary")) {
                 String r1 = (String) responseBody.get("summary");
-                res.put("summary", r1);
-                res.put("status", "yes");
-                return res;
+                result.put("summary", r1);
+                result.put("status", "yes");
+                return result;
 
             }
 
@@ -97,9 +97,9 @@ public class SummaryService {
             } catch (Exception ignored) {}
 
             String r1 = "{\"winner\":\"\",\"score\":\"\",\"matchRating\":0,\"overview\":\"" + errorMsg + "\",\"highlights\":[\"\"],\"tags\":[\"\"]}";
-            res.put("summary", r1);
-            res.put("status", "no_transcript");
-            return res;
+            result.put("summary", r1);
+            result.put("status", "no_transcript");
+            return result;
         }
     }
 

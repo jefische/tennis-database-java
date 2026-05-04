@@ -119,7 +119,7 @@ export default function FAQ() {
 								<Input
 									id="faq-name"
 									placeholder="Your name"
-									className="md:text-base"
+									className="text-base"
 									value={name}
 									onChange={(e) => setName(e.target.value)}
 								/>
@@ -132,7 +132,7 @@ export default function FAQ() {
 									id="faq-email"
 									type="email"
 									placeholder="you@example.com"
-									className="md:text-base"
+									className="text-base"
 									value={email}
 									onChange={(e) => setEmail(e.target.value)}
 								/>
