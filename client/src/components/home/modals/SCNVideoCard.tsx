@@ -252,7 +252,7 @@ export default function SCNVideoCard({ id, title, duration, summary, summaryStat
 							</div>
 						) : (
 							<div className="ai-summary p-4 text-md text-red-600 font-[600]">
-								Login as an admin to generate a summary for this video
+								Summary not generated for this video
 							</div>
 						)}
 					</div>
