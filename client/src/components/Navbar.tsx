@@ -76,7 +76,7 @@ export default function Navbar({ darkMode, setDarkMode }: NavbarProps) {
 											item.href === currentPath
 												? "bg-accent text-foreground"
 												: "text-muted-foreground hover:bg-accent hover:text-foreground",
-											"rounded-md px-3 py-2 mx-3 text-sm font-medium",
+											"rounded-md px-3 py-2 mx-3 text-base font-medium",
 										)}
 										onClick={handleActive}
 									>

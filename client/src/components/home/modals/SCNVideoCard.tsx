@@ -228,6 +228,12 @@ export default function SCNVideoCard({ id, title, duration, summary, summaryStat
 									</span>
 								</div>
 								<p className="m-0 text-sm leading-relaxed">{aiSummary.overview}</p>
+								<div className="border-t border-gray-200 pt-3">
+									<p className="m-0 text-xs font-semibold uppercase tracking-wider text-gray-400">
+										Match Highlights
+									</p>
+								</div>
+
 								<ul className="m-0 ps-4 text-sm flex flex-col gap-1 list-disc marker">
 									{aiSummary.highlights.map((h, i) => (
 										<li key={i}>{h}</li>
