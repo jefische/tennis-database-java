@@ -33,7 +33,7 @@ const faqs = [
 	},
 	{
 		question: "What is the AI-generated match summary?",
-		answer: "Each match includes an AI-generated summary that provides a brief overview of the match highlights, key moments, and outcome. These summaries are created to give you quick context about the match before watching the full video.",
+		answer: "Each match includes an AI-generated summary that provides a brief overview of the match highlights, key moments, and outcome. Note that these summaries can sometimes be inaccurate as results are based on LLM interpretation of video transcripts. If you notice an inaccuracy in a reported outcome or score, please let us know in the contact form below.",
 	},
 ];
 
