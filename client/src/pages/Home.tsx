@@ -1,12 +1,12 @@
 import Sidebar from "../components/home/sidebar/Sidebar";
 import TagFilters from "../components/TagFilters";
 import { SearchBar } from "../components/SearchBar";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { VideoFilters, Videos, User } from "@/types";
 import SCNVideoCard from "@/components/home/modals/SCNVideoCard";
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { SlidersHorizontal } from "lucide-react";
+import { CircleChevronUp, SlidersHorizontal } from "lucide-react";
 import { sortVideos, initFilterData } from "../utils/helpers";
 import SCNAddModal from "@/components/home/modals/add/SCNAddModal";
 import TournamentFilters from "@/components/home/sidebar/TournamentFilters";
@@ -21,6 +21,9 @@ export default function Home() {
 	// const [filterData, setFilterData] = useState<VideoFilters>({ tournament: {}, year: {} });
 	const [mobileFilterOpen, setMobileFilterOpen] = useState<boolean>(false);
 	const [isLoading, setLoading] = useState<boolean>(true);
+	const [showScrollTop, setShowScrollTop] = useState(false);
+	const mainRef = useRef<HTMLDivElement>(null);
+
 	const pageLoadingSkeletons = Array.from({ length: 12 });
 
 	const {
@@ -114,12 +117,23 @@ export default function Home() {
 		setFilterData(sorted);
 	}, [allVideos]);
 
+	useEffect(() => {
+		const el = mainRef.current;
+		if (!el) return;
+		const handleScroll = () => setShowScrollTop(el.scrollTop > 400);
+		el.addEventListener("scroll", handleScroll);
+		return () => el.removeEventListener("scroll", handleScroll);
+	}, []);
+
 	return (
 		<>
 			<div className="h-[calc(100%-64px)] mb-4">
 				<section className="flex bg-background h-full">
 					<Sidebar handleFilter={handleSubmit} />
-					<main className="w-full lg:w-[calc(100%-245px)] overflow-auto px-[50px] pb-[200px] scrollbar-custom">
+					<main
+						ref={mainRef}
+						className="w-full lg:w-[calc(100%-245px)] overflow-auto px-[50px] pb-[200px] scrollbar-custom"
+					>
 						<div className="flex flex-col items-center gap-[50px] py-[50px] xl:flex-row justify-center">
 							<h1 className="text-4xl text-center text-foreground font-semibold">
 								Welcome to the Match Archive{user?.username && `, ${user?.username}`}
@@ -156,14 +170,25 @@ export default function Home() {
 							})}
 						</div>
 					</main>
+					{showScrollTop && (
+						<Button
+							variant="outline"
+							size="icon"
+							className="fixed bottom-18 right-2 sm:right-4 z-30 rounded-full shadow-lg lg:hidden transition-opacity"
+							onClick={() => mainRef.current?.scrollTo({ top: 0, behavior: "smooth" })}
+						>
+							<CircleChevronUp className="size-7" />
+						</Button>
+					)}
+
 					<Sheet open={mobileFilterOpen} onOpenChange={setMobileFilterOpen}>
 						<SheetTrigger asChild className="lg:hidden">
 							<Button
 								variant="outline"
 								size="icon"
-								className="fixed bottom-5 right-2 sm:right-4 z-30 rounded-full shadow-lg"
+								className="fixed bottom-5 right-2 sm:right-4 z-30 rounded-full shadow-lg animate-hint-pulse"
 							>
-								<SlidersHorizontal className="size-5" />
+								<SlidersHorizontal className="size-7" />
 							</Button>
 						</SheetTrigger>
 						<SheetContent side="right" className="w-72 ps-2 overflow-y-auto">
