@@ -4,7 +4,7 @@ import SCNEditModal from "./edit/SCNEditModal";
 import DeleteModal from "./delete/DeleteModal";
 import { generateMatchSummary } from "@/utils/matchSummaryAgent";
 import { VideoCards, Videos, User, AISummary } from "@/types";
-import { Star } from "lucide-react";
+import { Star, Sparkles } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import { useStore } from "@/hooks/useStore";
 
@@ -166,9 +166,11 @@ export default function SCNVideoCard({ id, title, duration, summary, summaryStat
 								</>
 							)}
 						</div>
-						<p className="mt-2 ms-1 font-semibold text-foreground">
+						<p className="hidden sm:block mt-2 ms-1 font-semibold text-foreground">
 							{title} ({duration})
 						</p>
+						<p className="block sm:hidden mt-2 ms-1 font-semibold text-foreground">{title}</p>
+						<span className="block sm:hidden ms-1 font-semibold text-foreground">{duration}</span>
 					</div>
 				</DialogTrigger>
 				<DialogContent
@@ -176,7 +178,7 @@ export default function SCNVideoCard({ id, title, duration, summary, summaryStat
 					mode="light"
 				>
 					<DialogHeader>
-						<DialogTitle className="flex items-center justify-center gap-6 text-2xl me-4">
+						<DialogTitle className="hidden sm:flex items-center justify-center gap-6 text-lg md:text-2xl me-4">
 							{title} ({duration})
 							{user?.role === "ADMIN" && (
 								<Button onClick={handleTranscript}>
@@ -187,7 +189,7 @@ export default function SCNVideoCard({ id, title, duration, summary, summaryStat
 						</DialogTitle>
 					</DialogHeader>
 
-					<div className="flex flex-col xl:flex-row gap-[15px] overflow-y-auto">
+					<div className="flex flex-col xl:flex-row gap-[15px] overflow-y-auto mt-2 sm:mt-0">
 						<div className="basis-2/3 shrink-0">
 							<iframe
 								height="100%"
@@ -203,8 +205,12 @@ export default function SCNVideoCard({ id, title, duration, summary, summaryStat
 							<div className="ai-summary flex flex-col gap-3 p-4 font-[500] overflow-y-scroll">
 								{/* <h5 className="text-gray-500 font-normal">Winner:</h5> */}
 								{/* <div className="flex items-center justify-between"> */}
+								<span className="flex items-center gap-1 text-xs text-gray-400 uppercase tracking-wider">
+									<Sparkles size={12} /> AI Summary
+								</span>
 								<h5 className="m-0 font-semibold">{aiSummary.winner} wins</h5>
 								{/* </div> */}
+
 								<div className="flex justify-between">
 									<div className="flex gap-0.5 items-center">
 										{Array.from({ length: 5 }, (_, i) => {

@@ -158,7 +158,7 @@ export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, setOpe
 
 	return (
 		<form id="video-form" className="flex flex-col gap-6" onSubmit={form.handleSubmit(saveVideo)} noValidate>
-			<div className="grid grid-cols-2 gap-6">
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 				{/* Radix Select needs Controller */}
 
 				<Controller
@@ -227,7 +227,7 @@ export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, setOpe
 				</Field>
 			</div>
 
-			<div className="grid grid-cols-2 gap-6">
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 				<Field data-invalid={!!form.formState.errors.year}>
 					<FieldLabel htmlFor="youtubeId" className="ps-2">
 						Youtube ID
@@ -271,7 +271,7 @@ export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, setOpe
 				/>
 			</div>
 
-			<div className="grid grid-cols-2 gap-6">
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 				<Controller
 					name="player1"
 					control={form.control}

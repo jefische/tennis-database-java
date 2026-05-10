@@ -64,6 +64,11 @@ if __name__ == "__main__":
 # Create youtube_ids.json for input into batchAdd.py
 # python youtubeUrls.py <playlist_url>
 
-# Example:
-# https://www.youtube.com/watch?v=u5LLU8swG_k&list=PLxESD4zmEEYeuq-iiDpLZn3qdzwmomZzn&index=1&pp=iAQB0gcJCdQKAYcqIYzv
-# python youtubeUrls.py "https://www.youtube.com/watch?v=u5LLU8swG_k&list=PLxESD4zmEEYeuq-iiDpLZn3qdzwmomZzn"
+# Example (russian account videos? 206 videos ):
+# python youtubeUrls.py "https://www.youtube.com/playlist?list=PLxESD4zmEEYeuq-iiDpLZn3qdzwmomZzn"
+
+# 247 Australian Open Videos
+# https://www.youtube.com/playlist?list=PL2RR--XMozwWcV6-VEEMbCNnJ-Xre1BU7
+
+# 53 Roland Garros matches
+# https://www.youtube.com/playlist?list=PLUK9NdagG_CfzOU3sX5WENGpCFb4W4ZJA

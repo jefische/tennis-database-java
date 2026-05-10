@@ -257,3 +257,9 @@ if __name__ == "__main__":
 
 # Run with auth token:
 # python batchAdd.py --token=eyJhbGciOi...
+
+# 247 Australian Open Videos
+# https://www.youtube.com/playlist?list=PL2RR--XMozwWcV6-VEEMbCNnJ-Xre1BU7
+
+# 53 Roland Garros matches
+# https://www.youtube.com/playlist?list=PLUK9NdagG_CfzOU3sX5WENGpCFb4W4ZJA
