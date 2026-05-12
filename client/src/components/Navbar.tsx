@@ -53,7 +53,7 @@ export default function Navbar({ darkMode, setDarkMode }: NavbarProps) {
 	};
 
 	return (
-		<nav className="bg-background border-b-1 border-gray-400">
+		<nav className="border-b-1 border-gray-400">
 			<div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
 				<div className="relative flex h-16 items-center justify-between">
 					<Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>

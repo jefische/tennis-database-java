@@ -25,7 +25,9 @@ body,
 }
 
 @keyframes hint-pulse {
-	0%, 30%, 100% {
+	0%,
+	30%,
+	100% {
 		box-shadow: 0 0 0 0 rgba(var(--primary), 0);
 		transform: scale(1);
 	}
