@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import Landing from "./pages/Landing";
 import Home from "./pages/Home";
 import Players from "./pages/Players";
+import PlayerShotDetail from "./pages/PlayerShotDetail";
+import PlayerDetail from "./pages/PlayerDetail";
 import Draws from "./pages/Draws";
 import FAQ from "./pages/FAQ";
 import Profile from "./pages/Profile";
@@ -49,6 +51,8 @@ export default function App() {
 					<Route element={<NavbarLayout darkMode={darkMode} setDarkMode={setDarkMode} />}>
 						<Route path="/home" element={<Home />} />
 						<Route path="/players" element={<Players />} />
+						<Route path="/players/:slug/:videoId" element={<PlayerShotDetail />} />
+						<Route path="/players/:slug" element={<PlayerDetail />} />
 						<Route path="/draws" element={<Draws />} />
 						<Route path="/faq" element={<FAQ />} />
 						<Route path="/profile" element={<Profile />} />
