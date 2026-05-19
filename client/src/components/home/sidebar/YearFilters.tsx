@@ -5,9 +5,9 @@ import { Label } from "@/components/ui/label";
 import { ChevronDown } from "lucide-react";
 import { useStore } from "@/hooks/useStore";
 
-export default function YearFilters() {
-	// isActive state is used to manage the accordion dropdown filters in the sidebar
-	const [isActive, setIsActive] = useState(true);
+export default function YearFilters({ open }: { open?: boolean }) {
+	// isOpen state is used to manage the accordion dropdown filters in the sidebar
+	const [isOpen, setisOpen] = useState<boolean>(open ?? true);
 	const [selectAll, setSelectAll] = useState(true);
 	const { filterData, setFilterData } = useStore();
 	const uid = useId();
@@ -51,15 +51,13 @@ export default function YearFilters() {
 			<div className="accordion-item">
 				<div
 					className="accordion-title flex justify-between border-top cursor-pointer pt-[10px]"
-					onClick={() => setIsActive(!isActive)}
+					onClick={() => setisOpen(!isOpen)}
 				>
 					<h6 className="hover:underline text-lg">Year</h6>
-					<ChevronDown
-						className={`size-4 transition-transform duration-300 ${isActive ? "rotate-180" : ""}`}
-					/>
+					<ChevronDown className={`size-4 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
 				</div>
 				<div
-					className={`grid transition-[grid-template-rows] duration-350 ease-in-out ${isActive ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+					className={`grid transition-[grid-template-rows] duration-350 ease-in-out ${isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
 				>
 					<div className="overflow-hidden">
 						<ul className="filter py-2 px-0">

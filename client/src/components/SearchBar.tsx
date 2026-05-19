@@ -31,7 +31,7 @@ export function SearchBar() {
 	return (
 		<>
 			<Input
-				className="bg-white text-black min-w-3/4 xl:min-w-0 xl:basis-[500px] h-[50px]"
+				className="bg-white text-black text-base min-w-3/4 xl:min-w-0 xl:basis-[500px] h-[50px]"
 				name="searchBar"
 				type="text"
 				placeholder="Search by Player or Video Title"
