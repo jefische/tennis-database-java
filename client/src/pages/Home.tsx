@@ -33,7 +33,6 @@ export default function Home() {
 		activeVideos,
 		setActiveVideos,
 		filterData,
-		setFilterData,
 		addFilterVideos,
 		resetFilterVideos,
 	} = useStore();
