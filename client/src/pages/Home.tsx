@@ -2,12 +2,12 @@ import Sidebar from "../components/home/sidebar/Sidebar";
 import TagFilters from "../components/TagFilters";
 import { SearchBar } from "../components/SearchBar";
 import { useState, useEffect, useRef } from "react";
-import { VideoFilters, Videos, User } from "@/types";
+import { Videos } from "@/types";
 import SCNVideoCard from "@/components/home/modals/SCNVideoCard";
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { CircleChevronUp, SlidersHorizontal } from "lucide-react";
-import { sortVideos, initFilterData } from "../utils/helpers";
+import { sortVideos } from "../utils/helpers";
 import SCNAddModal from "@/components/home/modals/add/SCNAddModal";
 import TournamentFilters from "@/components/home/sidebar/TournamentFilters";
 import YearFilters from "@/components/home/sidebar/YearFilters";
@@ -33,7 +33,6 @@ export default function Home() {
 		activeVideos,
 		setActiveVideos,
 		filterData,
-		setFilterData,
 		addFilterVideos,
 		resetFilterVideos,
 	} = useStore();
@@ -48,7 +47,7 @@ export default function Home() {
 		mode: "cors",
 	};
 
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+	const handleFilterSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
 		e.preventDefault();
 		let filteredVideos: Videos[] = [];
 
@@ -101,23 +100,6 @@ export default function Home() {
 	}, [baseURL]);
 
 	useEffect(() => {
-		// Sort the initial data object by keys
-		const initData: VideoFilters = allVideos.reduce(initFilterData, { tournament: {}, year: {} });
-		const sorted: VideoFilters = { tournament: {}, year: {} };
-
-		const tournamentKeys: string[] = Object.keys(initData.tournament).sort();
-		const yearKeys: string[] = Object.keys(initData.year).sort();
-
-		tournamentKeys.forEach((key) => {
-			sorted.tournament[key] = initData.tournament[key];
-		});
-		yearKeys.forEach((key) => {
-			sorted.year[key] = initData.year[key];
-		});
-		setFilterData(sorted);
-	}, [allVideos]);
-
-	useEffect(() => {
 		const el = mainRef.current;
 		if (!el) return;
 		const handleScroll = () => setShowScrollTop(el.scrollTop > 400);
@@ -128,8 +110,8 @@ export default function Home() {
 	return (
 		<>
 			<div className="h-[calc(100%-64px)] mb-4">
-				<section className="flex h-full">
-					<Sidebar handleFilter={handleSubmit} />
+				<section className="flex bg-background h-full">
+					<Sidebar handleFilter={handleFilterSubmit} />
 					<main
 						ref={mainRef}
 						className="w-full lg:w-[calc(100%-245px)] overflow-auto px-[50px] pb-[200px] scrollbar-custom"
@@ -195,7 +177,7 @@ export default function Home() {
 							<SheetHeader>
 								<SheetTitle>Filters</SheetTitle>
 							</SheetHeader>
-							<form className="w-auto px-4" onSubmit={handleSubmit}>
+							<form className="w-auto px-4" onSubmit={handleFilterSubmit}>
 								<h2 className="text-xl">Filter Match Results</h2>
 								<TournamentFilters />
 								<YearFilters />

@@ -1,109 +1,140 @@
-import Carousel from "react-bootstrap/Carousel";
-import PlayerVideoCard from "../components/players/PlayerVideoCard";
+import { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { PLAYERS, SHOT_VIDEOS } from "../assets/data/players";
+import { Button } from "@/components/ui/button";
+import { CircleChevronUp } from "lucide-react";
+import { useStore } from "@/hooks/useStore";
+
+const SHOT_TYPES = ["All", "Forehand", "Backhand", "Serve", "Volley", "Return"] as const;
+const variants = ["Kick", "One-handed"] as const;
 
 export default function Players() {
-	// const isProduction = import.meta.env.PROD;
-	const isProduction = true;
-	const myWidth = "200px";
+	const [activeFilter, setActiveFilter] = useState<string>("All");
+	const [showScrollTop, setShowScrollTop] = useState(false);
+	const mainRef = useRef<HTMLDivElement>(null);
+	const { user } = useStore();
+
+	const filteredPlayers = activeFilter === "All" ? PLAYERS : PLAYERS.filter((p) => p.shots.includes(activeFilter));
+
+	const filteredVideos =
+		activeFilter === "All" ? SHOT_VIDEOS : SHOT_VIDEOS.filter((v) => v.shotType === activeFilter);
+
+	useEffect(() => {
+		const el = mainRef.current;
+		if (!el) return;
+		const handleScroll = () => setShowScrollTop(el.scrollTop > 400);
+		el.addEventListener("scroll", handleScroll);
+		return () => el.removeEventListener("scroll", handleScroll);
+	}, []);
+
 	return (
 		<>
-			{isProduction ? (
+			{user?.role === "ADMIN" ? (
+				<>
+					<div className="h-[calc(100%-64px)] bg-background px-12 py-8 lg:px-16 overflow-auto" ref={mainRef}>
+						{/* Page Header */}
+						<div className="mb-8">
+							<h1 className="text-3xl font-bold text-foreground">Players</h1>
+							<p className="mt-2 text-muted-foreground">
+								Browse player shot techniques or filter by shot type to compare across players.
+							</p>
+						</div>
+
+						{/* Filter Bar */}
+						<div className="mb-8 flex flex-wrap gap-2">
+							{SHOT_TYPES.map((shot) => (
+								<button
+									key={shot}
+									onClick={() => setActiveFilter(shot)}
+									className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+										activeFilter === shot
+											? "bg-foreground text-background"
+											: "bg-muted text-muted-foreground hover:bg-muted/80"
+									}`}
+								>
+									{shot}
+								</button>
+							))}
+						</div>
+
+						{/* Content: Player Cards (no filter) or Video Grid (filter active) */}
+
+						{activeFilter === "All" ? (
+							<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+								{filteredPlayers.map((player) => (
+									<Link
+										key={player.slug}
+										to={`/players/${player.slug}`}
+										className="group overflow-hidden rounded-xl border border-border bg-card transition-all hover:scale-[1.02] hover:shadow-lg"
+									>
+										<div
+											className="h-48 w-full bg-cover bg-center"
+											style={{ backgroundImage: `url(${player.image})` }}
+										/>
+										<div className="p-4">
+											<h3 className="text-lg font-semibold text-foreground group-hover:text-primary">
+												{player.name}
+											</h3>
+											<div className="mt-2 flex flex-wrap gap-1.5">
+												{player.shots.map((shot) => (
+													<span
+														key={shot}
+														className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground"
+													>
+														{shot}
+													</span>
+												))}
+											</div>
+										</div>
+									</Link>
+								))}
+							</div>
+						) : (
+							<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+								{filteredVideos.map((video) => (
+									<Link
+										key={video.id}
+										to={`/players/shot/${video.id}`}
+										className="group overflow-hidden rounded-xl border border-border bg-card transition-all hover:scale-[1.02] hover:shadow-lg"
+									>
+										<div
+											className="h-48 w-full bg-cover bg-center"
+											style={{
+												backgroundImage: `url(https://img.youtube.com/vi/${video.id}/0.jpg)`,
+											}}
+										/>
+										<div className="p-4">
+											<h3 className="text-sm font-semibold text-foreground group-hover:text-primary">
+												{video.title}
+											</h3>
+											<div className="mt-2 flex items-center justify-between">
+												<span className="text-xs text-muted-foreground">{video.player}</span>
+												<span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+													{video.variant}
+												</span>
+											</div>
+										</div>
+									</Link>
+								))}
+							</div>
+						)}
+					</div>
+					{showScrollTop && (
+						<Button
+							variant="outline"
+							size="icon"
+							className="fixed bottom-18 right-2 sm:right-4 z-30 rounded-full shadow-lg lg:hidden transition-opacity"
+							onClick={() => mainRef.current?.scrollTo({ top: 0, behavior: "smooth" })}
+						>
+							<CircleChevronUp className="size-7" />
+						</Button>
+					)}
+				</>
+			) : (
 				<div className="h-[calc(100%-64px)] mb-4 bg-background">
 					<h1 className="text-foreground" style={{ textAlign: "center", paddingTop: "10%" }}>
 						Player page is under development
 					</h1>
-				</div>
-			) : (
-				<div className="body-container">
-					<main className="content-container h-full overflow-y-scroll bg-gray-custom">
-						<section className="hero-container">
-							<div className="herolist">
-								<Carousel fade pause="hover" controls={false} indicators={false}>
-									{/* <Carousel.Item interval={5000}>
-										<img src="/bgs/novak_1920x1226.jpg" alt="hero image" />
-									</Carousel.Item>
-									<Carousel.Item interval={5000}>
-										<img src="/bgs/Osaka.webp" alt="hero image" />
-									</Carousel.Item> */}
-									<Carousel.Item interval={5000}>
-										<img src="/bgs/big3_v2.jpg" alt="hero image" />
-									</Carousel.Item>
-									{/* <Carousel.Item interval={5000}>
-										<img src="/bgs/novak_640x408.jpg" alt="hero image" />
-									</Carousel.Item> */}
-								</Carousel>
-								<div id="billboard-gradient"></div>
-							</div>
-						</section>
-						{/* <h1
-						style={{
-							marginTop: "50px",
-							backgroundColor: "#ccc",
-							textAlign: "center",
-						}}
-					>
-						Individual Players Video Section
-					</h1> */}
-
-						<div className="player-videoContainer">
-							<h2 style={{ color: "#fff" }}>Stanislas Wawrinka</h2>
-							<div className="player-videoContainer-mobile">
-								<PlayerVideoCard id="97B2panmUvU" description="Wawrinka" maxWidth={myWidth} />
-								<PlayerVideoCard id="_cohjbquvwc" description="Wawrinka" maxWidth={myWidth} />
-								<PlayerVideoCard id="RDl2Kz0gd18" description="Wawrinka" maxWidth={myWidth} />
-								<PlayerVideoCard id="zYqtCPvGf4Y" description="Wawrinka" maxWidth={myWidth} />
-								<PlayerVideoCard id="hUuj7AoOWpc" description="Wawrinka" maxWidth={myWidth} />
-								<PlayerVideoCard id="_FBLXOaSAsU" description="Wawrinka" maxWidth={myWidth} />
-								<PlayerVideoCard id="Re-8_POaRIw" description="Wawrinka" maxWidth={myWidth} />
-								<PlayerVideoCard id="SlgMvQQrYhg" description="Wawrinka" maxWidth={myWidth} />
-								<PlayerVideoCard id="wWCVFRRaFCs" description="Wawrinka" maxWidth={myWidth} />
-								<PlayerVideoCard id="mx3eA5P-3nA" description="Wawrinka" maxWidth={myWidth} />
-								<PlayerVideoCard id="q3J2P8on7js" description="Wawrinka" maxWidth={myWidth} />
-								<PlayerVideoCard id="_7gd-XJRiEQ" description="Wawrinka" maxWidth={myWidth} />
-							</div>
-							<Carousel interval={null}>
-								<Carousel.Item>
-									<h2>Forehands</h2>
-									<div className="carousel-item-container">
-										<PlayerVideoCard id="97B2panmUvU" description="Wawrinka" maxWidth={myWidth} />
-										<PlayerVideoCard id="_cohjbquvwc" description="Wawrinka" maxWidth={myWidth} />
-										<PlayerVideoCard id="RDl2Kz0gd18" description="Wawrinka" maxWidth={myWidth} />
-										<PlayerVideoCard id="zYqtCPvGf4Y" description="Wawrinka" maxWidth={myWidth} />
-										<PlayerVideoCard id="hUuj7AoOWpc" description="Wawrinka" maxWidth={myWidth} />
-										<PlayerVideoCard id="_FBLXOaSAsU" description="Wawrinka" maxWidth={myWidth} />
-									</div>
-								</Carousel.Item>
-								<Carousel.Item>
-									<h2>Backhands</h2>
-									<div className="carousel-item-container">
-										<PlayerVideoCard id="Re-8_POaRIw" description="Wawrinka" maxWidth={myWidth} />
-										<PlayerVideoCard id="SlgMvQQrYhg" description="Wawrinka" maxWidth={myWidth} />
-										<PlayerVideoCard id="wWCVFRRaFCs" description="Wawrinka" maxWidth={myWidth} />
-										<PlayerVideoCard id="mx3eA5P-3nA" description="Wawrinka" maxWidth={myWidth} />
-										<PlayerVideoCard id="q3J2P8on7js" description="Wawrinka" maxWidth={myWidth} />
-										<PlayerVideoCard id="_7gd-XJRiEQ" description="Wawrinka" maxWidth={myWidth} />
-									</div>
-								</Carousel.Item>
-								<Carousel.Item>
-									<h2>Serves</h2>
-									<div className="carousel-item-container">
-										<PlayerVideoCard id="_xmJO_ZUtWU" description="Wawrinka" maxWidth={myWidth} />
-										<PlayerVideoCard id="Y1uhp9W0X9w" description="Wawrinka" maxWidth={myWidth} />
-										<PlayerVideoCard id="RcLbJzb5MdQ" description="Wawrinka" maxWidth={myWidth} />
-										<PlayerVideoCard id="58YBh2sUt7A" description="Wawrinka" maxWidth={myWidth} />
-										<PlayerVideoCard id="BLSFn33Z4IE" description="Wawrinka" maxWidth={myWidth} />
-										<PlayerVideoCard id="PSNl0Hdw1wM" description="Wawrinka" maxWidth={myWidth} />
-									</div>
-								</Carousel.Item>
-							</Carousel>
-						</div>
-
-						<section className="player-sections"></section>
-						<section className="player-sections"></section>
-						<section className="player-sections"></section>
-						<section className="player-sections"></section>
-						<section className="player-sections"></section>
-					</main>
 				</div>
 			)}
 		</>
