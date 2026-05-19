@@ -64,7 +64,7 @@ export default function FAQ() {
 	};
 
 	return (
-		<div className="h-[calc(100%-64px)] overflow-y-auto bg-background scrollbar-custom">
+		<div className="h-[calc(100%-64px)] overflow-y-auto scrollbar-custom">
 			<div className="mx-auto max-w-3xl px-4 sm:px-6 py-12">
 				{/* Header */}
 				<div className="text-center mb-12">

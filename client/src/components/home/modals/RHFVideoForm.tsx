@@ -44,7 +44,7 @@ interface VideoFormProps {
 export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, setOpenModal }: VideoFormProps) {
 	const [dur, setDur] = useState<boolean>(false);
 	const [addNewTournament, setAddNewTournament] = useState(false);
-	const { user, setUser, allVideos, setAllVideos, setActiveVideos } = useStore();
+	const { user, setUser, allVideos, setAllVideos } = useStore();
 
 	const form = useForm<z.infer<typeof schema>>({
 		resolver: zodResolver(schema),
@@ -109,7 +109,6 @@ export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, setOpe
 			.then((responseData) => {
 				setOpenModal(false);
 				setAllVideos(responseData);
-				setActiveVideos(responseData);
 				if (endpoint === "videos/add") {
 					toast.success("Video added successfully");
 				} else if (endpoint === "videos/edit") {
