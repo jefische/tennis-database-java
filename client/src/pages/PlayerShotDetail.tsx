@@ -42,13 +42,10 @@ export default function PlayerShotDetail() {
 						<h1 className="mb-6 text-2xl font-bold text-foreground lg:text-3xl">{video.title}</h1>
 
 						{/* Main Content: Video + Gear Sidebar */}
-						<div className="flex flex-col gap-8 lg:flex-row">
+						<div className="flex flex-col gap-8 xl:flex-row">
 							{/* Video Embed */}
 							<div className="flex-1">
-								<div
-									className="relative w-full overflow-hidden rounded-xl"
-									style={{ paddingBottom: "56.25%" }}
-								>
+								<div className="relative w-full overflow-hidden rounded-xl aspect-[3/4] sm:aspect-[1/1] md:aspect-video">
 									<iframe
 										className="absolute inset-0 h-full w-full"
 										src={`https://www.youtube.com/embed/${videoId}?loop=1&playlist=${videoId}`}

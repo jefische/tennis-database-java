@@ -12,7 +12,7 @@ import { useStore } from "@/hooks/useStore";
 
 const navigation = [
 	{ name: "Full Matches", href: "/home", current: true },
-	{ name: "Learn From the Pros", href: "/players", current: false },
+	{ name: "Player Shots", href: "/players", current: false },
 	{ name: "Draws", href: "/draws", current: false },
 	{ name: "FAQ", href: "/faq", current: false },
 ];
