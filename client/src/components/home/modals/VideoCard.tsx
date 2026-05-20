@@ -165,7 +165,7 @@ export default function VideoCard({
 						<iframe
 							height="100%"
 							width="100%"
-							src={`https://www.youtube.com/embed/${id}`}
+							src={`https://www.youtube.com/embed/${id}?enablejsapi=1&origin=https://tennisreplay.tv`}
 							title={title}
 							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 							referrerPolicy="strict-origin-when-cross-origin"
