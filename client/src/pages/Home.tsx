@@ -110,7 +110,7 @@ export default function Home() {
 	return (
 		<>
 			<div className="h-[calc(100%-64px)] mb-4">
-				<section className="flex bg-background h-full">
+				<section className="flex h-full">
 					<Sidebar handleFilter={handleFilterSubmit} />
 					<main
 						ref={mainRef}

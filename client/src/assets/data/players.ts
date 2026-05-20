@@ -7,12 +7,12 @@ type playerData = {
 	shots: string[];
 };
 export const PLAYERS: playerData[] = [
-	// {
-	// 	name: "Roger Federer",
-	// 	slug: "federer",
-	// 	image: "https://img.youtube.com/vi/97B2panmUvU/0.jpg",
-	// 	shots: ["Forehand", "Backhand", "Serve", "Volley"],
-	// },
+	{
+		name: "Roger Federer",
+		slug: "federer",
+		image: "https://img.youtube.com/vi/pRYJHxmZdQE/0.jpg",
+		shots: ["Forehand", "Backhand", "Serve", "Volley"],
+	},
 	// {
 	// 	name: "Rafael Nadal",
 	// 	slug: "nadal",
@@ -28,7 +28,8 @@ export const PLAYERS: playerData[] = [
 	{
 		name: "Stanislas Wawrinka",
 		slug: "wawrinka",
-		image: "https://img.youtube.com/vi/97B2panmUvU/0.jpg",
+		image: "https://img.youtube.com/vi/xOhLAbf_EAI/0.jpg",
+		// image: "https://img.youtube.com/vi/Dyj1Id6HDJ0/0.jpg",
 		shots: ["Forehand", "Backhand", "Serve"],
 	},
 	// {
@@ -145,8 +146,8 @@ export const PLAYER_DATA: Record<
 	federer: {
 		name: "Roger Federer",
 		videos: [
-			{ id: "_cohjbquvwc", title: "Federer Backhand Compilation", shotType: "Backhand", variant: "One-handed" },
-			{ id: "Re-8_POaRIw", title: "Federer Serve Compilation", shotType: "Serve", variant: "Flat" },
+			{ id: "gFmI3pNSdFI", title: "Federer Backhand Compilation", shotType: "Backhand", variant: "One-handed" },
+			{ id: "3OL6umAxQ4c", title: "Federer Serve Compilation", shotType: "Serve", variant: "Flat" },
 		],
 	},
 	wawrinka: {
@@ -187,6 +188,78 @@ export const PLAYER_DATA: Record<
 				title: "Wawrinka One-Handed Backhand — Match Play",
 				shotType: "Backhand",
 				variant: "One-handed",
+			},
+			{
+				id: "97B2panmUvU",
+				title: "Wawrinka Forehand Slow Motion",
+				shotType: "Forehand",
+				variant: "Topspin",
+			},
+			{
+				id: "_cohjbquvwc",
+				title: "Wawrinka Forehand Slow Motion",
+				shotType: "Forehand",
+				variant: "Topspin",
+			},
+			{
+				id: "hUuj7AoOWpc",
+				title: "Wawrinka Forehand in Slow Motion",
+				shotType: "Forehand",
+				variant: "Topspin",
+			},
+			{
+				id: "RDl2Kz0gd18",
+				title: "Wawrinka Forehand Slow Motion",
+				shotType: "Forehand",
+				variant: "Topspin",
+			},
+			{
+				id: "zYqtCPvGf4Y",
+				title: "Wawrinka Forehand Slow Motion",
+				shotType: "Forehand",
+				variant: "Topspin",
+			},
+			{
+				id: "_FBLXOaSAsU",
+				title: "Wawrinka Forehand Slow Motion",
+				shotType: "Forehand",
+				variant: "Topspin",
+			},
+			{
+				id: "_xmJO_ZUtWU",
+				title: "Wawrinka Serve",
+				shotType: "Serve",
+				variant: "Pinpoint",
+			},
+			{
+				id: "Y1uhp9W0X9w",
+				title: "Wawrinka Serve",
+				shotType: "Serve",
+				variant: "Pinpoint",
+			},
+			{
+				id: "RcLbJzb5MdQ",
+				title: "Wawrinka Serve",
+				shotType: "Serve",
+				variant: "Pinpoint",
+			},
+			{
+				id: "58YBh2sUt7A",
+				title: "Wawrinka Serve",
+				shotType: "Serve",
+				variant: "Pinpoint",
+			},
+			{
+				id: "BLSFn33Z4IE",
+				title: "Wawrinka Serve",
+				shotType: "Serve",
+				variant: "Pinpoint",
+			},
+			{
+				id: "PSNl0Hdw1wM",
+				title: "Wawrinka Serve",
+				shotType: "Serve",
+				variant: "Pinpoint",
 			},
 		],
 		gear: [
@@ -274,18 +347,29 @@ export const VIDEO_DATA: Record<
 			{ name: "Yonex Power Cushion Eclipsion", type: "Shoes", link: "#" },
 		],
 	},
+	gFmI3pNSdFI: {
+		title: "Federer Backhand Compilation",
+		player: "Roger Federer",
+		shotType: "Backhand",
+		variant: "One-handed",
+		gear: [
+			{ name: "Wilson Pro Staff RF97", type: "Racket", link: "#" },
+			{ name: "Wilson Natural Gut / Luxilon ALU Power", type: "String", link: "#" },
+			{ name: "On Running THE ROGER Pro", type: "Shoes", link: "#" },
+		],
+	},
+	"3OL6umAxQ4c": {
+		title: "Federer Serve Slow Motion",
+		player: "Roger Federer",
+		shotType: "Serve",
+		variant: "Flat",
+		gear: [
+			{ name: "Wilson Pro Staff RF97", type: "Racket", link: "#" },
+			{ name: "Wilson Natural Gut / Luxilon ALU Power", type: "String", link: "#" },
+			{ name: "On Running THE ROGER Pro", type: "Shoes", link: "#" },
+		],
+	},
 
-	// _cohjbquvwc: {
-	// 	title: "Federer Backhand Compilation",
-	// 	player: "Roger Federer",
-	// 	shotType: "Backhand",
-	// 	variant: "One-handed",
-	// 	gear: [
-	// 		{ name: "Wilson Pro Staff RF97", type: "Racket", link: "#" },
-	// 		{ name: "Wilson Natural Gut / Luxilon ALU Power", type: "String", link: "#" },
-	// 		{ name: "On Running THE ROGER Pro", type: "Shoes", link: "#" },
-	// 	],
-	// },
 	// RDl2Kz0gd18: {
 	// 	title: "Alcaraz Forehand Practice",
 	// 	player: "Carlos Alcaraz",

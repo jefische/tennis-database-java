@@ -28,7 +28,7 @@ export default function PlayerDetail() {
 	return (
 		<>
 			{user?.role === "ADMIN" ? (
-				<div className="min-h-[calc(100vh-64px)] bg-background px-4 py-8 sm:px-8 lg:px-16">
+				<div className="h-[calc(100vh-64px)] overflow-auto px-4 py-8 sm:px-8 lg:px-16">
 					{/* Breadcrumb */}
 					<nav className="mb-6 text-sm text-muted-foreground">
 						<Link to="/players" className="hover:text-foreground">
