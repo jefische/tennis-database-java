@@ -45,7 +45,7 @@ export default function PlayerShotDetail() {
 						<div className="flex flex-col gap-8 xl:flex-row">
 							{/* Video Embed */}
 							<div className="flex-1">
-								<div className="relative w-full overflow-hidden rounded-xl aspect-[3/4] sm:aspect-[1/1] md:aspect-video">
+								<div className="relative w-full overflow-hidden rounded-xl aspect-[3/4] sm:aspect-[1/1] md:aspect-video md:max-w-5xl">
 									<iframe
 										className="absolute inset-0 h-full w-full"
 										src={`https://www.youtube.com/embed/${videoId}?loop=1&playlist=${videoId}`}
@@ -101,7 +101,7 @@ export default function PlayerShotDetail() {
 						{/* Related Videos */}
 						<section className="mt-12">
 							<h2 className="mb-4 text-xl font-semibold text-foreground">Related Videos</h2>
-							<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+							<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 max-w-7xl">
 								{RELATED_VIDEOS.map((rv) => (
 									<Link
 										key={rv.id}
