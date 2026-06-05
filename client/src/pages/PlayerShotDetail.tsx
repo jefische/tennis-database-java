@@ -1,30 +1,25 @@
 import { Link, useParams } from "react-router-dom";
-import { PLAYER_DATA, VIDEO_DATA } from "@/assets/data/players";
+import { PLAYER_DATA } from "@/assets/data/players";
 import { useStore } from "@/hooks/useStore";
-
-const RELATED_VIDEOS = [
-	{ id: "_cohjbquvwc", title: "Federer Backhand Compilation", player: "Federer" },
-	{ id: "_FBLXOaSAsU", title: "Sinner Backhand Technique", player: "Sinner" },
-	{ id: "RDl2Kz0gd18", title: "Alcaraz Forehand Practice", player: "Alcaraz" },
-	{ id: "hUuj7AoOWpc", title: "Nadal Forehand Slow Motion", player: "Nadal" },
-];
+import { useEffect, useRef } from "react";
 
 export default function PlayerShotDetail() {
 	const { slug, videoId } = useParams<{ slug: string; videoId: string }>();
-	const video = VIDEO_DATA[videoId || ""] || {
-		title: videoId || "Unknown Video",
-		player: "Unknown",
-		shotType: "Unknown",
-		variant: "Unknown",
-		gear: [],
-	};
+	const containerRef = useRef<HTMLDivElement>(null);
+	const PlayerVideos = PLAYER_DATA[slug || ""];
+	const video = PlayerVideos.videos.filter((vid) => vid.id === videoId)[0];
+	const RELATED_VIDEOS = PlayerVideos.videos.filter((vid) => vid.shotType === video.shotType);
 	const { user } = useStore();
+
+	useEffect(() => {
+		containerRef.current?.scrollTo(0, 0);
+	}, [videoId]);
 
 	return (
 		<>
 			{user?.role === "ADMIN" ? (
 				<>
-					<div className="h-[calc(100vh-64px)] overflow-auto px-4 py-8 sm:px-8 lg:px-16">
+					<div ref={containerRef} className="h-[calc(100vh-64px)] overflow-auto px-4 py-8 sm:px-8 lg:px-16">
 						{/* Breadcrumb */}
 						<nav className="mb-6 text-sm text-muted-foreground">
 							<Link to="/players" className="hover:text-foreground">
@@ -32,7 +27,7 @@ export default function PlayerShotDetail() {
 							</Link>
 							<span className="mx-2">/</span>
 							<Link to={`/players/${slug}`} className="hover:text-foreground">
-								{video.player}
+								{PlayerVideos.name}
 							</Link>
 							<span className="mx-2">/</span>
 							<span className="text-foreground">{video.shotType}</span>
@@ -47,6 +42,7 @@ export default function PlayerShotDetail() {
 							<div className="flex-1">
 								<div className="relative w-full overflow-hidden rounded-xl aspect-[3/4] sm:aspect-[1/1] md:aspect-video md:max-w-5xl">
 									<iframe
+										key={videoId}
 										className="absolute inset-0 h-full w-full"
 										src={`https://www.youtube.com/embed/${videoId}?loop=1&playlist=${videoId}`}
 										title={video.title}
@@ -74,7 +70,7 @@ export default function PlayerShotDetail() {
 										Gear Used
 									</h3>
 									<ul className="flex flex-col gap-4">
-										{video.gear.map((item) => (
+										{PlayerVideos.gear.map((item) => (
 											<li key={item.name} className="flex items-center justify-between">
 												<div>
 													<p className="text-sm font-medium text-foreground">{item.name}</p>
@@ -105,7 +101,7 @@ export default function PlayerShotDetail() {
 								{RELATED_VIDEOS.map((rv) => (
 									<Link
 										key={rv.id}
-										to={`/players/shot/${rv.id}`}
+										to={`/players/${slug}/${rv.id}`}
 										className="group overflow-hidden rounded-xl border border-border bg-card transition-all hover:scale-[1.02] hover:shadow-lg"
 									>
 										<div
@@ -118,7 +114,7 @@ export default function PlayerShotDetail() {
 											<p className="text-sm font-medium text-foreground group-hover:text-primary">
 												{rv.title}
 											</p>
-											<p className="text-xs text-muted-foreground">{rv.player}</p>
+											<p className="text-xs text-muted-foreground">{PlayerVideos.name}</p>
 										</div>
 									</Link>
 								))}

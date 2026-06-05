@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import { PLAYER_DATA } from "@/assets/data/players";
 import { useStore } from "@/hooks/useStore";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 export default function PlayerDetail() {
 	const { slug } = useParams<{ slug: string }>();
@@ -27,6 +28,26 @@ export default function PlayerDetail() {
 	}, {});
 	console.log(grouped);
 
+	const VideoCard = ({ video }: { video: (typeof player.videos)[number] }) => (
+		<Link
+			to={`/players/${slug}/${video.id}`}
+			className="group overflow-hidden rounded-xl border border-border bg-card transition-all hover:scale-[1.02] hover:shadow-lg"
+		>
+			<div
+				className="h-40 w-full bg-cover bg-center"
+				style={{
+					backgroundImage: `url(https://img.youtube.com/vi/${video.id}/0.jpg)`,
+				}}
+			/>
+			<div className="p-3">
+				<p className="text-sm font-medium text-foreground group-hover:text-primary">{video.title}</p>
+				<span className="mt-1 inline-block rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+					{video.variant}
+				</span>
+			</div>
+		</Link>
+	);
+
 	return (
 		<>
 			{user?.role === "ADMIN" ? (
@@ -49,29 +70,26 @@ export default function PlayerDetail() {
 								<AccordionTrigger className="mb-4 text-xl font-semibold text-foreground">
 									{shotType}
 								</AccordionTrigger>
-								<AccordionContent className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-									{videos.map((video) => (
-										<Link
-											key={video.id}
-											to={`/players/${slug}/${video.id}`}
-											className="group overflow-hidden rounded-xl border border-border bg-card transition-all hover:scale-[1.02] hover:shadow-lg"
-										>
-											<div
-												className="h-40 w-full bg-cover bg-center"
-												style={{
-													backgroundImage: `url(https://img.youtube.com/vi/${video.id}/0.jpg)`,
-												}}
-											/>
-											<div className="p-3">
-												<p className="text-sm font-medium text-foreground group-hover:text-primary">
-													{video.title}
-												</p>
-												<span className="mt-1 inline-block rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
-													{video.variant}
-												</span>
-											</div>
-										</Link>
-									))}
+								<AccordionContent>
+									{/* Mobile: Carousel */}
+									<Carousel className="sm:hidden">
+										<CarouselContent>
+											{videos.map((video) => (
+												<CarouselItem key={video.id} className="basis-[85%]">
+													<VideoCard video={video} />
+												</CarouselItem>
+											))}
+										</CarouselContent>
+										<CarouselPrevious />
+										<CarouselNext />
+									</Carousel>
+
+									{/* Desktop: Grid */}
+									<div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+										{videos.map((video) => (
+											<VideoCard key={video.id} video={video} />
+										))}
+									</div>
 								</AccordionContent>
 							</AccordionItem>
 						))}

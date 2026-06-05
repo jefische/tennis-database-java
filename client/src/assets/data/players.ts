@@ -5,13 +5,21 @@ type playerData = {
 	slug: string;
 	image: string;
 	shots: string[];
+	hand: string;
+	serve: string;
+	forehand: string;
+	backhand: string;
 };
 export const PLAYERS: playerData[] = [
 	{
 		name: "Roger Federer",
 		slug: "federer",
 		image: "https://img.youtube.com/vi/pRYJHxmZdQE/0.jpg",
-		shots: ["Forehand", "Backhand", "Serve", "Volley"],
+		shots: ["Forehand", "Backhand", "Platform Serve", "Volley"],
+		hand: "right",
+		serve: "platform",
+		forehand: "eastern",
+		backhand: "one",
 	},
 	// {
 	// 	name: "Rafael Nadal",
@@ -30,7 +38,11 @@ export const PLAYERS: playerData[] = [
 		slug: "wawrinka",
 		image: "https://img.youtube.com/vi/xOhLAbf_EAI/0.jpg",
 		// image: "https://img.youtube.com/vi/Dyj1Id6HDJ0/0.jpg",
-		shots: ["Forehand", "Backhand", "Serve"],
+		shots: ["Forehand", "Backhand", "Pinpoint Serve"],
+		hand: "right",
+		serve: "pinpoint",
+		forehand: "semi-western",
+		backhand: "one",
 	},
 	// {
 	// 	name: "Carlos Alcaraz",
@@ -46,101 +58,13 @@ export const PLAYERS: playerData[] = [
 	// },
 ];
 
-// Placeholder videos for when a shot filter is active (cross-player view)
-export const SHOT_VIDEOS = [
-	{
-		id: "97B2panmUvU",
-		player: "Wawrinka",
-		shotType: "Forehand",
-		variant: "Topspin",
-		title: "Wawrinka Forehand Slow Motion",
-	},
-	{
-		id: "_cohjbquvwc",
-		player: "Wawrinka",
-		shotType: "Forehand",
-		variant: "Topspin",
-		title: "Wawrinka Forehand Slow Motion",
-	},
-	{
-		id: "hUuj7AoOWpc",
-		player: "Wawrinka",
-		shotType: "Forehand",
-		variant: "Topspin",
-		title: "Wawrinka Forehand in Slow Motion",
-	},
-	{
-		id: "RDl2Kz0gd18",
-		player: "Wawrinka",
-		shotType: "Forehand",
-		variant: "Topspin",
-		title: "Wawrinka Forehand Slow Motion",
-	},
-	{
-		id: "zYqtCPvGf4Y",
-		player: "Wawrinka",
-		shotType: "Forehand",
-		variant: "Topspin",
-		title: "Wawrinka Forehand Slow Motion",
-	},
-	{
-		id: "_FBLXOaSAsU",
-		player: "Wawrinka",
-		shotType: "Forehand",
-		variant: "Topspin",
-		title: "Wawrinka Forehand Slow Motion",
-	},
-	{
-		id: "Re-8_POaRIw",
-		player: "Wawrinka",
-		shotType: "Backhand",
-		variant: "Flat",
-		title: "Wawrinka Backhand Practice",
-	},
-	{
-		id: "SlgMvQQrYhg",
-		player: "Wawrinka",
-		shotType: "Backhand",
-		variant: "One-handed",
-		title: "Wawrinka Backhand Slow Motion",
-	},
-	{
-		id: "wWCVFRRaFCs",
-		player: "Wawrinka",
-		title: "Wawrinka One-Handed Backhand — Slow Motion",
-		shotType: "Backhand",
-		variant: "One-handed",
-	},
-	{
-		id: "mx3eA5P-3nA",
-		player: "Wawrinka",
-		title: "Wawrinka One-Handed Backhand — Slow Motion",
-		shotType: "Backhand",
-		variant: "One-handed",
-	},
-	{
-		id: "q3J2P8on7js",
-		player: "Wawrinka",
-		title: "Wawrinka One-Handed Backhand — Court Level",
-		shotType: "Backhand",
-		variant: "One-handed",
-	},
-	{
-		id: "_7gd-XJRiEQ",
-		player: "Wawrinka",
-		title: "Wawrinka One-Handed Backhand — Match Play",
-		shotType: "Backhand",
-		variant: "One-handed",
-	},
-];
-
 // Placeholder data — will come from API/DB later
 export const PLAYER_DATA: Record<
 	string,
 	{
 		name: string;
 		videos: { id: string; title: string; shotType: string; variant: string }[];
-		gear?: { name: string; type: string; link: string }[];
+		gear: { name: string; type: string; link: string }[];
 	}
 > = {
 	federer: {
@@ -148,6 +72,11 @@ export const PLAYER_DATA: Record<
 		videos: [
 			{ id: "gFmI3pNSdFI", title: "Federer Backhand Compilation", shotType: "Backhand", variant: "One-handed" },
 			{ id: "3OL6umAxQ4c", title: "Federer Serve Compilation", shotType: "Serve", variant: "Flat" },
+		],
+		gear: [
+			{ name: "Yonex VCORE 95", type: "Racket", link: "#" },
+			{ name: "Luxilon ALU Power 125", type: "String", link: "#" },
+			{ name: "Yonex Power Cushion Eclipsion", type: "Shoes", link: "#" },
 		],
 	},
 	wawrinka: {
@@ -437,3 +366,21 @@ export const VIDEO_DATA: Record<
 	// 	],
 	// },
 };
+
+// Placeholder videos for when a shot filter is active (cross-player view)
+export const SHOT_VIDEOS = [
+	{
+		id: "97B2panmUvU",
+		player: "Wawrinka",
+		shotType: "Forehand",
+		variant: "Topspin",
+		title: "Wawrinka Forehand Slow Motion",
+	},
+	{
+		id: "_cohjbquvwc",
+		player: "Wawrinka",
+		shotType: "Forehand",
+		variant: "Topspin",
+		title: "Wawrinka Forehand Slow Motion",
+	},
+];

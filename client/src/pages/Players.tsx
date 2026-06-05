@@ -8,9 +8,9 @@ import { useStore } from "@/hooks/useStore";
 const SHOT_TYPES = [
 	"All",
 	"Left handed",
-	"Eastern forehand",
-	"Semi-western forehand",
-	"Western forehand",
+	// "Eastern forehand",
+	// "Semi-western forehand",
+	// "Western forehand",
 	"One-handed backhand",
 	"Platform Serve",
 	"Pinpoint Serve",
@@ -44,9 +44,7 @@ export default function Players() {
 						{/* Page Header */}
 						<div className="mb-8">
 							<h1 className="text-3xl font-bold text-foreground">Players</h1>
-							<p className="mt-2 text-muted-foreground">
-								Browse shot techniques by player or filter by player style.
-							</p>
+							<p className="mt-2 text-muted-foreground">Select a player or filter by player attribute.</p>
 						</div>
 
 						{/* Filter Bar */}
