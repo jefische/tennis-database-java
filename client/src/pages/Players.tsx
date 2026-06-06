@@ -4,9 +4,12 @@ import { PLAYERS } from "../assets/data/players";
 import { Button } from "@/components/ui/button";
 import { CircleChevronUp } from "lucide-react";
 import { useStore } from "@/hooks/useStore";
+import { cn } from "@/lib/utils";
 
 const SHOT_TYPES = [
 	"All",
+	"ATP",
+	"WTA",
 	"Left handed",
 	// "Eastern forehand",
 	// "Semi-western forehand",
@@ -23,7 +26,7 @@ export default function Players() {
 	const mainRef = useRef<HTMLDivElement>(null);
 	const { user } = useStore();
 
-	const filteredPlayers = activeFilter === "All" ? PLAYERS : PLAYERS.filter((p) => p.shots.includes(activeFilter));
+	const filteredPlayers = activeFilter === "All" ? PLAYERS : PLAYERS.filter((p) => p.filters.includes(activeFilter));
 
 	// const filteredVideos =
 	// 	activeFilter === "All" ? SHOT_VIDEOS : SHOT_VIDEOS.filter((v) => v.shotType === activeFilter);
@@ -40,7 +43,7 @@ export default function Players() {
 		<>
 			{user?.role === "ADMIN" ? (
 				<>
-					<div className="h-[calc(100%-64px)] bg-background px-12 py-8 lg:px-16 overflow-auto" ref={mainRef}>
+					<div className="h-[calc(100%-64px)] bg-background px-10 py-8 lg:px-16 overflow-auto" ref={mainRef}>
 						{/* Page Header */}
 						<div className="mb-8">
 							<h1 className="text-3xl font-bold text-foreground">Players</h1>
@@ -66,18 +69,26 @@ export default function Players() {
 
 						{/* Content: Player Cards (no filter) or Video Grid (filter active) */}
 
-						<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+						<div className="grid gap-6 grid-cols-2 md:flex md:flex-wrap">
 							{filteredPlayers.map((player) => (
 								<Link
 									key={player.slug}
 									to={`/players/${player.slug}`}
-									className="group overflow-hidden rounded-xl border border-border bg-card transition-all hover:scale-[1.02] hover:shadow-lg"
+									className={cn(
+										"group overflow-hidden rounded-xl border border-border bg-card transition-all hover:scale-[1.02] hover:shadow-lg",
+										"max-h-[300px] max-w-[300px]",
+									)}
 								>
-									<div
-										className="h-48 w-full bg-cover bg-center"
-										style={{ backgroundImage: `url(${player.image})` }}
+									<img
+										src={player.image}
+										alt={player.name}
+										className="w-full object-contain max-h-[300px]"
 									/>
-									<div className="p-4">
+									{/* <div
+										className="h-48 w-full bg-contain bg-center bg-no-repeat hidden"
+										style={{ backgroundImage: `url(${player.image})` }}
+									/> */}
+									{/* <div className="p-4">
 										<h3 className="text-lg font-semibold text-foreground group-hover:text-primary">
 											{player.name}
 										</h3>
@@ -91,7 +102,7 @@ export default function Players() {
 												</span>
 											))}
 										</div>
-									</div>
+									</div> */}
 								</Link>
 							))}
 						</div>
