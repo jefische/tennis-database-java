@@ -3,7 +3,7 @@ FROM node:18-alpine AS frontend-build
 WORKDIR /app
 
 # Add build argument
-ARG VITE_API_URL=https://tennisreplay.tv
+ARG VITE_API_URL=https://thetennisarchive.com
 
 # Copy frontend package files
 COPY client/package*.json ./
