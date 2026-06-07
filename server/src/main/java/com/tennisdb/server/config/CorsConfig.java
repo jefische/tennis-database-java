@@ -20,7 +20,9 @@ public class CorsConfig implements WebMvcConfigurer {
                         "http://localhost:5173",
                         "https://tennis-database-java.fly.dev",
                         "https://tennisreplay.tv",
-                        "https://www.tennisreplay.tv"
+                        "https://www.tennisreplay.tv",
+                        "https://thetennisarchive.com",
+                        "https://www.thetennisarchive.com"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
