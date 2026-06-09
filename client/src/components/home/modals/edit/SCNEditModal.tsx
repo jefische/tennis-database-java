@@ -5,7 +5,6 @@ import {
 	DialogTitle,
 	DialogDescription,
 	DialogFooter,
-	DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import RHFVideoForm from "../RHFVideoForm";
@@ -39,11 +38,9 @@ export default function SCNEditModal({ editData, open, setEditModal }: EditModal
 						setOpenModal={setEditModal}
 					/>
 					<DialogFooter>
-						<DialogClose asChild>
-							<Button type="submit" form="video-form">
-								Submit
-							</Button>
-						</DialogClose>
+						<Button type="submit" form="video-form">
+							Submit
+						</Button>
 					</DialogFooter>
 				</DialogContent>
 			</Dialog>

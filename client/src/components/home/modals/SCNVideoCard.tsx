@@ -194,7 +194,7 @@ export default function SCNVideoCard({ id, title, duration, summary, summaryStat
 							<iframe
 								height="100%"
 								width="100%"
-								src={`https://www.youtube.com/embed/${id}?enablejsapi=1&origin=https://tennisreplay.tv`}
+								src={`https://www.youtube.com/embed/${id}?enablejsapi=1&origin=https://thetennisarchive.com`}
 								title={title}
 								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 								referrerPolicy="strict-origin-when-cross-origin"

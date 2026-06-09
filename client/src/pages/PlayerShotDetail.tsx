@@ -44,7 +44,7 @@ export default function PlayerShotDetail() {
 									<iframe
 										key={videoId}
 										className="absolute inset-0 h-full w-full"
-										src={`https://www.youtube.com/embed/${videoId}?loop=1&playlist=${videoId}`}
+										src={`https://www.youtube.com/embed/${videoId}?loop=1&playlist=${videoId}?enablejsapi=1&origin=https://thetennisarchive.com`}
 										title={video.title}
 										allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 										referrerPolicy="strict-origin-when-cross-origin"

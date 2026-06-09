@@ -43,10 +43,13 @@ export default function Players() {
 		<>
 			{user?.role === "ADMIN" ? (
 				<>
-					<div className="h-[calc(100%-64px)] bg-background px-10 py-8 lg:px-16 overflow-auto" ref={mainRef}>
+					<div
+						className="h-[calc(100%-64px)] flex flex-col items-center text-center bg-background px-10 py-8 lg:px-16 overflow-auto"
+						ref={mainRef}
+					>
 						{/* Page Header */}
 						<div className="mb-8">
-							<h1 className="text-3xl font-bold text-foreground">Players</h1>
+							<h1 className="text-3xl font-bold text-foreground">Player Videos</h1>
 							<p className="mt-2 text-muted-foreground">Select a player or filter by player attribute.</p>
 						</div>
 
@@ -69,7 +72,7 @@ export default function Players() {
 
 						{/* Content: Player Cards (no filter) or Video Grid (filter active) */}
 
-						<div className="grid gap-6 grid-cols-2 md:flex md:flex-wrap">
+						<div className="grid gap-6 grid-cols-2 md:flex md:flex-wrap md:justify-center">
 							{filteredPlayers.map((player) => (
 								<Link
 									key={player.slug}
