@@ -35,6 +35,10 @@ const faqs = [
 		question: "What is the AI-generated match summary?",
 		answer: "Each match includes an AI-generated summary that provides a brief overview of the match highlights, key moments, and outcome. Note that these summaries can sometimes be inaccurate as results are based on LLM interpretation of video transcripts. If you notice an inaccuracy in a reported outcome or score, please let us know in the contact form below.",
 	},
+	{
+		question: "What is the Player Shots section?",
+		answer: "The Player Shots section features short clips of individual player techniques — forehands, backhands, serves, volleys, and more. We're actively adding new players and expanding the video library, so check back often for new content.",
+	},
 ];
 
 export default function FAQ() {

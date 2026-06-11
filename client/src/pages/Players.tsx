@@ -41,7 +41,7 @@ export default function Players() {
 
 	return (
 		<>
-			{user?.role === "ADMIN" ? (
+			{user?.role === "ADMIN" || user === null ? (
 				<>
 					<div
 						className="h-[calc(100%-64px)] flex flex-col items-center text-center bg-background px-10 py-8 lg:px-16 overflow-auto"
@@ -78,34 +78,20 @@ export default function Players() {
 									key={player.slug}
 									to={`/players/${player.slug}`}
 									className={cn(
-										"group overflow-hidden rounded-xl border border-border bg-card transition-all hover:scale-[1.02] hover:shadow-lg",
+										"group overflow-hidden relative rounded-xl border border-border bg-card transition-all hover:scale-[1.02] hover:shadow-lg",
 										"max-h-[300px] max-w-[300px]",
 									)}
 								>
 									<img
 										src={player.image}
 										alt={player.name}
-										className="w-full object-contain max-h-[300px]"
+										className="w-full h-full object-contain"
 									/>
-									{/* <div
-										className="h-48 w-full bg-contain bg-center bg-no-repeat hidden"
-										style={{ backgroundImage: `url(${player.image})` }}
-									/> */}
-									{/* <div className="p-4">
-										<h3 className="text-lg font-semibold text-foreground group-hover:text-primary">
-											{player.name}
-										</h3>
-										<div className="mt-2 flex flex-wrap gap-1.5">
-											{player.shots.map((shot) => (
-												<span
-													key={shot}
-													className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground"
-												>
-													{shot}
-												</span>
-											))}
-										</div>
-									</div> */}
+									<h3 className="absolute inset-0 flex flex-col items-center justify-center text-4xl font-bold text-white [text-shadow:_2px_2px_4px_rgb(0_0_0_/_80%)]">
+										{player.name.split(" ").map((part, i) => (
+											<span key={i}>{part}</span>
+										))}
+									</h3>
 								</Link>
 							))}
 						</div>

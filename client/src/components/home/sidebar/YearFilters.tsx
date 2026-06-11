@@ -7,7 +7,7 @@ import { useStore } from "@/hooks/useStore";
 
 export default function YearFilters({ open }: { open?: boolean }) {
 	// isOpen state is used to manage the accordion dropdown filters in the sidebar
-	const [isOpen, setisOpen] = useState<boolean>(open ?? true);
+	const [isOpen, setisOpen] = useState<boolean>(open ?? false);
 	const [selectAll, setSelectAll] = useState(true);
 	const { filterData, setFilterData } = useStore();
 	const uid = useId();

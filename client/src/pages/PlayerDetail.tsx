@@ -41,59 +41,66 @@ export default function PlayerDetail() {
 			/>
 			<div className="p-3">
 				<p className="text-sm font-medium text-foreground group-hover:text-primary">{video.title}</p>
-				<span className="mt-1 inline-block rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
-					{video.variant}
-				</span>
+				{video.variant.map((shot, index) => (
+					<span
+						key={index}
+						className="mt-1 inline-block rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground"
+					>
+						{shot}
+					</span>
+				))}
 			</div>
 		</Link>
 	);
 
 	return (
 		<>
-			{user?.role === "ADMIN" ? (
+			{user?.role === "ADMIN" || user === null ? (
 				<div className="h-[calc(100vh-64px)] overflow-auto px-4 py-8 sm:px-8 lg:px-16">
-					{/* Breadcrumb */}
-					<nav className="mb-6 text-sm text-muted-foreground">
-						<Link to="/players" className="hover:text-foreground">
-							Players
-						</Link>
-						<span className="mx-2">/</span>
-						<span className="text-foreground">{player.name}</span>
-					</nav>
+					<div className="mx-auto flex w-full max-w-7xl flex-col">
+						{/* Breadcrumb */}
+						<nav className="mb-6 text-sm text-muted-foreground">
+							<Link to="/players" className="hover:text-foreground">
+								Players
+							</Link>
+							<span className="mx-2">/</span>
+							<span className="text-foreground">{player.name}</span>
+						</nav>
 
-					<h1 className="mb-8 text-3xl font-bold text-foreground">{player.name}</h1>
+						<h1 className="mb-8 text-3xl font-bold text-foreground">{player.name}</h1>
 
-					{/* Videos grouped by shot type */}
-					<Accordion type="multiple" defaultValue={["Forehand", "Backhand", "Serve"]}>
-						{Object.entries(grouped).map(([shotType, videos]) => (
-							<AccordionItem value={shotType} key={shotType} className="mb-10">
-								<AccordionTrigger className="mb-4 text-xl font-semibold text-foreground">
-									{shotType}
-								</AccordionTrigger>
-								<AccordionContent>
-									{/* Mobile: Carousel */}
-									<Carousel className="sm:hidden">
-										<CarouselContent>
+						{/* Videos grouped by shot type */}
+						<Accordion type="multiple" defaultValue={["Forehand", "Backhand", "Serve"]}>
+							{Object.entries(grouped).map(([shotType, videos]) => (
+								<AccordionItem value={shotType} key={shotType} className="mb-10">
+									<AccordionTrigger className="mb-4 text-xl font-semibold text-foreground">
+										{shotType}
+									</AccordionTrigger>
+									<AccordionContent>
+										{/* Mobile: Carousel */}
+										<Carousel className="sm:hidden">
+											<CarouselContent>
+												{videos.map((video) => (
+													<CarouselItem key={video.id} className="basis-[85%]">
+														<VideoCard video={video} />
+													</CarouselItem>
+												))}
+											</CarouselContent>
+											<CarouselPrevious />
+											<CarouselNext />
+										</Carousel>
+
+										{/* Desktop: Grid */}
+										<div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
 											{videos.map((video) => (
-												<CarouselItem key={video.id} className="basis-[85%]">
-													<VideoCard video={video} />
-												</CarouselItem>
+												<VideoCard key={video.id} video={video} />
 											))}
-										</CarouselContent>
-										<CarouselPrevious />
-										<CarouselNext />
-									</Carousel>
-
-									{/* Desktop: Grid */}
-									<div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-										{videos.map((video) => (
-											<VideoCard key={video.id} video={video} />
-										))}
-									</div>
-								</AccordionContent>
-							</AccordionItem>
-						))}
-					</Accordion>
+										</div>
+									</AccordionContent>
+								</AccordionItem>
+							))}
+						</Accordion>
+					</div>
 				</div>
 			) : (
 				<div className="h-[calc(100%-64px)] mb-4 bg-background">
