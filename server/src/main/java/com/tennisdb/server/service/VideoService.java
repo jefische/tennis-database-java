@@ -89,4 +89,24 @@ public class VideoService {
 		}
 		return false;
 	}
+
+	public boolean backfillTags() {
+		List<Video> allVideos = videoRepository.findAll();
+		for (Video video: allVideos) {
+			if (video.getSummaryStatus() == null) continue;
+			if (video.getSummaryStatus().equals("yes") && video.getTags() == null) {
+				try {
+					SummaryResponse summary = objectMapper.readValue(
+						video.getSummary(), SummaryResponse.class
+					);
+					String jsonArrayString = objectMapper.writeValueAsString(summary.getTags());
+					video.setTags(jsonArrayString);
+					videoRepository.save(video);
+				} catch (Exception e) {
+					// If parsing fails, leave tags as null
+				}
+			}
+		}
+		return false;
+	}
 }

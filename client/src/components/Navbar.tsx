@@ -13,7 +13,7 @@ import { useStore } from "@/hooks/useStore";
 const navigation = [
 	{ name: "Full Matches", href: "/home", current: true },
 	{ name: "Player Shots", href: "/players", current: false },
-	{ name: "Draws", href: "/draws", current: false },
+	// { name: "Draws", href: "/draws", current: false },
 	{ name: "FAQ", href: "/faq", current: false },
 ];
 

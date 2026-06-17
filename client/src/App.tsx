@@ -53,7 +53,7 @@ export default function App() {
 						<Route path="/players" element={<Players />} />
 						<Route path="/players/:slug/:videoId" element={<PlayerShotDetail />} />
 						<Route path="/players/:slug" element={<PlayerDetail />} />
-						<Route path="/draws" element={<Draws />} />
+						{/* <Route path="/draws" element={<Draws />} /> */}
 						<Route path="/faq" element={<FAQ />} />
 						<Route path="/profile" element={<Profile />} />
 					</Route>

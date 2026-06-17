@@ -54,6 +54,12 @@ public class VideoController {
 		return ResponseEntity.status(200).body(videoReponses);
 	}
 
+	@PostMapping(value = "backfill")
+	public ResponseEntity<?> addTags() {
+		videoService.backfillTags();
+		return ResponseEntity.status(200).build();
+	}
+
 	@GetMapping(value = "videos/{youtubeId}")
 	public ResponseEntity<?> getVideoById(@PathVariable String youtubeId) {
 		Video video = videoService.getVideoByYoutubeId(youtubeId).orElse(null);

@@ -49,6 +49,9 @@ public class Video {
 	private String summary;
 
 	@Column
+	private String tags;
+
+	@Column
 	private String summaryStatus;
 
 	@Column
