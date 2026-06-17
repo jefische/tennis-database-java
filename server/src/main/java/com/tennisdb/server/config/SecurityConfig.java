@@ -34,6 +34,8 @@ public class SecurityConfig {
                 // Static resources & SPA routes
                 .requestMatchers("/", "/index.html", "/assets/**", "/icons/**", "/favicon.ico", "/bgs/**").permitAll()
                 .requestMatchers("/{path:[^.]*}").permitAll()
+                .requestMatchers("/{path1:[^.]*}/{path2:[^.]*}").permitAll()
+                .requestMatchers("/{path1:[^.]*}/{path2:[^.]*}/{path3:[^.]*}").permitAll()
                 // Public API endpoints
                 .requestMatchers(HttpMethod.GET, "/videos/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/videosAI").permitAll()

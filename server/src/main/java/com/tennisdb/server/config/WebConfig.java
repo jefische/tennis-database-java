@@ -37,5 +37,7 @@ public class WebConfig implements WebMvcConfigurer {
         // Forward all non-API routes to React app
         registry.addViewController("/").setViewName("forward:/index.html");
         registry.addViewController("/{path:[^.]*}").setViewName("forward:/index.html");
+        registry.addViewController("/{path1:[^.]*}/{path2:[^.]*}").setViewName("forward:/index.html");
+        registry.addViewController("/{path1:[^.]*}/{path2:[^.]*}/{path3:[^.]*}").setViewName("forward:/index.html");
     }
 }
