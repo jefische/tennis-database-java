@@ -6,8 +6,8 @@ import { toast } from "sonner";
 
 const faqs = [
 	{
-		question: "What is the Tennis Match Archive?",
-		answer: "The Tennis Match Archive is a curated video database of full length professional tennis matches. Browse full matches from major tournaments, organized by event, year, round, and player.",
+		question: "What is The Tennis Archive?",
+		answer: "The Tennis Archive is a curated video database of full length professional tennis matches. Browse full matches from major tournaments, organized by event, year, round, and player.",
 	},
 	{
 		question: "Is the archive free to use?",
@@ -76,7 +76,7 @@ export default function FAQ() {
 						Frequently Asked Questions
 					</h1>
 					<p className="mt-3 text-muted-foreground text-lg">
-						Everything you need to know about the Tennis Match Archive.
+						Everything you need to know about The Tennis Archive.
 					</p>
 				</div>
 

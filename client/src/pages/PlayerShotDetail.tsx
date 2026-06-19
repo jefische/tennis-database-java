@@ -55,12 +55,14 @@ export default function PlayerShotDetail() {
 
 									{/* Shot details below video */}
 									<div className="mt-4 flex flex-wrap gap-2">
-										<span className="rounded-full bg-muted px-3 py-1 text-sm font-medium text-muted-foreground">
+										{/* <span className="rounded-full bg-muted px-3 py-1 text-sm font-medium text-muted-foreground">
 											{video.shotType}
-										</span>
-										<span className="rounded-full bg-muted px-3 py-1 text-sm font-medium text-muted-foreground">
-											{video.variant}
-										</span>
+										</span> */}
+										{video.variant.map((v) => (
+											<span className="rounded-full bg-muted px-3 py-1 text-sm font-medium text-muted-foreground">
+												{v}
+											</span>
+										))}
 									</div>
 								</div>
 
