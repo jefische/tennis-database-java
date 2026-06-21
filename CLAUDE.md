@@ -75,9 +75,10 @@ client/src/
 ```
 
 **State Management Pattern:**
-- Uses React's built-in state (useState) with prop drilling - NO external state library (Redux/Zustand/Context).
-- The `Home` component is the state container, managing `activeVideos` and `allVideos`.
-- State setters (`setVideos`, `setAllVideos`) are passed down to child components that need to update state.
+- Uses a **Zustand** store (`useStore` in `src/hooks/useStore.ts`) for centralized state management.
+- The store holds `user`, `allVideos`, `activeVideos`, `filteredVideos`, and `filterData`.
+- `setAllVideos` derives filter data, applies active filters, and updates `filteredVideos`/`activeVideos` in one action.
+- Components access and update state directly via the `useStore` hook — no prop drilling needed.
 - Filtering/search operates by updating `activeVideos` while keeping `allVideos` as the source of truth.
 
 **API Integration:**
