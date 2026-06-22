@@ -2,7 +2,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Bars3Icon, SunIcon, MoonIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import { NavLink, Link, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import LoginModal from "./home/modals/login/LoginModal";
 import RegisterModal from "./home/modals/register/RegisterModal";
@@ -13,8 +13,8 @@ import { useStore } from "@/hooks/useStore";
 const navigation = [
 	{ name: "Full Matches", href: "/home", current: true },
 	{ name: "Player Shots", href: "/players", current: false },
-	// { name: "Draws", href: "/draws", current: false },
 	{ name: "FAQ", href: "/faq", current: false },
+	// { name: "Profile", href: "/profile", current: false },
 ];
 
 function classNames(...classes: string[]) {
@@ -51,6 +51,14 @@ export default function Navbar({ darkMode, setDarkMode }: NavbarProps) {
 		localStorage.removeItem("token");
 		setUser(null);
 	};
+
+	useEffect(() => {
+		if (user?.role === "ADMIN") {
+			setActiveLink([...navigation, { name: "Profile", href: "/profile", current: false }]);
+		} else {
+			setActiveLink(navigation);
+		}
+	}, [user]);
 
 	return (
 		<nav className="border-b-1 border-gray-400">

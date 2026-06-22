@@ -1,28 +1,27 @@
 import CustomVideos from "../components/profile/CustomVideos";
-import ModalTest from "../components/profile/ModalTest";
 import { useStore } from "@/hooks/useStore";
+import { PROFILE } from "@/assets/data/profile";
 
 export default function Profile() {
-	// const isProduction = import.meta.env.PROD;
 	const { user } = useStore();
-	const myId = "https://my-tennis-videos.s3.us-east-2.amazonaws.com/JF_Serving_AHS_12092024.mp4";
-	const UTRmatch = "https://my-tennis-videos.s3.us-east-2.amazonaws.com/04-30-2024-Dan_Ben_vs_Alex_Jeremy.mp4";
 
 	return (
 		<>
 			{user?.role === "ADMIN" ? (
-				<div className="body-container">
-					<main className="content-container bg-gray-custom">
-						<h1 style={{ textAlign: "center" }}>Profile page</h1>
-						<section
-							className="player-sections d-flex justify-content-center"
-							style={{ color: "#fff", gap: "20px" }}
-						>
-							<CustomVideos url={myId} title="Serving Dec. 2024 - AHS" />
-							<CustomVideos url={UTRmatch} title="Snyder Doubles Match Apr. 2024" />
-							<ModalTest />
-						</section>
-					</main>
+				<div className="h-[calc(100%-64px)] overflow-y-auto bg-background px-10 py-8">
+					{/* Header */}
+					<div className="text-center mb-12">
+						<h1 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight">
+							Profile Section
+						</h1>
+						<p className="mt-3 text-muted-foreground text-lg">My personal videos</p>
+					</div>
+
+					<section className="flex flex-wrap justify-center gap-10 text-center text-3xl py-10">
+						{PROFILE.map((video) => (
+							<CustomVideos url={video.S3URL} title={video.title} />
+						))}
+					</section>
 				</div>
 			) : (
 				<h1 style={{ textAlign: "center", marginTop: "10%" }}>Profile page is under development</h1>

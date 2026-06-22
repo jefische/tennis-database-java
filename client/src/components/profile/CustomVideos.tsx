@@ -1,72 +1,73 @@
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 import { Fragment, useState, useRef } from "react";
+import { Button } from "@/components/ui/button";
+import {
+	Dialog,
+	DialogTrigger,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+	DialogFooter,
+	DialogClose,
+} from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 
 interface CustomVideosProps {
-	url: string,
-	title: string,
-	maxWidth?: string,
+	url: string;
+	title: string;
+	maxWidth?: string;
 }
 
-export default function CustomVideos({ url, title, maxWidth }: CustomVideosProps) {
-	const [modalIsOpen, setIsOpen] = useState(false);
+export default function CustomVideos({ url, title }: CustomVideosProps) {
 	const [timestamp, setTimestamp] = useState({
 		Start: 0,
 	});
-	const videoRef = useRef(null);
-
-	const openModal = () => setIsOpen(true);
-	const closeModal = () => setIsOpen(false);
 
 	return (
 		<Fragment>
-			<div className="card-cover" style={{ maxWidth: maxWidth }}>
-				<video className="header-background" onClick={openModal}>
-					<source src={url} />
-				</video>
-				<p className="card-title">{title}</p>
-			</div>
-			<Modal
-				show={modalIsOpen}
-				onHide={closeModal}
-				centered
-				backdrop="static"
-				aria-labelledby="video modal"
-				dialogClassName="modal-75w"
-			>
-				<Modal.Header closeButton>
-					<Modal.Title>{title}</Modal.Title>
-				</Modal.Header>
-				<Modal.Body style={{ height: "80vh" }} className="flex flex-col 2xl:flex-row gap-[20px]">
-					<div className="col" style={{ maxWidth: "1280px" }}>
-						<video ref={videoRef} src={url} controls></video>
-						<Button className="mt-5">Play</Button>
-						{Object.entries(timestamp).map(([key, val]) => {
-							return (
-								<>
-									<Button className="mt-5 ms-2">{key}</Button>
-								</>
-							);
-						})}
-						<Button className="mt-5 ms-2">Add Timestamp</Button>
-						{/* <iframe
-							height="100%"
-							width="100%"
-							src={`${url}`}
-							title={title}
-							frameBorder="0"
-							allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-							referrerPolicy="strict-origin-when-cross-origin"
-							allowFullScreen
-						></iframe> */}
+			<Dialog>
+				<DialogTrigger asChild>
+					<div
+						role="button"
+						tabIndex={0}
+						className={cn("cursor-pointer hover:scale-105 transition-all duration-500 ease-in-out")}
+					>
+						<video className="relative h-auto max-w-[400px] w-full rounded-[10px]">
+							<source src={url} />
+						</video>
+						<p className="mt-2 ms-1 font-semibold text-foreground text-sm">{title}</p>
 					</div>
-				</Modal.Body>
-				<Modal.Footer>
-					<Button variant="secondary" onClick={closeModal}>
-						Close
-					</Button>
-				</Modal.Footer>
-			</Modal>
+				</DialogTrigger>
+				<DialogContent
+					className="sm:max-w-xl md:max-w-2xl lg:max-w-4xl 2xl:max-w-6xl duration-200 grid-rows-[auto_1fr] sm:min-h-2/3 lg:min-h-3/4 lg:max-h-4/5"
+					mode="light"
+				>
+					<DialogHeader>
+						<DialogTitle className="hidden sm:flex items-center justify-center gap-6 text-lg md:text-2xl me-4">
+							{title}
+						</DialogTitle>
+					</DialogHeader>
+
+					<div className="flex flex-col xl:flex-row gap-[15px] overflow-y-auto mt-2 sm:mt-0">
+						<div className="basis-3/3 shrink-0">
+							<iframe
+								height="100%"
+								width="100%"
+								src={`${url}`}
+								title={title}
+								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+								referrerPolicy="strict-origin-when-cross-origin"
+								allowFullScreen
+							></iframe>
+						</div>
+					</div>
+
+					<DialogFooter>
+						<DialogClose asChild>
+							<Button>Close</Button>
+						</DialogClose>
+					</DialogFooter>
+				</DialogContent>
+			</Dialog>
 		</Fragment>
 	);
 }

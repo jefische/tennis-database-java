@@ -7,6 +7,7 @@ import { VideoCards, Videos, User, AISummary } from "@/types";
 import { Star, Sparkles } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import { useStore } from "@/hooks/useStore";
+import { cn } from "@/lib/utils";
 
 import {
 	DropdownMenu,
@@ -37,7 +38,6 @@ const emptySummary: AISummary = {
 	status: null,
 };
 
-import { cn } from "@/lib/utils";
 export default function SCNVideoCard({ id, title, duration, summary, summaryStatus }: VideoCards) {
 	const [editData, setEditData] = useState<Videos>({} as Videos);
 	const [editModal, setEditModal] = useState<boolean>(false);
