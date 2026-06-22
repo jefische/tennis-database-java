@@ -31,8 +31,8 @@ export default function CustomVideos({ url, title }: CustomVideosProps) {
 						tabIndex={0}
 						className={cn("cursor-pointer hover:scale-105 transition-all duration-500 ease-in-out")}
 					>
-						<video className="relative h-auto max-w-[400px] w-full rounded-[10px]">
-							<source src={url} />
+						<video className="relative h-auto max-w-[400px] w-full rounded-[10px]" playsInline muted preload="metadata">
+							<source src={`${url}#t=0.001`} />
 						</video>
 						<p className="mt-2 ms-1 font-semibold text-foreground text-sm">{title}</p>
 					</div>
