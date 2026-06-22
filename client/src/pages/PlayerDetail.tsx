@@ -26,7 +26,7 @@ export default function PlayerDetail() {
 		acc[video.shotType].push(video);
 		return acc;
 	}, {});
-	console.log(grouped);
+	// console.log(grouped);
 
 	const VideoCard = ({ video }: { video: (typeof player.videos)[number] }) => (
 		<Link
@@ -70,7 +70,7 @@ export default function PlayerDetail() {
 						<h1 className="mb-8 text-3xl font-bold text-foreground">{player.name}</h1>
 
 						{/* Videos grouped by shot type */}
-						<Accordion type="multiple" defaultValue={["Forehand", "Backhand", "Serve"]}>
+						<Accordion type="multiple" defaultValue={["Forehand", "Backhand", "Serve", "Practice"]}>
 							{Object.entries(grouped).map(([shotType, videos]) => (
 								<AccordionItem value={shotType} key={shotType} className="mb-10">
 									<AccordionTrigger className="mb-4 text-xl font-semibold text-foreground">

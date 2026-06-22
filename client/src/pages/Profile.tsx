@@ -1,16 +1,16 @@
 import CustomVideos from "../components/profile/CustomVideos";
 import ModalTest from "../components/profile/ModalTest";
+import { useStore } from "@/hooks/useStore";
 
 export default function Profile() {
-	const isProduction = import.meta.env.PROD;
+	// const isProduction = import.meta.env.PROD;
+	const { user } = useStore();
 	const myId = "https://my-tennis-videos.s3.us-east-2.amazonaws.com/JF_Serving_AHS_12092024.mp4";
 	const UTRmatch = "https://my-tennis-videos.s3.us-east-2.amazonaws.com/04-30-2024-Dan_Ben_vs_Alex_Jeremy.mp4";
 
 	return (
 		<>
-			{isProduction ? (
-				<h1 style={{ textAlign: "center", marginTop: "10%" }}>Profile page is under development</h1>
-			) : (
+			{user?.role === "ADMIN" ? (
 				<div className="body-container">
 					<main className="content-container bg-gray-custom">
 						<h1 style={{ textAlign: "center" }}>Profile page</h1>
@@ -24,6 +24,8 @@ export default function Profile() {
 						</section>
 					</main>
 				</div>
+			) : (
+				<h1 style={{ textAlign: "center", marginTop: "10%" }}>Profile page is under development</h1>
 			)}
 		</>
 	);

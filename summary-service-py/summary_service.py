@@ -222,8 +222,21 @@ def generate_match_summary(youtube_url: str, video_info: dict = None) -> str:
     # result = chain.invoke({})
 
     # Strip markdown code fences if the LLM includes them despite instructions
+    print(f"[SUMMARY] Result type: {type(result)}")
+    print(f"[SUMMARY] Result content type: {type(result.content)}")
+    print(f"[SUMMARY] Result content repr: {repr(result.content[:200]) if result.content else 'EMPTY'}")
     content = result.content.strip()
+    print(f"[SUMMARY] Raw LLM response ({len(content)} chars): {content[:500]}")
     content = re.sub(r'^```json\s*', '', content)
     content = re.sub(r'\s*```$', '', content)
+
+    # Validate JSON before returning
+    import json
+    try:
+        json.loads(content)
+        print(f"[SUMMARY] Valid JSON response ({len(content)} chars)")
+    except json.JSONDecodeError as e:
+        print(f"[SUMMARY] WARNING: Invalid JSON from LLM: {e}")
+        print(f"[SUMMARY] Content: {content}")
 
     return content
