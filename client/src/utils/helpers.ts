@@ -42,31 +42,49 @@ export function sortVideos(a: Videos, b: Videos): number {
 	return 0;
 }
 
-export function initFilterData(acc: VideoFilters, x: Videos): VideoFilters {
-	// console.log(x);
-	const key: string = x.tournament.replace(/\s/g, "");
+export function initFilterData(acc: VideoFilters, video: Videos): VideoFilters {
+	// Add tournament filter
+	const key: string = video.tournament.replace(/\s/g, "");
 	if (!acc.tournament[key]) {
 		acc.tournament[key] = {
-			title: x.tournament,
-			year: [x.year],
+			title: video.tournament,
+			year: [video.year],
 			count: 1,
 			include: true,
 		};
 	} else {
-		if (!acc.tournament[key].year?.includes(x.year)) {
-			acc.tournament[key].year?.push(x.year);
+		if (!acc.tournament[key].year?.includes(video.year)) {
+			acc.tournament[key].year.push(video.year);
 		}
 		acc.tournament[key].count++;
 	}
 
-	if (!acc.year[x.year]) {
-		acc.year[x.year] = {
-			title: x.year,
+	// Add year filter
+	if (!acc.year[video.year]) {
+		acc.year[video.year] = {
+			title: video.year,
 			include: true,
 			count: 1,
 		};
 	} else {
-		acc.year[x.year].count++;
+		acc.year[video.year].count++;
+	}
+
+	// Add tag filter
+	if (video.tags) {
+		var tagArray = JSON.parse(video.tags);
+
+		tagArray.forEach((tag: string) => {
+			if (!acc.tags[tag]) {
+				acc.tags[tag] = {
+					title: tag,
+					include: true,
+					count: 1,
+				};
+			} else {
+				acc.tags[tag].count++;
+			}
+		});
 	}
 
 	return acc;

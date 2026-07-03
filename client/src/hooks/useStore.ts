@@ -25,11 +25,11 @@ export const useStore = create<State & Actions>((set, get) => ({
 	allVideos: [],
 	activeVideos: [],
 	filteredVideos: [],
-	filterData: { tournament: {}, year: {} },
+	filterData: { tournament: {}, year: {}, tags: {} },
 	setUser: (info: User) => set({ user: info }),
 	setAllVideos: (videos: Videos[]) => {
-		const initData: VideoFilters = videos.reduce(initFilterData, { tournament: {}, year: {} });
-		const sorted: VideoFilters = { tournament: {}, year: {} };
+		const initData: VideoFilters = videos.reduce(initFilterData, { tournament: {}, year: {}, tags: {} });
+		const sorted: VideoFilters = { tournament: {}, year: {}, tags: {} };
 
 		const currentFilterData = get().filterData;
 		const hasExistingFilters = Object.keys(currentFilterData.tournament).length > 0;
@@ -53,6 +53,27 @@ export const useStore = create<State & Actions>((set, get) => ({
 					include:
 						hasExistingFilters && currentFilterData.year[key] !== undefined
 							? currentFilterData.year[key].include
+							: true,
+				};
+			});
+
+		console.log(
+			Object.entries(initData.tags)
+				.sort((a, b) => b[1].count - a[1].count)
+				// .sort()
+				.map((t) => t[1]),
+		);
+
+		// console.log(Object.keys(initData.tags).sort());
+
+		Object.keys(initData.tags)
+			.sort()
+			.forEach((key) => {
+				sorted.tags[key] = {
+					...initData.tags[key],
+					include:
+						hasExistingFilters && currentFilterData.tags[key] !== undefined
+							? currentFilterData.tags[key].include
 							: true,
 				};
 			});

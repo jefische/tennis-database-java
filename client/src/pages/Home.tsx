@@ -88,6 +88,7 @@ export default function Home() {
 		fetch(`${baseURL}/videos`, requestOptions)
 			.then((response) => response.json())
 			.then((data) => {
+				// console.log(data);
 				setAllVideos(data);
 				resetFilterVideos();
 				addFilterVideos(data);
@@ -96,8 +97,17 @@ export default function Home() {
 			.catch((error) => {
 				console.error("Error fetching data:", error);
 			})
-			.finally(() => setLoading(false));
+			.finally(() => {
+				setLoading(false);
+				// console.log(filterData);
+				// console.log(activeVideos);
+				// console.log(allVideos);
+			});
 	}, [baseURL]);
+	console.log("filter data: ");
+	console.log(filterData);
+	// console.log(activeVideos);
+	// console.log(allVideos);
 
 	useEffect(() => {
 		const el = mainRef.current;
@@ -122,7 +132,7 @@ export default function Home() {
 							</h1>
 							<SearchBar />
 						</div>
-						<TagFilters></TagFilters>
+						<TagFilters />
 						<div className="grid grid-cols-[repeat(auto-fill,minmax(300px,370px))] gap-x-6 gap-y-8 mb-[50px] justify-center">
 							{user?.role === "ADMIN" && <SCNAddModal />}
 							{isLoading && (

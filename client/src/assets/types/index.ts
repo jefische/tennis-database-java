@@ -51,6 +51,7 @@ export interface Videos {
 	summary: string | null;
 	summaryStatus: "yes" | "no_transcript" | null;
 	duration?: string;
+	tags?: string | null;
 }
 
 // export type Videos = Video | null;
@@ -86,12 +87,19 @@ export type YearFilterItem = BaseFilterItem & {
 	title: number;
 };
 
+export type TagFilterItem = BaseFilterItem & {
+	title: string;
+};
+
 export interface VideoFilters {
 	tournament: {
-		[name: string]: TournamentFilterItem;
+		[key: string]: TournamentFilterItem;
 	};
 	year: {
-		[year: string]: YearFilterItem;
+		[key: string]: YearFilterItem;
+	};
+	tags: {
+		[key: string]: TagFilterItem;
 	};
 }
 
