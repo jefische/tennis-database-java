@@ -32,10 +32,10 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 // Static resources & SPA routes
-                .requestMatchers("/", "/index.html", "/assets/**", "/icons/**", "/favicon.ico", "/bgs/**").permitAll()
-                .requestMatchers("/{path:[^.]*}").permitAll()
-                .requestMatchers("/{path1:[^.]*}/{path2:[^.]*}").permitAll()
-                .requestMatchers("/{path1:[^.]*}/{path2:[^.]*}/{path3:[^.]*}").permitAll()
+                .requestMatchers(HttpMethod.GET, "/", "/index.html", "/assets/**", "/icons/**", "/favicon.ico", "/bgs/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/{path:[^.]*}").permitAll()
+                .requestMatchers(HttpMethod.GET, "/{path1:[^.]*}/{path2:[^.]*}").permitAll()
+                .requestMatchers(HttpMethod.GET, "/{path1:[^.]*}/{path2:[^.]*}/{path3:[^.]*}").permitAll()
                 // Public API endpoints
                 .requestMatchers(HttpMethod.GET, "/videos/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/videosAI").permitAll()
