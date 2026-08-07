@@ -5,7 +5,7 @@ import Home from "./pages/Home";
 import Players from "./pages/Players";
 import PlayerShotDetail from "./pages/PlayerShotDetail";
 import PlayerDetail from "./pages/PlayerDetail";
-import Draws from "./pages/Draws";
+// import Draws from "./pages/Draws";
 import FAQ from "./pages/FAQ";
 import Profile from "./pages/Profile";
 import Navbar from "./components/Navbar";
