@@ -44,7 +44,8 @@ export function sortVideos(a: Videos, b: Videos): number {
 
 export function initFilterData(acc: VideoFilters, video: Videos): VideoFilters {
 	// Add tournament filter
-	const key: string = video.tournament.replace(/\s/g, "");
+	// const key: string = video.tournament.replace(/\s/g, "");
+	const key: string = video.tournament;
 	if (!acc.tournament[key]) {
 		acc.tournament[key] = {
 			title: video.tournament,
@@ -89,6 +90,38 @@ export function initFilterData(acc: VideoFilters, video: Videos): VideoFilters {
 
 	return acc;
 }
+
+export function filterByYearAndTournament(allVideos: Videos[], filterData: VideoFilters) {
+	let filteredVideos: Videos[] = [];
+
+	// First extract years to include for filtering
+	const yearsToInclude: number[] = Object.entries(filterData.year)
+		.filter(([key, val]) => {
+			return val.include === true;
+		})
+		.map(([key, value]) => Number(key));
+
+	// Second extract tournaments to include for filtering
+	const tournamentsToInclude: string[] = Object.entries(filterData.tournament)
+		.filter(([key, val]) => {
+			return val.include === true;
+		})
+		.map(([key, value]) => String(key));
+
+	// Finall filter formData to include tournament and years selected from above.
+	const temp: Videos[] = allVideos.filter(
+		(x) => tournamentsToInclude.includes(x.tournament) && yearsToInclude.includes(x.year),
+	);
+
+	if (temp.length > 0) {
+		filteredVideos = filteredVideos.concat(temp);
+	}
+
+	return filteredVideos;
+}
+
+export const setAllInclude = <T extends { include: boolean }>(group: Record<string, T>, include: boolean) =>
+	Object.fromEntries(Object.entries(group).map(([key, value]) => [key, { ...value, include }]));
 
 export function checkThumbnail(url: string): Promise<boolean> {
 	return new Promise((resolve, reject) => {

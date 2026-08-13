@@ -1,6 +1,18 @@
 // Initial Filters data structure for reference
 /*
 let initFilters = {
+	tags: {
+		Classic: {
+			title: "Classic",
+			count: 2,
+			include: true,
+		},
+		Comeback: {
+			title: "Comeback",
+			count: 70,
+			include: true,
+		},
+	},
 	tournament: {
 		AustralianOpen: {
 			title: "Australian Open",
@@ -22,6 +34,21 @@ let initFilters = {
 };
 
 let allVideos = [
+	{
+		"videoId": 225,
+		"tournament": "Acapulco Open",
+		"year": 2022,
+		"youtubeId": "Ulb-bUZmQ_A",
+		"player1": "Rafael Nadal",
+		"player2": "Daniil Medvedev",
+		"title": "Rafael Nadal vs. Daniil Medvedev | Acapulco Open 2022 Semifinals",
+		"round": "Semifinals",
+		"summary": "{\n    \"winner\": \"Rafael Nadal\",\n    \"score\": \"6-3, 6-3\",\n    \"matchRating\": 4.2,\n    \"overview\": \"Rafael Nadal defeated Daniil Medvedev 6-3, 6-3 in a compelling Acapulco Open semifinal. Nadal dominated the first set, but the second was a titanic battle. Nadal saved 11 break points, including a monumental 20-minute service game, showcasing his clutch play. Despite the straight-sets score, Medvedev pushed Nadal, highlighting their blossoming rivalry.\",\n    \"highlights\": [\n        \"Nadal's strong start, carrying momentum from the Australian Open final.\",\n        \"Medvedev's struggle with his second serve and unforced errors in the first set.\",\n        \"Nadal saving 11 break points in the second set, including a monumental 20-minute service game.\",\n        \"Medvedev's tactical adjustments and effective use of drop shots in the second set.\",\n        \"Nadal's 'sublime' and 'rock solid' performance under immense pressure.\"\n    ],\n    \"tags\": [\n        \"rivalry\",\n        \"clutch performance\",\n        \"marathon game\",\n        \"straight sets\"\n    ]\n}",
+		"tags": "[\"Rivalry\", \"Clutch Performance\", \"Marathon Game\", \"Straight Sets\"]",
+		"summaryStatus": "yes",
+		"duration": "1hr 59min",
+		"created": null
+	},
 	{
 		player1: "Jannik Sinner",
 		player2: "Alexander Zverev",

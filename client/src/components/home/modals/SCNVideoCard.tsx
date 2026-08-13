@@ -3,7 +3,7 @@ import { Fragment, useState } from "react";
 import SCNEditModal from "./edit/SCNEditModal";
 import DeleteModal from "./delete/DeleteModal";
 import { generateMatchSummary } from "@/utils/matchSummaryAgent";
-import { VideoCards, Videos, User, AISummary } from "@/types";
+import { VideoCards, Videos, AISummary } from "@/types";
 import { Star, Sparkles } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import { useStore } from "@/hooks/useStore";

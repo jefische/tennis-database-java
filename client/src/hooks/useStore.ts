@@ -14,6 +14,7 @@ type Actions = {
 	setUser: (info: User) => void;
 	setAllVideos: (video: Videos[]) => void;
 	setFilterData: (filters: VideoFilters) => void;
+	// setFilterDataFalse: () => void;
 	addFilterVideos: (video: Videos[]) => void;
 	resetFilterVideos: () => void;
 	setActiveVideos: (video: Videos[]) => void;
@@ -57,12 +58,12 @@ export const useStore = create<State & Actions>((set, get) => ({
 				};
 			});
 
-		console.log(
-			Object.entries(initData.tags)
-				.sort((a, b) => b[1].count - a[1].count)
-				// .sort()
-				.map((t) => t[1]),
-		);
+		// console.log(
+		// 	Object.entries(initData.tags)
+		// 		.sort((a, b) => b[1].count - a[1].count)
+		// 		// .sort()
+		// 		.map((t) => t[1]),
+		// );
 
 		// console.log(Object.keys(initData.tags).sort());
 
@@ -79,14 +80,41 @@ export const useStore = create<State & Actions>((set, get) => ({
 			});
 
 		const filtered = videos.filter((v) => {
-			const tKey = v.tournament.replace(/\s/g, "");
-			return sorted.tournament[tKey]?.include && sorted.year[v.year]?.include;
+			// const tKey = v.tournament.replace(/\s/g, "");
+			return sorted.tournament[v.tournament]?.include && sorted.year[v.year]?.include;
 		});
 
 		set({ allVideos: videos, filterData: sorted, filteredVideos: filtered, activeVideos: filtered });
 	},
 
 	setFilterData: (filters: VideoFilters) => set({ filterData: filters }),
+	// setFilterDataFalse: () => {
+	// 	set((state) => ({
+	// 		filterData: {
+	// 			tournament: setAllInclude(state.filterData.tournament, false),
+	// 			year: setAllInclude(state.filterData.year, false),
+	// 			tags: setAllInclude(state.filterData.tags, false),
+	// 		},
+	// 	}));
+	// },
+	// setFilterDataFalse: () => {
+	// 	set((state) => ({
+	// 		filterData: {
+	// 			tournament: Object.fromEntries(
+	// 				Object.entries(state.filterData.tournament).map(([key, value]) => [
+	// 					key,
+	// 					{ ...value, include: false },
+	// 				]),
+	// 			),
+	// 			year: Object.fromEntries(
+	// 				Object.entries(state.filterData.year).map(([key, value]) => [key, { ...value, include: false }]),
+	// 			),
+	// 			tags: Object.fromEntries(
+	// 				Object.entries(state.filterData.tags).map(([key, value]) => [key, { ...value, include: false }]),
+	// 			),
+	// 		},
+	// 	}));
+	// },
 	addFilterVideos: (videos: Videos[]) => set((state) => ({ filteredVideos: [...state.filteredVideos, ...videos] })),
 	resetFilterVideos: () => set({ filteredVideos: [] }),
 	setActiveVideos: (videos: Videos[]) => set({ activeVideos: videos }),
