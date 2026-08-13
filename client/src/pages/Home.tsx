@@ -2,12 +2,12 @@ import Sidebar from "../components/home/sidebar/Sidebar";
 import TagFilters from "../components/TagFilters";
 import { SearchBar } from "../components/SearchBar";
 import { useState, useEffect, useRef } from "react";
-import { Videos } from "@/types";
+import { Videos, VideoFilters } from "@/types";
 import SCNVideoCard from "@/components/home/modals/SCNVideoCard";
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { CircleChevronUp, SlidersHorizontal } from "lucide-react";
-import { sortVideos } from "../utils/helpers";
+import { sortVideos, setAllInclude, filterByYearAndTournament } from "../utils/helpers";
 import SCNAddModal from "@/components/home/modals/add/SCNAddModal";
 import TournamentFilters from "@/components/home/sidebar/TournamentFilters";
 import YearFilters from "@/components/home/sidebar/YearFilters";
@@ -15,10 +15,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useStore } from "@/hooks/useStore";
 
 export default function Home() {
-	// const [activeVideos, setActiveVideos] = useState<Videos[]>([]);
-	// const [allVideos, setAllVideos] = useState<Videos[]>([]);
-	// formData is used to manage the checkboxes and pass them to form submit for ytVideo filtering and rendering in Home.jsx
-	// const [filterData, setFilterData] = useState<VideoFilters>({ tournament: {}, year: {} });
 	const [mobileFilterOpen, setMobileFilterOpen] = useState<boolean>(false);
 	const [isLoading, setLoading] = useState<boolean>(true);
 	const [showScrollTop, setShowScrollTop] = useState(false);
@@ -49,27 +45,26 @@ export default function Home() {
 
 	const handleFilterSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
 		e.preventDefault();
-		let filteredVideos: Videos[] = [];
+		let filteredVideos: Videos[] = filterByYearAndTournament(allVideos, filterData);
 
-		// First extract years to include for filtering
-		const yearsToInclude: number[] = Object.entries(filterData.year)
-			.filter(([key, val]) => {
-				return val.include === true;
-			})
-			.map(([key, value]) => Number(key));
+		// newFilterData is for implementing filter sync. Toggling tournaments also toggles to available years
+		// not sure if this is the behavior I want as it introduces odd edge cases.
 
-		// Then, filter formData for tournaments to include by years selected from above.
-		for (var key in filterData.tournament) {
-			if (filterData.tournament[key].include == true) {
-				const temp: Videos[] = allVideos.filter(
-					(x) => filterData.tournament[key].title === x.tournament && yearsToInclude.includes(x.year),
-				);
+		// const newFilterData: VideoFilters = {
+		// 	tournament: setAllInclude(filterData.tournament, false),
+		// 	year: setAllInclude(filterData.year, false),
+		// 	tags: setAllInclude(filterData.tags, false),
+		// };
 
-				if (temp.length > 0) {
-					filteredVideos = filteredVideos.concat(temp);
-				}
-			}
-		}
+		// filteredVideos.forEach((video) => {
+		// 	if (newFilterData.tournament[video.tournament]) {
+		// 		newFilterData.tournament[video.tournament].include = true;
+		// 	}
+		// 	if (newFilterData.year[video.year]) {
+		// 		newFilterData.year[video.year].include = true;
+		// 	}
+		// });
+
 		resetFilterVideos();
 		addFilterVideos(filteredVideos);
 		setActiveVideos(filteredVideos);
@@ -79,24 +74,21 @@ export default function Home() {
 	useEffect(() => {
 		if (allVideos.length > 0) {
 			// Don't refetch videos and rely on zustand store if populated.
-			setActiveVideos(allVideos);
-			resetFilterVideos();
-			addFilterVideos(allVideos);
 			setLoading(false);
 			return;
 		}
 		fetch(`${baseURL}/videos`, requestOptions)
 			.then((response) => response.json())
 			.then((data) => {
+				// console.log(data);
 				setAllVideos(data);
-				resetFilterVideos();
-				addFilterVideos(data);
-				setActiveVideos(data);
 			})
 			.catch((error) => {
 				console.error("Error fetching data:", error);
 			})
-			.finally(() => setLoading(false));
+			.finally(() => {
+				setLoading(false);
+			});
 	}, [baseURL]);
 
 	useEffect(() => {
@@ -114,42 +106,44 @@ export default function Home() {
 					<Sidebar handleFilter={handleFilterSubmit} />
 					<main
 						ref={mainRef}
-						className="w-full lg:w-[calc(100%-245px)] overflow-auto px-[50px] pb-[200px] scrollbar-custom"
+						className="w-full lg:w-[calc(100%-245px)] overflow-auto ps-[50px] pe-[50px] pb-[200px] scrollbar-custom"
 					>
-						<div className="flex flex-col items-center gap-[50px] py-[50px] xl:flex-row justify-center">
-							<h1 className="text-4xl text-center text-foreground font-semibold">
-								Welcome to the Match Archive{user?.username && `, ${user?.username}`}
-							</h1>
-							<SearchBar />
-						</div>
-						<TagFilters></TagFilters>
-						<div className="grid grid-cols-[repeat(auto-fill,minmax(300px,370px))] gap-x-6 gap-y-8 mb-[50px] justify-center">
-							{user?.role === "ADMIN" && <SCNAddModal />}
-							{isLoading && (
-								<>
-									{pageLoadingSkeletons.map((_, i) => {
-										return (
-											<Skeleton
-												key={i}
-												className="relative h-[235px] max-w-[370px] w-full bg-center bg-cover rounded-[10px]"
-											/>
-										);
-									})}
-								</>
-							)}
+						<div>
+							<div className="grid grid-cols-[repeat(auto-fill,minmax(300px,370px))] gap-x-6 gap-y-8 mb-[50px] justify-center">
+								<div className="flex flex-col items-start gap-[50px] pt-[50px] 2xl:flex-row col-span-full">
+									<h1 className="text-4xl text-center text-foreground font-semibold">
+										Welcome to the Match Archive{user?.username && `, ${user?.username}`}
+									</h1>
+									<SearchBar />
+								</div>
+								<TagFilters />
+								{user?.role === "ADMIN" && <SCNAddModal />}
+								{isLoading && (
+									<>
+										{pageLoadingSkeletons.map((_, i) => {
+											return (
+												<Skeleton
+													key={i}
+													className="relative h-[235px] max-w-[370px] w-full bg-center bg-cover rounded-[10px]"
+												/>
+											);
+										})}
+									</>
+								)}
 
-							{activeVideos.sort(sortVideos).map((video: Videos) => {
-								return (
-									<SCNVideoCard
-										key={video.videoId}
-										id={video.youtubeId}
-										title={video.title}
-										duration={video.duration}
-										summary={video.summary}
-										summaryStatus={video.summaryStatus}
-									/>
-								);
-							})}
+								{activeVideos.sort(sortVideos).map((video: Videos) => {
+									return (
+										<SCNVideoCard
+											key={video.videoId}
+											id={video.youtubeId}
+											title={video.title}
+											duration={video.duration}
+											summary={video.summary}
+											summaryStatus={video.summaryStatus}
+										/>
+									);
+								})}
+							</div>
 						</div>
 					</main>
 					{showScrollTop && (
