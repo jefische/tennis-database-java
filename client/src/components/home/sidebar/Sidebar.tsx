@@ -1,6 +1,5 @@
 import TournamentFilters from "./TournamentFilters";
 import YearFilters from "./YearFilters";
-import TagFilters from "./TagFilters";
 import { Button } from "@/components/ui/button";
 
 interface SidebarProps {
