@@ -47,7 +47,8 @@ spring.sql.init.mode=never
 spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect
 ```
 
-- **`ddl-auto=update`**: On startup, Hibernate compares the `@Entity` classes to the existing database schema and applies `ALTER TABLE` statements for any new columns/tables. It never drops anything.
+- **`ddl-auto=update`**: On startup, Hibernate compares the `@Entity` classes to the existing database schema and applies `ALTER TABLE` statements for any new columns/tables. It never drops anything. This is best for local development.
+- **`ddl-auto=none`**: Disables all automatic DDL schema manipulation. Best for production.
 - **`MySQLDialect`**: Tells Hibernate to generate MySQL-compatible SQL (e.g., `AUTO_INCREMENT` instead of H2's `IDENTITY`).
 - **`init.mode=never`**: Prevents Spring from running `data.sql` / `schema.sql` scripts. In development, this could be set to `always` to seed test data.
 

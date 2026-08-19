@@ -183,7 +183,7 @@ export default function SCNVideoCard({ id, title, duration, summary, summaryStat
 							{user?.role === "ADMIN" && (
 								<Button onClick={handleTranscript}>
 									<Spinner className={cn(loading ? "block" : "hidden")} data-icon="inline-start" />{" "}
-									Create Transcript
+									Create AI Summary
 								</Button>
 							)}
 						</DialogTitle>

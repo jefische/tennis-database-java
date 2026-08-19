@@ -86,7 +86,7 @@ def generate_match_summary_yt_api(youtube_url: str) -> str:
         - "matchRating": Integer 1-10 rating of how exciting/competitive the match was
         - "overview": 4-5 sentence match overview covering the final score and significance (50 words max)
         - "highlights": Array of 3-5 key moments or standout performances as short strings
-        - "tags": Array of 2-4 descriptive tags (e.g. "five-setter", "upset", "rivalry", "comeback")
+        - "tags": Array of 2-4 descriptive tags (e.g. "Five-setter", "Upset", "Rivalry", "Comeback")
 
         FORMAT:
         - Return ONLY valid JSON, no markdown code fences, no extra text.
@@ -97,14 +97,14 @@ def generate_match_summary_yt_api(youtube_url: str) -> str:
         {{
             "winner": "Roger Federer",
             "score": "6-4, 3-6, 7-6(5)",
-            "matchRating": 8,
-            "overview": "Roger Federer edged Rafael Nadal **6-4, 3-6, 7-6(5)** in a tightly contested semifinal at the 2024 Australian Open. Federer controlled the opening set with precise serving before Nadal stormed back to level the match. The decider went to a tiebreak where Federer's nerves of steel proved decisive. He won five of the last six points to seal the victory. This was their 41st career meeting and one of their most dramatic encounters.",
+            "matchRating": 4.6,
+            "overview": "Roger Federer edged Rafael Nadal 6-4, 3-6, 7-6(5) in a tightly contested semifinal at the 2024 Australian Open. Federer controlled the opening set with precise serving before Nadal stormed back to level the match. The decider went to a tiebreak where Federer's nerves of steel proved decisive. He won five of the last six points to seal the victory. This was their 41st career meeting and one of their most dramatic encounters.",
             "highlights": [
                 "Federer saved 3 break points in the opening set",
                 "Nadal's forehand winner streak in the second set",
                 "Third-set tiebreak: Federer won 5 of the last 6 points"
             ],
-            "tags": ["three-setter", "rivalry", "tiebreak"]
+            "tags": ["Three-setter", "Rivalry", "Tiebreak"]
         }}
 
         TONE: Professional but engaging, suitable for tennis fans."""
@@ -186,7 +186,7 @@ def generate_match_summary(youtube_url: str, video_info: dict = None) -> str:
         - "matchRating": Decimal 0-5 star rating of how exciting/competitive the match was. Always use one decimal point (e.g 1.5, 3.7, 4.5, etc..)
         - "overview": 4-5 sentence match overview covering the final score and significance (50 words max)
         - "highlights": Array of 3-5 key moments or standout performances as short strings
-        - "tags": Array of 2-4 descriptive tags (e.g. "five-setter", "upset", "rivalry", "comeback")
+        - "tags": Array of 2-4 descriptive tags (e.g. "Five-setter", "Upset", "Rivalry", "Comeback")
 
         FORMAT:
         - Return ONLY valid JSON, NO markdown code fences, NO extra text.
@@ -195,14 +195,14 @@ def generate_match_summary(youtube_url: str, video_info: dict = None) -> str:
         {{
             "winner": "Roger Federer",
             "score": "6-4, 3-6, 7-6(5)",
-            "matchRating": 8,
+            "matchRating": 4.5,
             "overview": "Roger Federer edged Rafael Nadal 6-4, 3-6, 7-6(5) in a tightly contested semifinal at the 2024 Australian Open. Federer controlled the opening set with precise serving before Nadal stormed back to level the match. The decider went to a tiebreak where Federer's nerves of steel proved decisive. He won five of the last six points to seal the victory. This was their 41st career meeting and one of their most dramatic encounters.",
             "highlights": [
                 "Federer saved 3 break points in the opening set",
                 "Nadal's forehand winner streak in the second set",
                 "Third-set tiebreak: Federer won 5 of the last 6 points"
             ],
-            "tags": ["three-setter", "rivalry", "tiebreak"]
+            "tags": ["Three-setter", "Rivalry", "Tiebreak"]
         }}
 
         TONE: Professional but engaging, suitable for tennis fans."""

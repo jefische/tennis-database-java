@@ -10,6 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +25,7 @@ public class SummaryService {
 
     private final VideoRepository videoRepository;
     private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Value("${SUMMARY_SERVICE_URL:http://localhost:3001}")
     private String summaryServiceUrl;
@@ -75,6 +79,16 @@ public class SummaryService {
                 String r1 = (String) responseBody.get("summary");
                 result.put("summary", r1);
                 result.put("status", "yes");
+
+                // Extract the tags from the summary string
+                // readTree() throws JsonProcessingException (checked), so it needs a try/catch block.
+                try {
+                    JsonNode tags = objectMapper.readTree(r1).get("tags");
+                    result.put("tags", tags != null && tags.isArray() ? tags.toString() : "[]");
+                } catch (Exception ignored) {
+                    result.put("tags", "[]");
+                }
+
                 return result;
 
             }
@@ -90,25 +104,28 @@ public class SummaryService {
             System.out.println("Python service client error response: " + responseBody);
             String errorMsg = responseBody;
             try {
-                var json = new com.fasterxml.jackson.databind.ObjectMapper().readTree(responseBody);
+                var json = objectMapper.readTree(responseBody);
                 if (json.has("error")) {
                     errorMsg = json.get("error").asText();
                 }
             } catch (Exception ignored) {}
 
-            String r1 = "{\"winner\":\"\",\"score\":\"\",\"matchRating\":0,\"overview\":\"" + errorMsg + "\",\"highlights\":[\"\"],\"tags\":[\"\"]}";
+            String r1 = "{\"winner\":\"\",\"score\":\"\",\"matchRating\":0.0,\"overview\":\"" + errorMsg + "\",\"highlights\":[\"\"],\"tags\":[]}";
             result.put("summary", r1);
             result.put("status", "no_transcript");
+            result.put("tags", "[]");
             return result;
         }
     }
 
-    public void saveSummaryToVideo(String youtubeId, String summary, String summaryStatus) {
+    public void saveSummaryToVideo(String youtubeId, String summary, String summaryStatus, String tags) {
         Video video = videoRepository.findByYoutubeId(youtubeId)
             .orElseThrow(() -> new RuntimeException("Video not found with youtubeId: " + youtubeId));
 
         video.setSummary(summary);
         video.setSummaryStatus(summaryStatus);
+        video.setTags(tags);
         videoRepository.save(video);
     }
+
 }

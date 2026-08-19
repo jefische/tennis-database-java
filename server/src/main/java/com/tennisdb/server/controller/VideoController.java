@@ -54,12 +54,6 @@ public class VideoController {
 		return ResponseEntity.status(200).body(videoReponses);
 	}
 
-	@PostMapping(value = "backfill")
-	public ResponseEntity<?> addTags() {
-		videoService.backfillTags();
-		return ResponseEntity.status(200).build();
-	}
-
 	@GetMapping(value = "videos/{youtubeId}")
 	public ResponseEntity<?> getVideoById(@PathVariable String youtubeId) {
 		Video video = videoService.getVideoByYoutubeId(youtubeId).orElse(null);
@@ -83,19 +77,6 @@ public class VideoController {
 			return ResponseEntity.status(200).body(response);
 		} catch (Exception e) {
 			return ResponseEntity.status(400).body(e.getMessage());
-		}
-		
-	}
-
-	@DeleteMapping(value = "videos/{youtubeId}")
-	public ResponseEntity<?> deleteVideoById(@PathVariable String youtubeId) {
-		if (videoService.deleteVideoByYoutubeId(youtubeId)) {
-			List<Video> videos = videoService.getVideos();
-			return ResponseEntity.status(200).body(videos);
-		}
-		else {
-			ErrorResponse error = new ErrorResponse(404, "Video not found");
-			return ResponseEntity.status(404).body(error);
 		}
 	}
 
@@ -121,6 +102,18 @@ public class VideoController {
 		}
 	}
 
+	@DeleteMapping(value = "videos/{youtubeId}")
+	public ResponseEntity<?> deleteVideoById(@PathVariable String youtubeId) {
+		if (videoService.deleteVideoByYoutubeId(youtubeId)) {
+			List<Video> videos = videoService.getVideos();
+			return ResponseEntity.status(200).body(videos);
+		}
+		else {
+			ErrorResponse error = new ErrorResponse(404, "Video not found");
+			return ResponseEntity.status(404).body(error);
+		}
+	}
+
 	@PostMapping(value = "api/summary/{youtubeId}")
 	public ResponseEntity<?> addSummary(@PathVariable String youtubeId) {
 		try {
@@ -138,9 +131,9 @@ public class VideoController {
 			Map<String, String> result = summaryService.generateSummary(youtubeUrl, video);
 
 			// Save summary to video entity
-			summaryService.saveSummaryToVideo(youtubeId, result.get("summary"), result.get("status"));
+			summaryService.saveSummaryToVideo(youtubeId, result.get("summary"), result.get("status"), result.get("tags"));
 
-			return ResponseEntity.ok(Map.of("summary", result.get("summary"), "status", result.get("status")));
+			return ResponseEntity.ok(Map.of("summary", result.get("summary"), "status", result.get("status"), "tags", result.get("tags")));
 
 		} catch (org.springframework.web.client.HttpClientErrorException e) {
 			return ResponseEntity.status(e.getStatusCode())
@@ -149,6 +142,11 @@ public class VideoController {
 			return ResponseEntity.status(500)
 				.body(new ErrorResponse(500, "Failed to generate summary: " + e.getMessage()));
 		}
+	}
 
+	@PostMapping(value = "backfill")
+	public ResponseEntity<?> addTags() {
+		videoService.backfillTags();
+		return ResponseEntity.status(200).build();
 	}
 }
