@@ -1,4 +1,4 @@
-package com.tennisdb.server;
+package com.tennisdb.server.service;
 
 import java.util.Optional;
 
@@ -20,7 +20,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.tennisdb.server.model.Video;
 import com.tennisdb.server.repository.VideoRepository;
-import com.tennisdb.server.service.VideoService;
 
 // The @ExtendWith(MockitoExtension.class) annotation registers Mockito with JUnit 5, allowing automatic mock 
 // initialization and injection without manually calling MockitoAnnotations.openMocks()
@@ -41,8 +40,34 @@ public class VideoServiceTest {
 	@Test
 	public void testGetVideo(){
 		// Arrange - Create test data
-		Video video1 = new Video(1, "Wimbledon", 2025, "http://example.com/video1", "Alcaraz", "Sinner", "Finals match", "Finals", "ai summary", "['Epic']", "no_transcript", "5hr 3min");
-		Video video2 = new Video(2, "US Open", 2024, "http://example.com/video2", "Djokovic", "Shelton", "Quarterfinals match", "Quarterfinals", "ai summary", "['Epic']", "no_transcript", "5hr 3min");
+		Video video1 = new Video(
+			1,
+			"Wimbledon",
+			2025,
+			"http://example.com/video1",
+			"Alcaraz",
+			"Sinner",
+			"Finals match",
+			"Finals",
+			"ai summary",
+			"['Epic']",
+			"no_transcript",
+			"5hr 3min"
+		);
+		Video video2 = new Video(
+			2,
+			"US Open",
+			2024,
+			"http://example.com/video2",
+			"Djokovic",
+			"Shelton",
+			"Quarterfinals match",
+			"Quarterfinals",
+			"ai summary",
+			"['Epic']",
+			"no_transcript",
+			"5hr 3min"
+		);
 		List<Video> expectedVideos = Arrays.asList(video1, video2);
 
 		// Mock the repository (dependency) behavior
@@ -69,7 +94,21 @@ public class VideoServiceTest {
 	@Test
 	public void testGetVideoById() {
 		String youtubeId = "http://example.com/video1";
-		Optional<Video> video1 = Optional.of(new Video(1, "Wimbledon", 2025, "http://example.com/video1", "Alcaraz", "Sinner", "Finals match", "Finals", "ai summary", "['Epic']", "no_transcript", "5hr 3min"));
+		Optional<Video> video1 = Optional.of(
+			new Video(
+				1,
+				"Wimbledon",
+				2025,
+				"http://example.com/video1",
+				"Alcaraz",
+				"Sinner",
+				"Finals match",
+				"Finals",
+				"ai summary",
+				"['Epic']",
+				"no_transcript",
+				"5hr 3min"
+			));
 		when(videoRepository.findByYoutubeId(youtubeId)).thenReturn(video1);
 
 		Optional<Video> actual = videoService.getVideoByYoutubeId(youtubeId);
@@ -79,7 +118,20 @@ public class VideoServiceTest {
 
 	@Test
 	public void testCreateVideo(){
-		Video video1 = new Video(1, "Wimbledon", 2025, "http://example.com/video1", "Alcaraz", "Sinner", "Finals match", "Finals", "ai summary", "['Epic']", "no_transcript", "5hr 3min");
+		Video video1 = new Video(
+			1,
+			"Wimbledon",
+			2025,
+			"http://example.com/video1",
+			"Alcaraz",
+			"Sinner",
+			"Finals match",
+			"Finals",
+			"ai summary",
+			"['Epic']",
+			"no_transcript",
+			"5hr 3min"
+		);
 
 		when(videoRepository.save(video1)).thenReturn(video1);
 		Video savedVideo = videoService.addNewVideo(video1);
@@ -113,12 +165,6 @@ public class VideoServiceTest {
 
 	// when(petMock.doTrick()).thenThrow(Exception.class); // compiler error!
 	// doThrow(Exception.class).when(petMock).doTrick(); // this works!
-
-	@Test
-	public void test() {
-		// assertEquals("hello world", "Hello World"); // fails due to lower and uppercase
-		assertEquals("Hello World", "Hello World"); // test passes
-	}
 
 	
 }

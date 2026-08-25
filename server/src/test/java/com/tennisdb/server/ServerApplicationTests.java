@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.tennisdb.server.model.Video;
 import com.tennisdb.server.repository.VideoRepository;
@@ -25,6 +27,7 @@ import java.util.List;
 // Annotate the class with @SpringBootTest to load the full Spring Boot application context during testing.
 // Used for integration testing
 
+@ActiveProfiles("test")
 @SpringBootTest(classes = ServerApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ServerApplicationTests {
 
@@ -37,11 +40,13 @@ public class ServerApplicationTests {
 	private VideoRepository videoRepository; //This injects the real VideoRepository bean, connected to the test database.
 
 	@Test
+	@DisplayName("Verify the Spring application context loads successfully")
 	void contextLoads() {
-		// Verify that the Spring application context loads successfully
+		// No body required
 	}
 
 	@Test
+	@DisplayName("Verify /videos returns 200 and list of video objects")
 	void testGetEndpoint(){
 		// ResponseEntity<List<Video>> response = restTemplate.getForEntity("/videos", List.class);
 		ResponseEntity<List<Video>> response = restTemplate.exchange(
@@ -52,26 +57,48 @@ public class ServerApplicationTests {
 		);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 
+		List<Video> videos = response.getBody();
+		assertNotNull(videos);
+		assertEquals(4, videos.size());
+		assertTrue(videos.stream().anyMatch(v -> "ckbX699wngs".equals(v.getYoutubeId())));
 	}
 
 	@Test
+	@DisplayName("GET video by YoutubeId returns single video with individual field checks")
 	void testGetVideo_ByYoutubeId_Endpoint(){
-		Video testVideo = new Video(4,"French Open", 2025, "ckbX699wngs", "Carlos Alcaraz", "Jannik Sinner", "Carlos Alcaraz vs Jannik Sinner | Roland-Garros 2025 Final (5hr 53min)", "Finals", "ai summary", "['Epic']", "no_transcript", "5hr 3min");
+
 		ResponseEntity<Video> response = restTemplate.exchange(
 			"/videos/ckbX699wngs",
 			HttpMethod.GET,
 			null,
 			Video.class
 		);
-		Video responseVideo = response.getBody();
-		assertEquals(responseVideo, testVideo);
+		Video alcarazMatch = response.getBody();
+
+		assertEquals("French Open", alcarazMatch.getTournament());
+		assertEquals(Integer.valueOf(2025), alcarazMatch.getYear());
+		assertEquals("Carlos Alcaraz", alcarazMatch.getPlayer1());
+		assertEquals("Jannik Sinner", alcarazMatch.getPlayer2());
+		assertEquals("Finals", alcarazMatch.getRound());
+		assertEquals("ai summary", alcarazMatch.getSummary());
+		assertEquals("['Epic']", alcarazMatch.getTags());
+		assertEquals("no_transcript", alcarazMatch.getSummaryStatus());
+		assertEquals("5hr 3min", alcarazMatch.getDuration());
 
 	}
 
 	@Test
 	void testPostEndpoint() {
 		// Create a new video to add via the API
-		Video newVideo = new Video("Wimbledon", 2025, "test-youtube-id-123", "Alcaraz", "Sinner", "Finals Title", "The Final Round");
+		Video newVideo = new Video(
+			"Wimbledon",
+			2025,
+			"test-youtube-id-123",
+			"Alcaraz",
+			"Sinner",
+			"Finals Title",
+			"The Final Round"
+		);
 		
 		// Set up HTTP headers for JSON content
 		HttpHeaders headers = new HttpHeaders();
