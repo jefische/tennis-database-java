@@ -27,8 +27,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 public class VideoController {
 
-	private VideoService videoService;
-	private SummaryService summaryService;
+	private final VideoService videoService;
+	private final SummaryService summaryService;
 
 	@Value("${GOOGLE_API_KEY}")
 	private String googleApiKey;
