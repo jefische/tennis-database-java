@@ -137,15 +137,15 @@ public class VideoController {
 
 		} catch (org.springframework.web.client.HttpClientErrorException e) {
 			return ResponseEntity.status(e.getStatusCode())
-				.body(new ErrorResponse(e.getStatusCode().value(), "Rate limit exceeded. Please try again later."));
+				.body(new ErrorResponse(e.getStatusCode().value(), "Gemini rate limit exceeded. Please try again later."));
 		} catch (Exception e) {
 			return ResponseEntity.status(500)
-				.body(new ErrorResponse(500, "Failed to generate summary: " + e.getMessage()));
+				.body(new ErrorResponse(500, e.getMessage()));
 		}
 	}
 
 	@PostMapping(value = "backfill")
-	public ResponseEntity<?> addTags() {
+	public ResponseEntity<Void> addTags() {
 		videoService.backfillTags();
 		return ResponseEntity.status(200).build();
 	}

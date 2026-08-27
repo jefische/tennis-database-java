@@ -8,4 +8,4 @@ COPY app.py summary_service.py ./
 
 EXPOSE 3001
 
-CMD ["gunicorn", "--bind", "0.0.0.0:3001", "app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:3001", "--timeout", "120", "--workers", "2", "app:app"]

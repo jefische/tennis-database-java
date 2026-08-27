@@ -4,7 +4,11 @@ load_dotenv()
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from summary_service import generate_match_summary
+from summary_service import (
+    generate_match_summary,
+    TranscriptUnavailable,
+    TranscriptFetchFailed,
+)
 from google.api_core.exceptions import ResourceExhausted
 
 app = Flask(__name__)
@@ -46,13 +50,21 @@ def summary():
     
     except ResourceExhausted as e:
         print(f"Rate limit hit: {e}")
-        return jsonify({"error": "Rate limit exceeded. Please try again later."}), 429
+        return jsonify({"error": "Gemini rate limit exceeded. Please try again later."}), 429
+
+    # Permanent: this video has no transcript. Safe for the caller to record.
+    except TranscriptUnavailable as e:
+        print(f"No transcript available: {e}")
+        return jsonify({"error": "No transcript available for this video"}), 400
+
+    # Transient: YouTube failed us despite retries. The caller must not persist this.
+    except TranscriptFetchFailed as e:
+        print(f"Transcript fetch failed upstream: {e}")
+        return jsonify({"error": "Transcript service temporarily unavailable. Please try again."}), 503
 
     except Exception as e:
         error_msg = str(e)
         print(f"Error generating summary: {e}")
-        if "No transcript available" in error_msg or "Failed to get transcript" in error_msg:
-            return jsonify({"error": error_msg}), 400
         return jsonify({"error": f"Failed to generate summary: {error_msg}"}), 500
 
 if __name__ == "__main__":

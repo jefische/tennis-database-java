@@ -97,11 +97,11 @@ public class SummaryService {
 
         } catch (org.springframework.web.client.HttpClientErrorException e) {
 
+            // Rate limits are rethrown so the controller can report 429 specifically.
             if (e.getStatusCode().value() == 429) {
                 throw e;
             }
             String responseBody = e.getResponseBodyAsString();
-            System.out.println("Python service client error response: " + responseBody);
             String errorMsg = responseBody;
             try {
                 var json = objectMapper.readTree(responseBody);
@@ -109,13 +109,44 @@ public class SummaryService {
                     errorMsg = json.get("error").asText();
                 }
             } catch (Exception ignored) {}
+            System.out.println("Python service client error (" + e.getStatusCode() + "): " + errorMsg);
 
-            String r1 = "{\"winner\":\"\",\"score\":\"\",\"matchRating\":0.0,\"overview\":\"" + errorMsg + "\",\"highlights\":[\"\"],\"tags\":[]}";
+            // A 4xx means the video genuinely has no transcript, which is a durable fact:
+            // record it so the video is not retried forever. Transient upstream failures
+            // arrive as 503 instead and are thrown by the HttpServerErrorException branch.
+            String overview = "No transcript is available for this video.";
+            String r1;
+            try {
+                var node = objectMapper.createObjectNode();
+                node.put("winner", "");
+                node.put("score", "");
+                node.put("matchRating", 0.0);
+                node.put("overview", overview);
+                node.putArray("highlights");
+                node.putArray("tags");
+                r1 = objectMapper.writeValueAsString(node);
+            } catch (Exception ex) {
+                r1 = "{\"winner\":\"\",\"score\":\"\",\"matchRating\":0.0,\"overview\":\"" + overview + "\",\"highlights\":[],\"tags\":[]}";
+            }
+
             result.put("summary", r1);
             result.put("status", "no_transcript");
             result.put("tags", "[]");
             return result;
+        } catch (org.springframework.web.client.HttpServerErrorException e) {
+            // Any 5xx from the Python service: Gemini failure, killed worker, unhandled bug.
+            // The body is not reliably JSON here (a killed gunicorn worker returns
+            // Werkzeug's HTML error page), so log it rather than parse it.
+            System.out.println("Python service error " + e.getStatusCode() + ": " + e.getResponseBodyAsString());
+            throw new RuntimeException("Summary service failed to generate a summary. Please try again.", e);
+
+        } catch (org.springframework.web.client.ResourceAccessException e) {
+            // No HTTP response at all: read timed out, or the connection was dropped
+            // (what a gunicorn worker kill looks like once its --timeout is hit).
+            System.out.println("Python service unreachable or timed out: " + e.getMessage());
+            throw new RuntimeException("Summary service timed out. Please try again.", e);
         }
+
     }
 
     public void saveSummaryToVideo(String youtubeId, String summary, String summaryStatus, String tags) {
