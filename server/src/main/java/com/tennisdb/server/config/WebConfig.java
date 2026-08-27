@@ -1,5 +1,6 @@
 package com.tennisdb.server.config;
 
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
@@ -7,6 +8,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.time.Duration;
 
 @Configuration // Tells Spring class contains bean definitions and configs for application context.
 public class WebConfig implements WebMvcConfigurer {
@@ -16,8 +19,13 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
+    public RestTemplate restTemplate(RestTemplateBuilder builder) {
+        // Read timeout must exceed the summary service's gunicorn --timeout (120s)
+        // so a slow Gemini call surfaces as its HTTP response rather than a client-side abort.
+        return builder
+                .connectTimeout(Duration.ofSeconds(10))
+                .readTimeout(Duration.ofSeconds(130))
+                .build();
     }
 
     @Override

@@ -1,4 +1,5 @@
 import os
+import time
 from youtube_transcript_api import YouTubeTranscriptApi
 from langchain_community.document_loaders import YoutubeLoader
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -34,27 +35,53 @@ def extract_video_id(url_or_id: str) -> str:
 
 ytt_api = YouTubeTranscriptApi()
 
-def fetch_transcript(video_id: str) -> str:
-    """Fetch transcript from YouTube using youtube-transcript-api."""
-    print(f"[TRANSCRIPT] Attempting to fetch transcript for video: {video_id}")
+# YouTube's timedtext endpoint returns intermittent 5xx errors even when a
+# transcript exists and the request is properly signed. Retry those.
+TRANSIENT_MARKERS = ("502", "503", "504", "Bad Gateway", "timed out", "Connection")
+
+
+class TranscriptUnavailable(Exception):
+    """The video genuinely has no transcript. A permanent fact worth recording."""
+
+
+class TranscriptFetchFailed(Exception):
+    """Upstream YouTube failure that retries did not resolve. Try again later."""
+
+
+def _is_transient(err: Exception) -> bool:
+    return any(marker in str(err) for marker in TRANSIENT_MARKERS)
+
+
+def _fetch_once(video_id: str):
+    """Single fetch attempt: English first, then any available language."""
     try:
-        print(f"[TRANSCRIPT] Trying English transcript...")
-        transcript = ytt_api.fetch(video_id, languages=['en'])
-        print(f"[TRANSCRIPT] English transcript found ({len(transcript)} entries)")
-        transcript_text = ' '.join([entry.text for entry in transcript])
-        return transcript_text
+        return ytt_api.fetch(video_id, languages=['en'])
     except Exception as e:
+        if _is_transient(e):
+            raise
         print(f"[TRANSCRIPT] English transcript failed: {e}")
-        # Try to get any available transcript
+        print(f"[TRANSCRIPT] Trying any available language...")
+        return ytt_api.fetch(video_id)
+
+
+def fetch_transcript(video_id: str, attempts: int = 3) -> str:
+    """Fetch transcript from YouTube, retrying transient upstream failures."""
+    print(f"[TRANSCRIPT] Attempting to fetch transcript for video: {video_id}")
+    for attempt in range(1, attempts + 1):
         try:
-            print(f"[TRANSCRIPT] Trying any available language...")
-            transcript = ytt_api.fetch(video_id)
-            print(f"[TRANSCRIPT] Fallback transcript found ({len(transcript)} entries)")
-            transcript_text = ' '.join([entry.text for entry in transcript])
-            return transcript_text
-        except Exception as e2:
-            print(f"[TRANSCRIPT] All attempts failed: {e2}")
-            raise Exception(f"Failed to get transcript: {str(e2)}")
+            transcript = _fetch_once(video_id)
+            print(f"[TRANSCRIPT] Transcript found ({len(transcript)} entries) on attempt {attempt}")
+            return ' '.join([entry.text for entry in transcript])
+        except Exception as e:
+            if _is_transient(e) and attempt < attempts:
+                delay = 2 ** attempt  # 2s, 4s
+                print(f"[TRANSCRIPT] Transient error on attempt {attempt}, retrying in {delay}s: {e}")
+                time.sleep(delay)
+                continue
+            print(f"[TRANSCRIPT] All attempts failed: {e}")
+            if _is_transient(e):
+                raise TranscriptFetchFailed(str(e)) from e
+            raise TranscriptUnavailable(str(e)) from e
 
 # Apply the youtubeapi directly with custom functions above
 def generate_match_summary_yt_api(youtube_url: str) -> str:
@@ -142,12 +169,16 @@ def generate_match_summary(youtube_url: str, video_info: dict = None) -> str:
             docs = loader.load()
             if not docs:
                 print(f"[SUMMARY] YoutubeLoader returned empty docs")
-                raise Exception("No transcript available for this video")
+                raise TranscriptUnavailable("No transcript available for this video")
             transcript = docs[0].page_content
             print(f"[SUMMARY] YoutubeLoader transcript fetched ({len(transcript)} chars)")
         except Exception as e2:
             print(f"[SUMMARY] YoutubeLoader also failed: {e2}")
-            raise Exception("No transcript available for this video")
+            # A transient upstream failure must stay distinguishable from a video
+            # that truly has no transcript: only the latter is a durable fact.
+            if isinstance(e, TranscriptFetchFailed) or _is_transient(e2):
+                raise TranscriptFetchFailed(str(e)) from e
+            raise TranscriptUnavailable("No transcript available for this video") from e
 
     # Build canonical details section if video_info is provided
     canonical_details = ""
