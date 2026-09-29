@@ -120,9 +120,6 @@ export function filterByYearAndTournament(allVideos: Videos[], filterData: Video
 	return filteredVideos;
 }
 
-export const setAllInclude = <T extends { include: boolean }>(group: Record<string, T>, include: boolean) =>
-	Object.fromEntries(Object.entries(group).map(([key, value]) => [key, { ...value, include }]));
-
 export function checkThumbnail(url: string): Promise<boolean> {
 	return new Promise((resolve, reject) => {
 		const img = new Image();

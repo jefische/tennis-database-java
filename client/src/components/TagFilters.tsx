@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useStore } from "@/hooks/useStore";
-import { setAllInclude } from "@/utils/helpers";
 
 interface TagFiltersMap {
 	[name: string]: boolean;
@@ -24,7 +23,7 @@ export default function TagFilters() {
 		epic: false,
 	});
 
-	const { allVideos, filterData, setFilterData, setActiveVideos } = useStore();
+	const { allVideos, dispatchFilter, setActiveVideos } = useStore();
 
 	const handleFilters = (val: string) => {
 		var updatedTagFilters = {
@@ -42,12 +41,7 @@ export default function TagFilters() {
 		});
 		if (allFalseCount == Object.keys(updatedTagFilters).length) {
 			// If all false, I want to make sure that sidebar filters all get reselected
-
-			setFilterData({
-				tournament: setAllInclude(filterData.tournament, true),
-				year: setAllInclude(filterData.year, true),
-				tags: setAllInclude(filterData.tags, true),
-			});
+			dispatchFilter({ type: "RESET_ALL" });
 		} else {
 			// Filter all videos to match on each of the 5 selected tags.
 			Object.entries(updatedTagFilters).forEach((t) => {

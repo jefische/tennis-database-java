@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { User, Videos, VideoFilters } from "@/assets/types";
 import { initFilterData } from "@/utils/helpers";
+import { filterReducer, FilterAction } from "@/utils/filterReducer";
 
 type State = {
 	user: User;
@@ -13,12 +14,10 @@ type State = {
 type Actions = {
 	setUser: (info: User) => void;
 	setAllVideos: (video: Videos[]) => void;
-	setFilterData: (filters: VideoFilters) => void;
-	// setFilterDataFalse: () => void;
 	addFilterVideos: (video: Videos[]) => void;
 	resetFilterVideos: () => void;
 	setActiveVideos: (video: Videos[]) => void;
-	// decrement: (qty: number) => void;
+	dispatchFilter: (action: FilterAction) => void;
 };
 
 export const useStore = create<State & Actions>((set, get) => ({
@@ -86,39 +85,10 @@ export const useStore = create<State & Actions>((set, get) => ({
 
 		set({ allVideos: videos, filterData: sorted, filteredVideos: filtered, activeVideos: filtered });
 	},
-
-	setFilterData: (filters: VideoFilters) => set({ filterData: filters }),
-	// setFilterDataFalse: () => {
-	// 	set((state) => ({
-	// 		filterData: {
-	// 			tournament: setAllInclude(state.filterData.tournament, false),
-	// 			year: setAllInclude(state.filterData.year, false),
-	// 			tags: setAllInclude(state.filterData.tags, false),
-	// 		},
-	// 	}));
-	// },
-	// setFilterDataFalse: () => {
-	// 	set((state) => ({
-	// 		filterData: {
-	// 			tournament: Object.fromEntries(
-	// 				Object.entries(state.filterData.tournament).map(([key, value]) => [
-	// 					key,
-	// 					{ ...value, include: false },
-	// 				]),
-	// 			),
-	// 			year: Object.fromEntries(
-	// 				Object.entries(state.filterData.year).map(([key, value]) => [key, { ...value, include: false }]),
-	// 			),
-	// 			tags: Object.fromEntries(
-	// 				Object.entries(state.filterData.tags).map(([key, value]) => [key, { ...value, include: false }]),
-	// 			),
-	// 		},
-	// 	}));
-	// },
+	dispatchFilter: (action: FilterAction) => set((s) => ({ filterData: filterReducer(s.filterData, action) })),
 	addFilterVideos: (videos: Videos[]) => set((state) => ({ filteredVideos: [...state.filteredVideos, ...videos] })),
 	resetFilterVideos: () => set({ filteredVideos: [] }),
 	setActiveVideos: (videos: Videos[]) => set({ activeVideos: videos }),
-	// decrement: (qty: number) => set((state) => ({ user: state.user - qty })),
 }));
 
 // export type setVideosFunction = Dispatch<SetStateAction<Videos[]>>;
