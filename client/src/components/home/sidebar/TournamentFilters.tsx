@@ -9,7 +9,7 @@ export default function TournamentFilters({ open }: { open?: boolean }) {
 	// isOpen state is used to manage the accordion dropdown filters in the sidebar
 	const [isOpen, setisOpen] = useState<boolean>(open ?? true);
 	const [selectAll, setSelectAll] = useState(true);
-	const { filterData, setFilterData } = useStore();
+	const { filterData, dispatchFilter } = useStore();
 	const uid = useId();
 
 	let numTournaments: number = 0; // for Select All count
@@ -18,31 +18,14 @@ export default function TournamentFilters({ open }: { open?: boolean }) {
 		return key;
 	});
 
-	// const select = Object.values(filterData.tournament).every((val) => val.include);
-
 	function handleSelectAll(): void {
 		setSelectAll(!selectAll);
-		setFilterData({
-			...filterData,
-			tournament: Object.fromEntries(
-				Object.entries(filterData.tournament).map(([key, val]) => {
-					return [key, { ...val, include: !selectAll }];
-				}),
-			),
-		});
+		dispatchFilter({ type: "SELECT_ALL", group: "tournament", include: !selectAll });
 	}
 
 	const handleChange = (key: string, checked: boolean): void => {
-		setFilterData({
-			...filterData,
-			tournament: {
-				...filterData.tournament,
-				[key]: {
-					...filterData.tournament[key],
-					include: checked,
-				},
-			},
-		});
+		dispatchFilter({ type: "SELECT_ONE", group: "tournament", key: key });
+
 		// If any individual year is unchecked, uncheck the select all input field
 		if (checked === false) setSelectAll(false);
 	};

@@ -9,7 +9,7 @@ export default function YearFilters({ open }: { open?: boolean }) {
 	// isOpen state is used to manage the accordion dropdown filters in the sidebar
 	const [isOpen, setisOpen] = useState<boolean>(open ?? false);
 	const [selectAll, setSelectAll] = useState(true);
-	const { filterData, setFilterData } = useStore();
+	const { filterData, dispatchFilter } = useStore();
 	const uid = useId();
 
 	let numYears: number = 0; // for Select All count
@@ -18,31 +18,13 @@ export default function YearFilters({ open }: { open?: boolean }) {
 		return key;
 	});
 
-	// const select = Object.values(filterData.year).every((val) => val.include);
-
 	function handleSelectAll(): void {
 		setSelectAll(!selectAll);
-		setFilterData({
-			...filterData,
-			year: Object.fromEntries(
-				Object.entries(filterData.year).map(([key, val]) => {
-					return [key, { ...val, include: !selectAll }];
-				}),
-			),
-		});
+		dispatchFilter({ type: "SELECT_ALL", group: "year", include: !selectAll });
 	}
 
 	const handleChange = (key: string, checked: boolean): void => {
-		setFilterData({
-			...filterData,
-			year: {
-				...filterData.year,
-				[key]: {
-					...filterData.year[key],
-					include: checked,
-				},
-			},
-		});
+		dispatchFilter({ type: "SELECT_ONE", group: "year", key: key });
 		if (checked === false) setSelectAll(false);
 	};
 

@@ -7,7 +7,7 @@ import SCNVideoCard from "@/components/home/modals/SCNVideoCard";
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { CircleChevronUp, SlidersHorizontal } from "lucide-react";
-import { sortVideos, setAllInclude, filterByYearAndTournament } from "../utils/helpers";
+import { sortVideos, filterByYearAndTournament } from "../utils/helpers";
 import SCNAddModal from "@/components/home/modals/add/SCNAddModal";
 import TournamentFilters from "@/components/home/sidebar/TournamentFilters";
 import YearFilters from "@/components/home/sidebar/YearFilters";
@@ -49,21 +49,6 @@ export default function Home() {
 
 		// newFilterData is for implementing filter sync. Toggling tournaments also toggles to available years
 		// not sure if this is the behavior I want as it introduces odd edge cases.
-
-		// const newFilterData: VideoFilters = {
-		// 	tournament: setAllInclude(filterData.tournament, false),
-		// 	year: setAllInclude(filterData.year, false),
-		// 	tags: setAllInclude(filterData.tags, false),
-		// };
-
-		// filteredVideos.forEach((video) => {
-		// 	if (newFilterData.tournament[video.tournament]) {
-		// 		newFilterData.tournament[video.tournament].include = true;
-		// 	}
-		// 	if (newFilterData.year[video.year]) {
-		// 		newFilterData.year[video.year].include = true;
-		// 	}
-		// });
 
 		resetFilterVideos();
 		addFilterVideos(filteredVideos);
