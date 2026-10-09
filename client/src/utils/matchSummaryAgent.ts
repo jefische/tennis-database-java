@@ -1,7 +1,7 @@
 /**
  * Frontend utility for requesting match summaries from the backend API
  */
-import { User, AISummary } from "@/assets/types";
+import { User, AISummary } from "@/types";
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
 /**

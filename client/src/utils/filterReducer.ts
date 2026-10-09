@@ -1,4 +1,4 @@
-import { VideoFilters } from "@/assets/types";
+import { VideoFilters } from "@/types";
 
 export type FilterAction =
 	| { type: "SELECT_ONE"; group: keyof VideoFilters; key: string }

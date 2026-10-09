@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { ChevronDown } from "lucide-react";
 import { useStore } from "@/hooks/useStore";
 
-export default function TournamentFilters({ open }: { open?: boolean }) {
+export default function TagFilters({ open }: { open?: boolean }) {
 	// isOpen state is used to manage the accordion dropdown filters in the sidebar
 	const [isOpen, setisOpen] = useState<boolean>(open ?? true);
 	const [selectAll, setSelectAll] = useState(true);
@@ -18,14 +18,15 @@ export default function TournamentFilters({ open }: { open?: boolean }) {
 		return key;
 	});
 
+	// const select = Object.values(filterData.tournament).every((val) => val.include);
+
 	function handleSelectAll(): void {
 		setSelectAll(!selectAll);
-		dispatchFilter({ type: "SELECT_ALL", group: "tournament", include: !selectAll });
+		dispatchFilter({ type: "SELECT_ALL", group: "tags", include: !selectAll });
 	}
 
 	const handleChange = (key: string, checked: boolean): void => {
-		dispatchFilter({ type: "SELECT_ONE", group: "tournament", key: key });
-
+		dispatchFilter({ type: "SELECT_ONE", group: "tags", key: key });
 		// If any individual year is unchecked, uncheck the select all input field
 		if (checked === false) setSelectAll(false);
 	};

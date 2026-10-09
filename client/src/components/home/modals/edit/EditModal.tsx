@@ -2,7 +2,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import VideoForm from "../VideoForm";
 import { useState, useEffect } from "react";
-import { Videos, setVideosFunction } from "@/assets/types";
+import { Videos, setVideosFunction } from "@/types";
 
 interface EditModalProps {
 	editModalOpen: boolean;

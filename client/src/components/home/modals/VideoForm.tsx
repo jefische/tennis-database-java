@@ -1,4 +1,4 @@
-import { Videos } from "@/assets/types";
+import { Videos } from "@/types";
 import Button from "react-bootstrap/Button";
 import { useVideoForm } from "@/hooks/useVideoForm";
 import { Tournaments } from "@/assets/data/tournaments";

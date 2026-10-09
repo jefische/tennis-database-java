@@ -1,4 +1,4 @@
-import { YearFilterItem } from "@/assets/types";
+import { YearFilterItem } from "@/types";
 import { useState, useId } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";

@@ -1,4 +1,4 @@
-import { isoDurationToSeconds, formatHrMin } from "./helpers";
+import { isoDurationToSeconds, formatHrMin } from "./format";
 
 export async function pullDuration(id: string): Promise<string> {
 	try {

@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import RHFVideoForm from "../RHFVideoForm";
-import { Videos } from "@/assets/types";
+import { Videos } from "@/types";
 
 interface EditModalProps {
 	open: boolean;

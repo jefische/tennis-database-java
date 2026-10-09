@@ -1,6 +1,6 @@
-import { Button, buttonVariants } from "@/components/ui/button";
 import { useState } from "react";
 import { useStore } from "@/hooks/useStore";
+import { Button } from "@/components/ui/button";
 
 interface TagFiltersMap {
 	[name: string]: boolean;

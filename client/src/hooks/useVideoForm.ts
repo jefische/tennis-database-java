@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
-import { Videos } from "@/assets/types";
-import { checkThumbnail } from "@/utils/helpers";
+import { Videos } from "@/types";
+import { checkThumbnail } from "@/utils/youtube";
 import { pullDuration } from "@/utils/callbacks";
 
 interface useVideoFormProps {

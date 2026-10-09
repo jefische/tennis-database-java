@@ -8,7 +8,7 @@ import {
 	DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Videos } from "@/assets/types";
+import { Videos } from "@/types";
 import { toast } from "sonner";
 import { useStore } from "@/hooks/useStore";
 

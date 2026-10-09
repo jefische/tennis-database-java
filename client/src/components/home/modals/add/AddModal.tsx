@@ -2,7 +2,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import VideoForm from "../VideoForm";
 import { Fragment, useState, useEffect } from "react";
-import { setVideosFunction, Videos } from "@/assets/types";
+import { setVideosFunction, Videos } from "@/types";
 
 const defaultData: Omit<Videos, "videoId"> = {
 	tournament: "US Open",

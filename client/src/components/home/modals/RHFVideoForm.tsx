@@ -17,7 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { z } from "zod";
-import { checkThumbnail } from "@/utils/helpers";
+import { checkThumbnail } from "@/utils/youtube";
 import { pullDuration } from "@/utils/callbacks";
 import { useState } from "react";
 import { useStore } from "@/hooks/useStore";

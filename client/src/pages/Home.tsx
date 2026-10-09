@@ -1,18 +1,19 @@
-import Sidebar from "../components/home/sidebar/Sidebar";
-import TagFilters from "../components/TagFilters";
-import { SearchBar } from "../components/SearchBar";
 import { useState, useEffect, useRef, useMemo } from "react";
 import { Videos } from "@/types";
+import { VIDEO_SORTS } from "@/utils/videoSort";
+import { useStore } from "@/hooks/useStore";
+import { filterByYearAndTournament } from "@/utils/videoFilter";
+import Sidebar from "@/components/home/sidebar/Sidebar";
+import TagFilters from "@/components/TagFilters";
+import { SearchBar } from "@/components/SearchBar";
 import SCNVideoCard from "@/components/home/modals/SCNVideoCard";
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { CircleChevronUp, SlidersHorizontal } from "lucide-react";
-import { VIDEO_SORTS, filterByYearAndTournament } from "../utils/helpers";
 import SCNAddModal from "@/components/home/modals/add/SCNAddModal";
 import TournamentFilters from "@/components/home/sidebar/TournamentFilters";
 import YearFilters from "@/components/home/sidebar/YearFilters";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useStore } from "@/hooks/useStore";
+import { CircleChevronUp, SlidersHorizontal } from "lucide-react";
 
 export default function Home() {
 	const [mobileFilterOpen, setMobileFilterOpen] = useState<boolean>(false);

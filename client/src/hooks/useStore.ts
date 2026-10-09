@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import { User, Videos, VideoFilters, SortMode } from "@/assets/types";
-import { initFilterData } from "@/utils/helpers";
+import { User, Videos, VideoFilters, SortMode } from "@/types";
+import { initFilterData } from "@/utils/videoFilter";
 import { filterReducer, FilterAction } from "@/utils/filterReducer";
 
 type State = {
