@@ -2,6 +2,8 @@ package com.tennisdb.server.config;
 
 import com.tennisdb.server.security.JwtAuthFilter;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -33,6 +35,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Static resources & SPA routes
                 .requestMatchers(HttpMethod.GET, "/", "/index.html", "/assets/**", "/icons/**", "/favicon.ico", "/bgs/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/sitemap.xml", "/robots.txt").permitAll()
                 .requestMatchers(HttpMethod.GET, "/{path:[^.]*}").permitAll()
                 .requestMatchers(HttpMethod.GET, "/{path1:[^.]*}/{path2:[^.]*}").permitAll()
                 .requestMatchers(HttpMethod.GET, "/{path1:[^.]*}/{path2:[^.]*}/{path3:[^.]*}").permitAll()
@@ -42,14 +45,23 @@ public class SecurityConfig {
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/contact").permitAll()
                 // Protected endpoints — require authentication
-                .requestMatchers(HttpMethod.POST, "/videos/**").authenticated()
-                .requestMatchers(HttpMethod.PUT, "/videos/**").authenticated()
-                .requestMatchers(HttpMethod.DELETE, "/videos/**").authenticated()
-                .requestMatchers("/api/summary/**").authenticated()
+                .requestMatchers(HttpMethod.POST, "/videos/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/videos/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/videos/**").hasRole("ADMIN")
+                .requestMatchers("/api/summary/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/backfill").hasRole("ADMIN")
                 // Everything else requires auth
                 .anyRequest().authenticated()
             )
+            .exceptionHandling(ex -> ex
+                .authenticationEntryPoint((req, res, e) -> {
+                    res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    res.setContentType("application/json");
+                    res.getWriter().write("{\"error\":\"Unauthorized\"}");
+                })
+            )
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+            // .oauth2ResourceServer(null);
 
         return http.build();
     }
