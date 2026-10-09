@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { useState } from "react";
 import { useStore } from "@/hooks/useStore";
 
@@ -23,7 +23,7 @@ export default function TagFilters() {
 		epic: false,
 	});
 
-	const { allVideos, dispatchFilter, setActiveVideos } = useStore();
+	const { allVideos, dispatchFilter, setActiveVideos, user, sortMode, setSortMode } = useStore();
 
 	const handleFilters = (val: string) => {
 		var updatedTagFilters = {
@@ -75,6 +75,11 @@ export default function TagFilters() {
 		// tag filters separately. Though, this does introduce some odd behavior I'm not sure how to account for.
 	};
 
+	function handleSort() {
+		// Home derives display order from sortMode, so toggling the mode is what re-sorts the grid.
+		setSortMode(sortMode === "newest" ? "tournament" : "newest");
+	}
+
 	return (
 		<div className="flex flex-wrap gap-4 mb-6 col-span-full" role="group" aria-label="Filter by tag">
 			{TAGS.map(({ key, label }) => {
@@ -94,6 +99,14 @@ export default function TagFilters() {
 					</Button>
 				);
 			})}
+			{user?.role === "ADMIN" && (
+				<Button
+					className={`h-9 rounded-full px-4 transition-colors duration-200 bg-primary text-primary-foreground hover:bg-primary/90`}
+					onClick={handleSort}
+				>
+					Sort by Date
+				</Button>
+			)}
 		</div>
 	);
 }

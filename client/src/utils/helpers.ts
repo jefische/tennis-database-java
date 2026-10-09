@@ -1,4 +1,4 @@
-import { Videos, VideoFilters } from "@/types";
+import { Videos, VideoFilters, SortMode } from "@/types";
 
 const ROUND_ORDER: Record<string, number> = {
 	Finals: 1,
@@ -41,6 +41,23 @@ export function sortVideos(a: Videos, b: Videos): number {
 
 	return 0;
 }
+
+/**
+ * createdAt arrives from the API as a string and is only converted to a Date on some
+ * code paths, so normalize defensively here. Missing dates sort last in a descending sort.
+ */
+function createdAtMs(video: Videos): number {
+	return video.createdAt ? new Date(video.createdAt).getTime() : -Infinity;
+}
+
+export function sortVideosByNewest(a: Videos, b: Videos): number {
+	return createdAtMs(b) - createdAtMs(a);
+}
+
+export const VIDEO_SORTS: Record<SortMode, (a: Videos, b: Videos) => number> = {
+	tournament: sortVideos,
+	newest: sortVideosByNewest,
+};
 
 export function initFilterData(acc: VideoFilters, video: Videos): VideoFilters {
 	// Add tournament filter
