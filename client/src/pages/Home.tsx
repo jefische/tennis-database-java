@@ -32,6 +32,7 @@ export default function Home() {
 		addFilterVideos,
 		resetFilterVideos,
 		sortMode,
+		setSortMode,
 	} = useStore();
 
 	// Sort a copy: activeVideos is store state, and Array.sort mutates in place.
@@ -74,6 +75,7 @@ export default function Home() {
 						return { ...v, createdAt: v.createdAt ? new Date(v.createdAt) : null };
 					}),
 				);
+				setSortMode("tournament");
 			})
 			.catch((error) => {
 				console.error("Error fetching data:", error);

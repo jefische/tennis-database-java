@@ -43,20 +43,22 @@ export function sortVideos(a: Videos, b: Videos): number {
 }
 
 /**
- * createdAt arrives from the API as a string and is only converted to a Date on some
- * code paths, so normalize defensively here. Missing dates sort last in a descending sort.
+ * Order by insertion, newest first. videoId is auto-increment, so it encodes the order
+ * rows were added. Preferred over createdAt, which is null for all but a handful of rows
+ * because the column was added long after most videos were inserted.
  */
-function createdAtMs(video: Videos): number {
-	return video.createdAt ? new Date(video.createdAt).getTime() : -Infinity;
+export function sortVideosByNewest(a: Videos, b: Videos): number {
+	return b.videoId - a.videoId;
 }
 
-export function sortVideosByNewest(a: Videos, b: Videos): number {
-	return createdAtMs(b) - createdAtMs(a);
+export function sortVideosByOldest(a: Videos, b: Videos): number {
+	return a.videoId - b.videoId;
 }
 
 export const VIDEO_SORTS: Record<SortMode, (a: Videos, b: Videos) => number> = {
 	tournament: sortVideos,
 	newest: sortVideosByNewest,
+	oldest: sortVideosByOldest,
 };
 
 export function initFilterData(acc: VideoFilters, video: Videos): VideoFilters {

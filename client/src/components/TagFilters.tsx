@@ -77,7 +77,7 @@ export default function TagFilters() {
 
 	function handleSort() {
 		// Home derives display order from sortMode, so toggling the mode is what re-sorts the grid.
-		setSortMode(sortMode === "newest" ? "tournament" : "newest");
+		setSortMode(sortMode === "newest" ? "oldest" : "newest");
 	}
 
 	return (
@@ -104,7 +104,7 @@ export default function TagFilters() {
 					className={`h-9 rounded-full px-4 transition-colors duration-200 bg-primary text-primary-foreground hover:bg-primary/90`}
 					onClick={handleSort}
 				>
-					Sort by Date
+					Sort by Oldest
 				</Button>
 			)}
 		</div>
