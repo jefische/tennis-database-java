@@ -84,7 +84,7 @@ export interface Videos {
 }
 
 /** Display order for the video grid. */
-export type SortMode = "tournament" | "newest";
+export type SortMode = "tournament" | "newest" | "oldest";
 
 // export type Videos = Video | null;
 
