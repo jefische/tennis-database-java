@@ -3,6 +3,7 @@ import { Videos } from "@/types";
 import { VIDEO_SORTS } from "@/utils/videoSort";
 import { useStore } from "@/hooks/useStore";
 import { filterByYearAndTournament } from "@/utils/videoFilter";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import Sidebar from "@/components/home/sidebar/Sidebar";
 import TagFilters from "@/components/TagFilters";
 import { SearchBar } from "@/components/SearchBar";
@@ -93,6 +94,7 @@ export default function Home() {
 		el.addEventListener("scroll", handleScroll);
 		return () => el.removeEventListener("scroll", handleScroll);
 	}, []);
+	useDocumentTitle("The Tennis Archive | Full Length Tennis Matches");
 
 	return (
 		<>

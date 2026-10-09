@@ -5,6 +5,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
+import java.time.Instant;
+
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -56,6 +59,9 @@ public class Video {
 
 	@Column
 	private String duration;
+
+	@Column(name = "created_at", insertable = false, updatable = false)
+	private Instant createdAt;
 
 
 	/**

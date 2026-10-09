@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { CircleChevronUp } from "lucide-react";
 import { useStore } from "@/hooks/useStore";
 import { cn } from "@/lib/utils";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
 const SHOT_TYPES = [
 	"All",
@@ -38,6 +39,7 @@ export default function Players() {
 		el.addEventListener("scroll", handleScroll);
 		return () => el.removeEventListener("scroll", handleScroll);
 	}, []);
+	useDocumentTitle("The Tennis Archive | Player Technique");
 
 	return (
 		<>

@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Players from "./pages/Players";
 import PlayerShotDetail from "./pages/PlayerShotDetail";
 import PlayerDetail from "./pages/PlayerDetail";
+import MatchView from "./pages/MatchView";
 // import Draws from "./pages/Draws";
 import FAQ from "./pages/FAQ";
 import Profile from "./pages/Profile";
@@ -53,6 +54,7 @@ export default function App() {
 						<Route path="/players" element={<Players />} />
 						<Route path="/players/:slug/:videoId" element={<PlayerShotDetail />} />
 						<Route path="/players/:slug" element={<PlayerDetail />} />
+						<Route path="/matches/:youtubeId" element={<MatchView />} />
 						{/* <Route path="/draws" element={<Draws />} /> */}
 						<Route path="/faq" element={<FAQ />} />
 						<Route path="/profile" element={<Profile />} />
