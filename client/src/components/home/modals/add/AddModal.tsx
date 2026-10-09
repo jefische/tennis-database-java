@@ -15,6 +15,7 @@ const defaultData: Omit<Videos, "videoId"> = {
 	duration: "(0hr 43min)",
 	summary: "",
 	summaryStatus: "yes",
+	createdAt: "05/10/2026",
 };
 
 interface AddVideoTypes {
