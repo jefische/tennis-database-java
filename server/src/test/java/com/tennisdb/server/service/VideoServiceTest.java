@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 
 import java.util.Arrays;
 import java.util.List;
+import java.time.Instant;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -52,7 +53,8 @@ public class VideoServiceTest {
 			"ai summary",
 			"['Epic']",
 			"no_transcript",
-			"5hr 3min"
+			"5hr 3min",
+			Instant.now()
 		);
 		Video video2 = new Video(
 			2,
@@ -66,7 +68,8 @@ public class VideoServiceTest {
 			"ai summary",
 			"['Epic']",
 			"no_transcript",
-			"5hr 3min"
+			"5hr 3min",
+			Instant.now()
 		);
 		List<Video> expectedVideos = Arrays.asList(video1, video2);
 
@@ -107,7 +110,8 @@ public class VideoServiceTest {
 				"ai summary",
 				"['Epic']",
 				"no_transcript",
-				"5hr 3min"
+				"5hr 3min",
+				Instant.now()
 			));
 		when(videoRepository.findByYoutubeId(youtubeId)).thenReturn(video1);
 
@@ -130,7 +134,8 @@ public class VideoServiceTest {
 			"ai summary",
 			"['Epic']",
 			"no_transcript",
-			"5hr 3min"
+			"5hr 3min",
+			Instant.now()
 		);
 
 		when(videoRepository.save(video1)).thenReturn(video1);
