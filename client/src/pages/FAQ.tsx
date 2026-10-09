@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
 const faqs = [
 	{
@@ -66,6 +67,7 @@ export default function FAQ() {
 			})
 			.catch((error) => console.error(error));
 	};
+	useDocumentTitle("The Tennis Archive | Frequently Asked Questions");
 
 	return (
 		<div className="h-[calc(100%-64px)] overflow-y-auto scrollbar-custom">

@@ -6,6 +6,7 @@ import { generateMatchSummary } from "@/utils/matchSummaryAgent";
 import { VideoCards, Videos, AISummary } from "@/types";
 import { Star, Sparkles } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
+import { NavLink, Link, useLocation } from "react-router-dom";
 import { useStore } from "@/hooks/useStore";
 import { cn } from "@/lib/utils";
 
@@ -107,6 +108,8 @@ export default function SCNVideoCard({ id, title, duration, summary, summaryStat
 			setLoading(false);
 		}
 	}
+
+	function handleFullPage() {}
 
 	return (
 		<Fragment>
@@ -270,6 +273,9 @@ export default function SCNVideoCard({ id, title, duration, summary, summaryStat
 					</div>
 
 					<DialogFooter>
+						<Button variant="default">
+							<Link to={`/matches/${id}`}>Full Page View</Link>
+						</Button>
 						<DialogClose asChild>
 							<Button>Close</Button>
 						</DialogClose>
