@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { User, Videos, VideoFilters } from "@/assets/types";
+import { User, Videos, VideoFilters, SortMode } from "@/assets/types";
 import { initFilterData } from "@/utils/helpers";
 import { filterReducer, FilterAction } from "@/utils/filterReducer";
 
@@ -9,6 +9,7 @@ type State = {
 	activeVideos: Videos[];
 	filteredVideos: Videos[];
 	filterData: VideoFilters;
+	sortMode: SortMode;
 };
 
 type Actions = {
@@ -17,6 +18,7 @@ type Actions = {
 	addFilterVideos: (video: Videos[]) => void;
 	resetFilterVideos: () => void;
 	setActiveVideos: (video: Videos[]) => void;
+	setSortMode: (mode: SortMode) => void;
 	dispatchFilter: (action: FilterAction) => void;
 };
 
@@ -26,6 +28,7 @@ export const useStore = create<State & Actions>((set, get) => ({
 	activeVideos: [],
 	filteredVideos: [],
 	filterData: { tournament: {}, year: {}, tags: {} },
+	sortMode: "tournament",
 	setUser: (info: User) => set({ user: info }),
 	setAllVideos: (videos: Videos[]) => {
 		const initData: VideoFilters = videos.reduce(initFilterData, { tournament: {}, year: {}, tags: {} });
@@ -89,6 +92,7 @@ export const useStore = create<State & Actions>((set, get) => ({
 	addFilterVideos: (videos: Videos[]) => set((state) => ({ filteredVideos: [...state.filteredVideos, ...videos] })),
 	resetFilterVideos: () => set({ filteredVideos: [] }),
 	setActiveVideos: (videos: Videos[]) => set({ activeVideos: videos }),
+	setSortMode: (mode: SortMode) => set({ sortMode: mode }),
 }));
 
 // export type setVideosFunction = Dispatch<SetStateAction<Videos[]>>;

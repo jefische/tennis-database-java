@@ -1,13 +1,13 @@
 import Sidebar from "../components/home/sidebar/Sidebar";
 import TagFilters from "../components/TagFilters";
 import { SearchBar } from "../components/SearchBar";
-import { useState, useEffect, useRef } from "react";
-import { Videos, VideoFilters } from "@/types";
+import { useState, useEffect, useRef, useMemo } from "react";
+import { Videos } from "@/types";
 import SCNVideoCard from "@/components/home/modals/SCNVideoCard";
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { CircleChevronUp, SlidersHorizontal } from "lucide-react";
-import { sortVideos, filterByYearAndTournament } from "../utils/helpers";
+import { VIDEO_SORTS, filterByYearAndTournament } from "../utils/helpers";
 import SCNAddModal from "@/components/home/modals/add/SCNAddModal";
 import TournamentFilters from "@/components/home/sidebar/TournamentFilters";
 import YearFilters from "@/components/home/sidebar/YearFilters";
@@ -31,7 +31,11 @@ export default function Home() {
 		filterData,
 		addFilterVideos,
 		resetFilterVideos,
+		sortMode,
 	} = useStore();
+
+	// Sort a copy: activeVideos is store state, and Array.sort mutates in place.
+	const sortedVideos = useMemo(() => [...activeVideos].sort(VIDEO_SORTS[sortMode]), [activeVideos, sortMode]);
 
 	// import.meta is a runtime metadata object available in ES modules
 	// Vite injects an env object on import.meta
@@ -65,8 +69,11 @@ export default function Home() {
 		fetch(`${baseURL}/videos`, requestOptions)
 			.then((response) => response.json())
 			.then((data) => {
-				// console.log(data);
-				setAllVideos(data);
+				setAllVideos(
+					data.map((v: Videos) => {
+						return { ...v, createdAt: v.createdAt ? new Date(v.createdAt) : null };
+					}),
+				);
 			})
 			.catch((error) => {
 				console.error("Error fetching data:", error);
@@ -116,7 +123,7 @@ export default function Home() {
 									</>
 								)}
 
-								{activeVideos.sort(sortVideos).map((video: Videos) => {
+								{sortedVideos.map((video: Videos) => {
 									return (
 										<SCNVideoCard
 											key={video.videoId}

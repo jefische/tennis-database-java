@@ -79,7 +79,12 @@ export interface Videos {
 	summaryStatus: "yes" | "no_transcript" | null;
 	duration?: string;
 	tags?: string | null;
+	// The API sends an ISO string; some paths convert it to a Date, others don't.
+	createdAt: Date | string | null;
 }
+
+/** Display order for the video grid. */
+export type SortMode = "tournament" | "newest";
 
 // export type Videos = Video | null;
 

@@ -28,5 +28,5 @@ export function filterReducer(state: VideoFilters, action: FilterAction): VideoF
 	}
 }
 
-const setAllInclude = <T extends Record<string, { include: boolean }>>(group: T, include: boolean): T =>
+export const setAllInclude = <T extends Record<string, { include: boolean }>>(group: T, include: boolean): T =>
 	Object.fromEntries(Object.entries(group).map(([key, value]) => [key, { ...value, include }])) as T;
