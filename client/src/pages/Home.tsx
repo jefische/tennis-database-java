@@ -4,6 +4,7 @@ import { VIDEO_SORTS } from "@/utils/videoSort";
 import { useStore } from "@/hooks/useStore";
 import { filterByYearAndTournament } from "@/utils/videoFilter";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
+import { useDocumentMeta } from "@/hooks/useDocumentMeta";
 import Sidebar from "@/components/home/sidebar/Sidebar";
 import TagFilters from "@/components/TagFilters";
 import { SearchBar } from "@/components/SearchBar";
@@ -95,6 +96,7 @@ export default function Home() {
 		return () => el.removeEventListener("scroll", handleScroll);
 	}, []);
 	useDocumentTitle("The Tennis Archive | Full Length Tennis Matches");
+	useDocumentMeta("Watch full length ATP and WTA matches");
 
 	return (
 		<>

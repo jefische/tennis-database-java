@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Videos } from "@/types";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
+import { useDocumentMeta } from "@/hooks/useDocumentMeta";
 import VideoFullPage from "@/components/VideoFullPage";
 import { Button } from "@/components/ui/button";
 
@@ -8,6 +10,27 @@ export default function MatchView() {
 	const { youtubeId } = useParams<{ youtubeId: string }>();
 	const [matchVideo, setMatchVideo] = useState<Videos>();
 	const baseURL: string = import.meta.env.VITE_API_URL;
+
+	/* Note useDocumentMeta hook is to handle the case where direct URL is accessed and <meta>
+	   description is added via Match controller. Otherwise stale meta data persists across the user
+	   session. If no direct URL is accessed the <meta> description tag is not included in the 
+	   original index.html load, and the update silently fails as no element is available for 
+	   query selection.
+
+	   This is purely a cosmetic benefit for live View Source inspection, no SEO benefit.
+	*/
+
+	function getDescription(): string {
+		if (matchVideo?.summary == null) {
+			return "Watch full length ATP and WTA matches";
+		}
+		try {
+			const parsed = JSON.parse(matchVideo?.summary);
+			return parsed.overview;
+		} catch {
+			return "Watch full length ATP and WTA matches";
+		}
+	}
 
 	useEffect(() => {
 		fetch(`${baseURL}/videos/${youtubeId}`)
@@ -18,6 +41,9 @@ export default function MatchView() {
 			.then((data) => setMatchVideo(data))
 			.catch((err) => console.error(err));
 	}, []);
+	useDocumentTitle(matchVideo?.title ?? "The Tennis Archive");
+	useDocumentMeta(getDescription());
+
 	return (
 		<div className="h-[calc(100%-64px)] mb-4">
 			<section className="h-full overflow-y-auto">

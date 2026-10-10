@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
+import { useDocumentMeta } from "@/hooks/useDocumentMeta";
 
 const faqs = [
 	{
@@ -68,6 +69,7 @@ export default function FAQ() {
 			.catch((error) => console.error(error));
 	};
 	useDocumentTitle("The Tennis Archive | Frequently Asked Questions");
+	useDocumentMeta("Frequently Asked Questions");
 
 	return (
 		<div className="h-[calc(100%-64px)] overflow-y-auto scrollbar-custom">

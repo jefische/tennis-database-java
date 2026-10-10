@@ -6,6 +6,7 @@ import { CircleChevronUp } from "lucide-react";
 import { useStore } from "@/hooks/useStore";
 import { cn } from "@/lib/utils";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
+import { useDocumentMeta } from "@/hooks/useDocumentMeta";
 
 const SHOT_TYPES = [
 	"All",
@@ -40,6 +41,7 @@ export default function Players() {
 		return () => el.removeEventListener("scroll", handleScroll);
 	}, []);
 	useDocumentTitle("The Tennis Archive | Player Technique");
+	useDocumentMeta("Watch shot specific videos or players court level");
 
 	return (
 		<>
