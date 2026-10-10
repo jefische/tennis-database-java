@@ -8,12 +8,11 @@ import lombok.Data;
 @NoArgsConstructor
 @Data
 public class SummaryResponse {
-    private String summary;
-    // Future: private List<Timestamp> timestamps;
     private String winner;
     private String score;
     private int matchRating;
     private String overview;
     private String[] highlights;
     private String[] tags;
+    // Future: private List<Timestamp> timestamps;
 }

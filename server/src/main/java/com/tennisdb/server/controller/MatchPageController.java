@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 
 import com.tennisdb.server.service.VideoService;
 import com.tennisdb.server.model.Video;
+import com.tennisdb.server.dto.VideoResponse;
+
 
 
 import org.springframework.core.io.ClassPathResource;
@@ -43,8 +45,20 @@ public class MatchPageController {
 
     
     public String render(Video v) {
+        // HtmlUtils.htmlEscape in case AI-generated overview or title contains ", <, &, ' characters
         String title = HtmlUtils.htmlEscape(v.getTitle());
-        String description = HtmlUtils.htmlEscape(v.getSummary());
+        
+        VideoResponse videoResponse = videoService.mapToVideoResponse(v);
+        String description;
+
+        if (videoResponse.getSummary() != null && !videoResponse.getSummary().getWinner().isBlank()) {
+            description = HtmlUtils.htmlEscape(videoResponse.getSummary().getOverview());
+        } else {
+            String overview = "Watch the full match: " + videoResponse.getPlayer1() +
+            " vs " + videoResponse.getPlayer2() + " at the " + videoResponse.getYear() +
+            " " + videoResponse.getTournament() + ", " + videoResponse.getRound();
+            description = HtmlUtils.htmlEscape(overview);
+        }
 
         String tags = "<meta name=\"description\" content=\"" + description + "\">"
             + "<meta property=\"og:title\" content=\"" + title + "\">"

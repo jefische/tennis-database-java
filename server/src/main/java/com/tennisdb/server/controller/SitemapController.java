@@ -27,6 +27,12 @@ public class SitemapController {
         xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         xml.append("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">");
         xml.append("<url><loc>https://thetennisarchive.com/home</loc></url>");
+        
+        // TODO: hardcoded until player_videos table + dynamic player list exist
+        xml.append("<url><loc>https://thetennisarchive.com/players/nadal</loc></url>");
+        xml.append("<url><loc>https://thetennisarchive.com/players/federer</loc></url>");
+        xml.append("<url><loc>https://thetennisarchive.com/players/wawrinka</loc></url>");
+        xml.append("<url><loc>https://thetennisarchive.com/players/swillimas</loc></url>");
 
         for (Video v: videoService.getVideos()) {
             xml.append("<url><loc>https://thetennisarchive.com/matches/");
