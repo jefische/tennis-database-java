@@ -101,10 +101,10 @@ export default function TagFilters() {
 			})}
 			{user?.role === "ADMIN" && (
 				<Button
-					className={`h-9 rounded-full px-4 transition-colors duration-200 bg-primary text-primary-foreground hover:bg-primary/90`}
+					className={`h-9 capitalize rounded-full px-4 transition-colors duration-200 bg-primary text-primary-foreground hover:bg-primary/90`}
 					onClick={handleSort}
 				>
-					Sort by Oldest
+					Sort by {sortMode}
 				</Button>
 			)}
 		</div>
