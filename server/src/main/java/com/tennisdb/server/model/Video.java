@@ -60,6 +60,9 @@ public class Video {
 	@Column
 	private String duration;
 
+	@Column
+	private Integer durationSeconds;
+
 	@Column(name = "created_at", insertable = false, updatable = false)
 	private Instant createdAt;
 

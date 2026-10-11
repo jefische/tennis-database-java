@@ -33,6 +33,7 @@ public class VideoService {
 		response.setTitle(video.getTitle());
 		response.setRound(video.getRound());
 		response.setDuration(video.getDuration());
+		response.setDurationSeconds(video.getDurationSeconds());
 
 		if (video.getSummary() != null) {
 			try {
