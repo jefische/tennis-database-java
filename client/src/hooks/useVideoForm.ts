@@ -149,7 +149,7 @@ export function useVideoForm({ initialData, HTTPmethod, endpoint, onFormSubmit }
 		const duration = await pullDuration(formData.youtubeId ?? "");
 		setFormData({
 			...formData,
-			duration: duration,
+			// duration: duration,
 		});
 	};
 
