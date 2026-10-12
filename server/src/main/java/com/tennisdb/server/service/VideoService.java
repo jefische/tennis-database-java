@@ -5,21 +5,30 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tennisdb.server.dto.SummaryResponse;
 import com.tennisdb.server.dto.VideoResponse;
 import com.tennisdb.server.model.Video;
 import com.tennisdb.server.repository.VideoRepository;
+import com.tennisdb.server.util.DurationUtil;
 
 @Service
 public class VideoService {
 	
 	private VideoRepository videoRepository;
 	private final ObjectMapper objectMapper = new ObjectMapper();
+	private final DurationUtil durationUtil;
 
-	public VideoService(VideoRepository videoRepository) {
+	@Value("${GOOGLE_API_KEY}")
+	private String googleApiKey;
+
+	public VideoService(VideoRepository videoRepository, DurationUtil durationUtil) {
 		this.videoRepository = videoRepository;
+		this.durationUtil = durationUtil;
 	}
 
 	public VideoResponse mapToVideoResponse(Video video) {
@@ -86,7 +95,7 @@ public class VideoService {
 		return false;
 	}
 
-	public boolean backfillTags() {
+	public void backfillTags() {
 		List<Video> allVideos = videoRepository.findAll();
 		for (Video video: allVideos) {
 			if (video.getSummaryStatus() == null) continue;
@@ -103,6 +112,41 @@ public class VideoService {
 				}
 			}
 		}
-		return false;
+	}
+
+	public int backfillDurationSeconds() {
+		List<Video> allVideos = videoRepository.findAll();
+		RestClient restClient = RestClient.create();
+		int updated = 0;
+
+		for (Video video: allVideos) {
+			if (video.getDurationSeconds() == null) {
+				try {
+					String response = restClient.get()
+						.uri("https://www.googleapis.com/youtube/v3/videos?id={id}&key={key}&part=snippet,contentDetails,statistics,status", video.getYoutubeId(), googleApiKey)
+						.retrieve()
+						.body(String.class);
+
+						String iso = durationUtil.extractISO(response);
+						if (iso == null) {
+							System.err.println("No duration found in YouTube response for youtubeId=" + video.getYoutubeId());
+						} else {
+							video.setDurationSeconds(durationUtil.isoToSeconds(iso));
+							videoRepository.save(video);
+							updated++;
+						}
+				} catch (RestClientException e) {
+					System.err.println("YouTube API call failed for youtubeId=" + video.getYoutubeId() + ": " + e.getMessage());
+				}
+
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+					break;
+				}
+			}
+		}	
+		return updated;
 	}
 }

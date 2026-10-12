@@ -47,7 +47,7 @@ export default function MatchView() {
 	return (
 		<div className="h-[calc(100%-64px)] mb-4">
 			<section className="h-full overflow-y-auto">
-				<div className="flex flex-col items-center px-4 py-10 w-fit mx-auto">
+				<div className="flex flex-col items-center px-4 py-10 w-full max-w-5xl mx-auto">
 					<Button variant="filter" className="self-start mb-4">
 						<Link to="/home">Back to Dashboard</Link>
 					</Button>
@@ -56,7 +56,6 @@ export default function MatchView() {
 							key={matchVideo.videoId}
 							id={matchVideo.youtubeId}
 							title={matchVideo.title}
-							duration={matchVideo.duration}
 							summary={matchVideo.summary}
 							summaryStatus={matchVideo.summaryStatus}
 						/>

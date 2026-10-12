@@ -104,7 +104,7 @@ export default function TagFilters() {
 					className={`h-9 capitalize rounded-full px-4 transition-colors duration-200 bg-primary text-primary-foreground hover:bg-primary/90`}
 					onClick={handleSort}
 				>
-					Sort by {sortMode}
+					Sort by {sortMode === "tournament" ? "oldest" : sortMode}
 				</Button>
 			)}
 		</div>

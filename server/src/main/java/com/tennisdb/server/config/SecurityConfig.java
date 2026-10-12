@@ -49,7 +49,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/videos/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/videos/**").hasRole("ADMIN")
                 .requestMatchers("/api/summary/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.POST, "/backfill").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/backfill/**").hasRole("ADMIN")
                 // Everything else requires auth
                 .anyRequest().authenticated()
             )

@@ -185,4 +185,10 @@ public class VideoController {
 		videoService.backfillTags();
 		return ResponseEntity.status(200).build();
 	}
+
+	@PostMapping(value = "backfill/durationSeconds")
+	public ResponseEntity<?> addDurationSeconds() {
+		int updated = videoService.backfillDurationSeconds();
+		return ResponseEntity.status(200).body(Map.of("updated", updated));
+	}
 }

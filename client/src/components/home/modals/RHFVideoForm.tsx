@@ -11,14 +11,12 @@ import {
 	SelectValue,
 	SelectLabel,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { z } from "zod";
 import { checkThumbnail } from "@/utils/youtube";
-import { pullDuration } from "@/utils/callbacks";
 import { useState } from "react";
 import { useStore } from "@/hooks/useStore";
 
@@ -31,7 +29,6 @@ const schema = z.object({
 	player1: z.string().regex(/^[a-zA-Z'\s\-\/]+$/, "Please enter valid characters only"),
 	player2: z.string().regex(/^[a-zA-Z'\s\-\/]+$/, "Please enter valid characters only"),
 	title: z.string(),
-	duration: z.string().optional(),
 });
 
 interface VideoFormProps {
@@ -42,7 +39,6 @@ interface VideoFormProps {
 }
 
 export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, setOpenModal }: VideoFormProps) {
-	const [dur, setDur] = useState<boolean>(false);
 	const [addNewTournament, setAddNewTournament] = useState(false);
 	const { user, setUser, allVideos, setAllVideos } = useStore();
 
@@ -56,15 +52,8 @@ export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, setOpe
 			player1: initialData.player1 ?? "",
 			player2: initialData.player2 ?? "",
 			title: initialData.title ?? "",
-			duration: initialData.duration ?? "",
 		},
 	});
-
-	const setDuration = async () => {
-		const duration = await pullDuration(form.getValues("youtubeId") ?? "");
-		form.setValue("duration", duration);
-		setDur(true);
-	};
 
 	const saveVideo = async (data: z.infer<typeof schema>) => {
 		form.clearErrors("youtubeId"); // reset any previous manual error
@@ -321,18 +310,6 @@ export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, setOpe
 							<FieldLabel htmlFor={field.name} className="ps-2">
 								Title
 							</FieldLabel>
-
-							<Button
-								variant="secondary"
-								size="default"
-								className="mx-4"
-								type="button"
-								disabled={dur}
-								onClick={setDuration}
-							>
-								YT API
-							</Button>
-							{dur && <p className="text-foreground">Duration set!</p>}
 						</div>
 						<Input
 							{...field}

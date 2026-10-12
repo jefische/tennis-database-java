@@ -77,7 +77,7 @@ export interface Videos {
 	round: Rounds;
 	summary: string | null;
 	summaryStatus: "yes" | "no_transcript" | null;
-	duration?: string;
+	durationSeconds: number;
 	tags?: string | null;
 	// The API sends an ISO string; some paths convert it to a Date, others don't.
 	createdAt: Date | string | null;
@@ -141,7 +141,7 @@ export type setFiltersFunction = Dispatch<SetStateAction<VideoFilters>>;
 export interface VideoCards {
 	id: string;
 	title: string;
-	duration?: string;
+	duration?: number;
 	maxWidth?: number;
 	summary?: string | null;
 	summaryStatus: "yes" | "no_transcript" | null;

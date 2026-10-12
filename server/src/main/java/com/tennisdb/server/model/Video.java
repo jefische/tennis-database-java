@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class Video {
 	
-	@Column
+	@Column(name="video_id")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer videoId;
@@ -33,7 +33,7 @@ public class Video {
 	@Column(name="video_year") // Escape the year column name
 	private Integer year;
 
-	@Column(unique = true)
+	@Column(name="youtube_id", unique = true)
 	private String youtubeId;
 
 	@Column
@@ -54,13 +54,13 @@ public class Video {
 	@Column
 	private String tags;
 
-	@Column
+	@Column(name="summary_status")
 	private String summaryStatus;
 
 	@Column
 	private String duration;
 
-	@Column
+	@Column(name="duration_seconds")
 	private Integer durationSeconds;
 
 	@Column(name = "created_at", insertable = false, updatable = false)
