@@ -77,7 +77,7 @@ export interface Videos {
 	round: Rounds;
 	summary: string | null;
 	summaryStatus: "yes" | "no_transcript" | null;
-	durationSeconds: number;
+	duration: number;
 	tags?: string | null;
 	// The API sends an ISO string; some paths convert it to a Date, others don't.
 	createdAt: Date | string | null;

@@ -136,7 +136,7 @@ export default function Home() {
 											key={video.videoId}
 											id={video.youtubeId}
 											title={video.title}
-											duration={video.durationSeconds}
+											duration={video.duration}
 											summary={video.summary}
 											summaryStatus={video.summaryStatus}
 										/>
