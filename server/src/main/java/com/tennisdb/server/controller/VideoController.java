@@ -112,7 +112,7 @@ public class VideoController {
 					if (iso == null) {
 						System.err.println("No duration found in YouTube response for youtubeId=" + video.getYoutubeId());
 					} else {
-						video.setDurationSeconds(durationUtil.isoToSeconds(iso));
+						video.setDuration(durationUtil.isoToSeconds(iso));
 					}
 			} catch (RestClientException e) {
 				System.err.println("YouTube API call failed for youtubeId=" + video.getYoutubeId() + ": " + e.getMessage());

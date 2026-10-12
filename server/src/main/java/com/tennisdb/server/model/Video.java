@@ -57,11 +57,8 @@ public class Video {
 	@Column(name="summary_status")
 	private String summaryStatus;
 
-	@Column
-	private String duration;
-
 	@Column(name="duration_seconds")
-	private Integer durationSeconds;
+	private Integer duration;
 
 	@Column(name = "created_at", insertable = false, updatable = false)
 	private Instant createdAt;

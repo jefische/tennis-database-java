@@ -42,7 +42,6 @@ public class VideoService {
 		response.setTitle(video.getTitle());
 		response.setRound(video.getRound());
 		response.setDuration(video.getDuration());
-		response.setDurationSeconds(video.getDurationSeconds());
 
 		if (video.getSummary() != null) {
 			try {
@@ -120,7 +119,7 @@ public class VideoService {
 		int updated = 0;
 
 		for (Video video: allVideos) {
-			if (video.getDurationSeconds() == null) {
+			if (video.getDuration() == null) {
 				try {
 					String response = restClient.get()
 						.uri("https://www.googleapis.com/youtube/v3/videos?id={id}&key={key}&part=snippet,contentDetails,statistics,status", video.getYoutubeId(), googleApiKey)
@@ -131,7 +130,7 @@ public class VideoService {
 						if (iso == null) {
 							System.err.println("No duration found in YouTube response for youtubeId=" + video.getYoutubeId());
 						} else {
-							video.setDurationSeconds(durationUtil.isoToSeconds(iso));
+							video.setDuration(durationUtil.isoToSeconds(iso));
 							videoRepository.save(video);
 							updated++;
 						}

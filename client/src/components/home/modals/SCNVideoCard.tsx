@@ -172,7 +172,9 @@ export default function SCNVideoCard({ id, title, duration, summary, summaryStat
 							{title} ({duration && formatHrMin(duration)})
 						</p>
 						<p className="block sm:hidden mt-2 ms-1 font-semibold text-foreground">{title}</p>
-						<span className="block sm:hidden ms-1 font-semibold text-foreground">{duration}</span>
+						<span className="block sm:hidden ms-1 font-semibold text-foreground">
+							{duration && formatHrMin(duration)}
+						</span>
 					</div>
 				</DialogTrigger>
 				<DialogContent
