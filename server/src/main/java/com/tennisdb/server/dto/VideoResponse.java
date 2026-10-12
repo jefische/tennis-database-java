@@ -16,6 +16,6 @@ public class VideoResponse {
     private String player2;
     private String title;
     private String round;
-    private String duration;
+    private Integer duration;
     private SummaryResponse summary;
 }

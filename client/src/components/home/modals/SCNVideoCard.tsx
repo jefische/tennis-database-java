@@ -6,9 +6,10 @@ import { generateMatchSummary } from "@/utils/matchSummaryAgent";
 import { VideoCards, Videos, AISummary } from "@/types";
 import { Star, Sparkles } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
-import { NavLink, Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useStore } from "@/hooks/useStore";
 import { cn } from "@/lib/utils";
+import { formatHrMin } from "@/utils/format";
 
 import {
 	DropdownMenu,
@@ -109,8 +110,6 @@ export default function SCNVideoCard({ id, title, duration, summary, summaryStat
 		}
 	}
 
-	function handleFullPage() {}
-
 	return (
 		<Fragment>
 			<Dialog>
@@ -170,10 +169,12 @@ export default function SCNVideoCard({ id, title, duration, summary, summaryStat
 							)}
 						</div>
 						<p className="hidden sm:block mt-2 ms-1 font-semibold text-foreground">
-							{title} ({duration})
+							{title} ({duration && formatHrMin(duration)})
 						</p>
 						<p className="block sm:hidden mt-2 ms-1 font-semibold text-foreground">{title}</p>
-						<span className="block sm:hidden ms-1 font-semibold text-foreground">{duration}</span>
+						<span className="block sm:hidden ms-1 font-semibold text-foreground">
+							{duration && formatHrMin(duration)}
+						</span>
 					</div>
 				</DialogTrigger>
 				<DialogContent

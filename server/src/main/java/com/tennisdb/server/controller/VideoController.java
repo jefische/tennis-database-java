@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import com.tennisdb.server.service.VideoService;
+import com.tennisdb.server.util.DurationUtil;
 import com.tennisdb.server.service.SummaryService;
 import com.tennisdb.server.dto.ErrorResponse;
 // import com.tennisdb.server.dto.SummaryResponse;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,13 +31,15 @@ public class VideoController {
 
 	private final VideoService videoService;
 	private final SummaryService summaryService;
+	private final DurationUtil durationUtil;
 
 	@Value("${GOOGLE_API_KEY}")
 	private String googleApiKey;
 
-	public VideoController(VideoService videoService, SummaryService summaryService) {
+	public VideoController(VideoService videoService, SummaryService summaryService, DurationUtil durationUtil) {
 		this.videoService = videoService;
 		this.summaryService = summaryService;
+		this.durationUtil = durationUtil;
 	}
 
 	@GetMapping(value = "videos")
@@ -52,6 +56,19 @@ public class VideoController {
 			videoReponses.add(videoService.mapToVideoResponse(v));
 		}
 		return ResponseEntity.status(200).body(videoReponses);
+	}
+
+	@GetMapping(value = "videosAI/{youtubeId}")
+	public ResponseEntity<?> getVideosAIById(@PathVariable String youtubeId) {
+		var video = videoService.getVideoByYoutubeId(youtubeId).orElse(null);
+		if (video != null) {
+			var v = videoService.mapToVideoResponse(video);
+			return ResponseEntity.status(200).body(v);
+		}
+		else {
+			ErrorResponse error = new ErrorResponse(404, "Video not found");
+			return ResponseEntity.status(404).body(error);
+		}
 	}
 
 	@GetMapping(value = "videos/{youtubeId}")
@@ -83,7 +100,26 @@ public class VideoController {
 	@PostMapping(value = "videos/add")
 	public ResponseEntity<?> addVideo(@RequestBody Video video) {
 		if (!videoService.getVideoByYoutubeId(video.getYoutubeId()).isPresent()) {
+			// Fetch duration - convert ISO 8601 to integer (seconds) and add to video
+			RestClient restClient = RestClient.create();
+			try {
+				String response = restClient.get()
+					.uri("https://www.googleapis.com/youtube/v3/videos?id={id}&key={key}&part=snippet,contentDetails,statistics,status", video.getYoutubeId(), googleApiKey)
+					.retrieve()
+					.body(String.class);
+
+					String iso = durationUtil.extractISO(response);
+					if (iso == null) {
+						System.err.println("No duration found in YouTube response for youtubeId=" + video.getYoutubeId());
+					} else {
+						video.setDuration(durationUtil.isoToSeconds(iso));
+					}
+			} catch (RestClientException e) {
+				System.err.println("YouTube API call failed for youtubeId=" + video.getYoutubeId() + ": " + e.getMessage());
+			}
+			
 			videoService.addNewVideo(video);
+
 			// Return the complete updated list of videos
 			List<Video> allVideos = videoService.getVideos();
 			return ResponseEntity.status(200).body(allVideos);
@@ -148,5 +184,11 @@ public class VideoController {
 	public ResponseEntity<Void> addTags() {
 		videoService.backfillTags();
 		return ResponseEntity.status(200).build();
+	}
+
+	@PostMapping(value = "backfill/durationSeconds")
+	public ResponseEntity<?> addDurationSeconds() {
+		int updated = videoService.backfillDurationSeconds();
+		return ResponseEntity.status(200).body(Map.of("updated", updated));
 	}
 }

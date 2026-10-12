@@ -12,7 +12,7 @@ const emptySummary: AISummary = {
 	status: null,
 };
 
-export default function VideoFullPage({ id, title, duration, summary, summaryStatus }: VideoCards) {
+export default function VideoFullPage({ id, title, summary, summaryStatus }: VideoCards) {
 	const [summaryError, setSummaryError] = useState<string | null>(null);
 	const [aiSummary, setAiSummary] = useState<AISummary>(() => {
 		if (!summary) return emptySummary;
@@ -25,7 +25,7 @@ export default function VideoFullPage({ id, title, duration, summary, summarySta
 		}
 	});
 	return (
-		<div className="flex flex-col justify-center gap-[15px] mt-2 sm:mt-0 w-full max-w-4xl">
+		<div className={`flex flex-col justify-center gap-[15px] mt-2 sm:mt-0 w-full max-w-5xl`}>
 			<div className="aspect-video">
 				<iframe
 					src={`https://www.youtube.com/embed/${id}?enablejsapi=1&origin=https://thetennisarchive.com`}

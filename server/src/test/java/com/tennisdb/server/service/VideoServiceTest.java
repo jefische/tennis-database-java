@@ -53,7 +53,7 @@ public class VideoServiceTest {
 			"ai summary",
 			"['Epic']",
 			"no_transcript",
-			"5hr 3min",
+			1350,
 			Instant.now()
 		);
 		Video video2 = new Video(
@@ -68,7 +68,7 @@ public class VideoServiceTest {
 			"ai summary",
 			"['Epic']",
 			"no_transcript",
-			"5hr 3min",
+			1350,
 			Instant.now()
 		);
 		List<Video> expectedVideos = Arrays.asList(video1, video2);
@@ -110,7 +110,7 @@ public class VideoServiceTest {
 				"ai summary",
 				"['Epic']",
 				"no_transcript",
-				"5hr 3min",
+				1450,
 				Instant.now()
 			));
 		when(videoRepository.findByYoutubeId(youtubeId)).thenReturn(video1);
@@ -134,7 +134,7 @@ public class VideoServiceTest {
 			"ai summary",
 			"['Epic']",
 			"no_transcript",
-			"5hr 3min",
+			3210,
 			Instant.now()
 		);
 

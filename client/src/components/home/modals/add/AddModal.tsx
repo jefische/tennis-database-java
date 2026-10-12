@@ -12,7 +12,7 @@ const defaultData: Omit<Videos, "videoId"> = {
 	player1: "Caroline Wozniacki",
 	player2: "Nao Hibino",
 	title: "Caroline Wozniacki vs. Nao Hibino | 2024 US Open Round 1 (43 min)",
-	duration: "(0hr 43min)",
+	duration: 1350,
 	summary: "",
 	summaryStatus: "yes",
 	createdAt: "05/10/2026",
