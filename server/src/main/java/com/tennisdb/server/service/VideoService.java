@@ -94,6 +94,13 @@ public class VideoService {
 		return false;
 	}
 
+	public String buildSlug(Video v) {
+		String raw = v.getPlayer1() + "-vs-" + v.getPlayer2() + "-" + v.getTournament() + "-" + v.getYear() + "-";
+		return raw.toLowerCase()
+			.replaceAll("[^a-z0-9]+", "-")
+			.replaceAll("(^-|-$)", "");
+	}
+
 	public void backfillTags() {
 		List<Video> allVideos = videoRepository.findAll();
 		for (Video video: allVideos) {

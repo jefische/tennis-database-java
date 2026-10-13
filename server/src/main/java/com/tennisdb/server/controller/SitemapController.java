@@ -15,7 +15,6 @@ import com.tennisdb.server.model.Video;
 public class SitemapController {
     private final VideoService videoService;
     
-
     public SitemapController(VideoService videoService) {
         this.videoService = videoService;
     }
@@ -36,7 +35,8 @@ public class SitemapController {
 
         for (Video v: videoService.getVideos()) {
             xml.append("<url><loc>https://thetennisarchive.com/matches/");
-            xml.append(HtmlUtils.htmlEscape(v.getYoutubeId()));
+            String slug = videoService.buildSlug(v);
+            xml.append(HtmlUtils.htmlEscape(slug + "-" + v.getYoutubeId()));
             xml.append("</loc></url>");
         }
 

@@ -33,11 +33,12 @@ public class MatchPageController {
         this.shell = res.exists() ? res.getContentAsString(StandardCharsets.UTF_8) : null;
     }
 
-    @GetMapping(value = "/matches/{youtubeId}", produces = MediaType.TEXT_HTML_VALUE)
+    @GetMapping(value = "/matches/{slugAndId}", produces = MediaType.TEXT_HTML_VALUE)
     @ResponseBody
-    public ResponseEntity<String> match(@PathVariable String youtubeId) {
+    public ResponseEntity<String> match(@PathVariable String slugAndId) {
         if (shell == null) return ResponseEntity.notFound().build();
 
+        String youtubeId = extractYoutubeId(slugAndId);
         return videoService.getVideoByYoutubeId(youtubeId)
             .map(v -> ResponseEntity.ok(render(v)))
             .orElseGet(() -> ResponseEntity.status(404).body(shell));
@@ -60,11 +61,18 @@ public class MatchPageController {
             description = HtmlUtils.htmlEscape(overview);
         }
 
+        String slug = videoService.buildSlug(v);
+        String canonicalUrl = "https://thetennisarchive.com/matches/" + HtmlUtils.htmlEscape(slug + "-" + v.getYoutubeId());
         String tags = "<meta name=\"description\" content=\"" + description + "\">"
             + "<meta property=\"og:title\" content=\"" + title + "\">"
-            + "<meta property=\"og:description\" content=\"" + description + "\">";
+            + "<meta property=\"og:description\" content=\"" + description + "\">"
+            + "<link rel=\"canonical\" href=\"" + canonicalUrl + "\">";
 
         return shell.replace("<!--SEO_TAGS-->", tags).replaceAll("<title>.*?</title>", "<title>" + title + "</title>");
+    }
+
+    private String extractYoutubeId(String slugAndId) {
+        return slugAndId.length() >= 11 ? slugAndId.substring(slugAndId.length() - 11) : slugAndId;
     }
 
 }
