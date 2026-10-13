@@ -7,7 +7,7 @@ import VideoFullPage from "@/components/VideoFullPage";
 import { Button } from "@/components/ui/button";
 
 export default function MatchView() {
-	const { youtubeId } = useParams<{ youtubeId: string }>();
+	const { slugAndId } = useParams<{ slugAndId: string }>();
 	const [matchVideo, setMatchVideo] = useState<Videos>();
 	const baseURL: string = import.meta.env.VITE_API_URL;
 
@@ -33,6 +33,8 @@ export default function MatchView() {
 	}
 
 	useEffect(() => {
+		const len = slugAndId!.length;
+		const youtubeId = len > 11 ? slugAndId!.slice(len - 11) : slugAndId;
 		fetch(`${baseURL}/videos/${youtubeId}`)
 			.then((res) => {
 				if (!res.ok) throw new Error(`${res.status}`);

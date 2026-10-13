@@ -54,7 +54,7 @@ export default function App() {
 						<Route path="/players" element={<Players />} />
 						<Route path="/players/:slug/:videoId" element={<PlayerShotDetail />} />
 						<Route path="/players/:slug" element={<PlayerDetail />} />
-						<Route path="/matches/:youtubeId" element={<MatchView />} />
+						<Route path="/matches/:slugAndId" element={<MatchView />} />
 						{/* <Route path="/draws" element={<Draws />} /> */}
 						<Route path="/faq" element={<FAQ />} />
 						<Route path="/profile" element={<Profile />} />
