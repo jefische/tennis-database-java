@@ -1,13 +1,13 @@
-import { Videos } from "@/types";
+import { Video } from "@/types";
 import Button from "react-bootstrap/Button";
 import { useVideoForm } from "@/hooks/useVideoForm";
 import { Tournaments } from "@/assets/data/tournaments";
 
 interface VideoFormProps {
-	initialData: Partial<Omit<Videos, "videoId">>;
+	initialData: Partial<Omit<Video, "videoId">>;
 	HTTPmethod: string;
 	endpoint: string;
-	onFormSubmit: (data: Videos[]) => void;
+	onFormSubmit: (data: Video[]) => void;
 }
 
 export default function VideoForm({ initialData, HTTPmethod, endpoint, onFormSubmit }: VideoFormProps) {

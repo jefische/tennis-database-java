@@ -1,98 +1,62 @@
 import { create } from "zustand";
-import { User, Videos, VideoFilters, SortMode } from "@/types";
+import { User, Video, VideoFilters, SortMode, Selected } from "@/types";
 import { initFilterData } from "@/utils/videoFilter";
 import { filterReducer, FilterAction } from "@/utils/filterReducer";
 
 type State = {
 	user: User;
-	allVideos: Videos[];
-	activeVideos: Videos[];
-	filteredVideos: Videos[];
-	filterData: VideoFilters;
+	allVideos: Video[];
+	filterOptions: VideoFilters;
+	selected: Selected;
 	sortMode: SortMode;
+	searchQuery: string;
+	allTournaments: boolean;
+	allYears: boolean;
 };
 
 type Actions = {
 	setUser: (info: User) => void;
-	setAllVideos: (video: Videos[]) => void;
-	addFilterVideos: (video: Videos[]) => void;
-	resetFilterVideos: () => void;
-	setActiveVideos: (video: Videos[]) => void;
-	setSortMode: (mode: SortMode) => void;
+	setAllVideos: (video: Video[]) => void;
 	dispatchFilter: (action: FilterAction) => void;
+	setSortMode: (mode: SortMode) => void;
+	setSearchQuery: (query: string) => void;
 };
 
 export const useStore = create<State & Actions>((set, get) => ({
 	user: null,
 	allVideos: [],
-	activeVideos: [],
-	filteredVideos: [],
-	filterData: { tournament: {}, year: {}, tags: {} },
+	filterOptions: { tournament: {}, year: {}, tag: {} },
+	selected: { tournament: {}, year: {}, tag: {} },
 	sortMode: "tournament",
+	searchQuery: "",
+	allTournaments: true,
+	allYears: true,
 	setUser: (info: User) => set({ user: info }),
-	setAllVideos: (videos: Videos[]) => {
-		const initData: VideoFilters = videos.reduce(initFilterData, { tournament: {}, year: {}, tags: {} });
-		const sorted: VideoFilters = { tournament: {}, year: {}, tags: {} };
+	dispatchFilter: (action: FilterAction) => set((s) => ({ ...filterReducer(s, action) })),
+	setSortMode: (mode: SortMode) => set({ sortMode: mode }),
+	setSearchQuery: (query: string) => set({ searchQuery: query }),
 
-		const currentFilterData = get().filterData;
-		const hasExistingFilters = Object.keys(currentFilterData.tournament).length > 0;
+	setAllVideos: (videos: Video[]) => {
+		const initData: VideoFilters = videos.reduce(initFilterData, { tournament: {}, year: {}, tag: {} });
+		const sorted: VideoFilters = { tournament: {}, year: {}, tag: {} };
 
+		// Sort the tournament, year, and tag keys alphabetically.
+		// Also copy the users existing checkbox/includes choice on subsequent filters after
+		// an add, edit, or delete operation from admins. The default for users sets include to true.
 		Object.keys(initData.tournament)
 			.sort()
-			.forEach((key) => {
-				sorted.tournament[key] = {
-					...initData.tournament[key],
-					include:
-						hasExistingFilters && currentFilterData.tournament[key] !== undefined
-							? currentFilterData.tournament[key].include
-							: true,
-				};
-			});
+			.forEach((key) => (sorted.tournament[key] = initData.tournament[key]));
+
 		Object.keys(initData.year)
 			.sort()
-			.forEach((key) => {
-				sorted.year[key] = {
-					...initData.year[key],
-					include:
-						hasExistingFilters && currentFilterData.year[key] !== undefined
-							? currentFilterData.year[key].include
-							: true,
-				};
-			});
+			.forEach((key) => (sorted.year[key] = initData.year[key]));
 
-		// console.log(
-		// 	Object.entries(initData.tags)
-		// 		.sort((a, b) => b[1].count - a[1].count)
-		// 		// .sort()
-		// 		.map((t) => t[1]),
-		// );
-
-		// console.log(Object.keys(initData.tags).sort());
-
-		Object.keys(initData.tags)
+		Object.keys(initData.tag)
 			.sort()
-			.forEach((key) => {
-				sorted.tags[key] = {
-					...initData.tags[key],
-					include:
-						hasExistingFilters && currentFilterData.tags[key] !== undefined
-							? currentFilterData.tags[key].include
-							: true,
-				};
-			});
+			.forEach((key) => (sorted.tag[key] = initData.tag[key]));
 
-		const filtered = videos.filter((v) => {
-			// const tKey = v.tournament.replace(/\s/g, "");
-			return sorted.tournament[v.tournament]?.include && sorted.year[v.year]?.include;
-		});
-
-		set({ allVideos: videos, filterData: sorted, filteredVideos: filtered, activeVideos: filtered });
+		set({ allVideos: videos, filterOptions: sorted });
 	},
-	dispatchFilter: (action: FilterAction) => set((s) => ({ filterData: filterReducer(s.filterData, action) })),
-	addFilterVideos: (videos: Videos[]) => set((state) => ({ filteredVideos: [...state.filteredVideos, ...videos] })),
-	resetFilterVideos: () => set({ filteredVideos: [] }),
-	setActiveVideos: (videos: Videos[]) => set({ activeVideos: videos }),
-	setSortMode: (mode: SortMode) => set({ sortMode: mode }),
 }));
 
 // export type setVideosFunction = Dispatch<SetStateAction<Videos[]>>;

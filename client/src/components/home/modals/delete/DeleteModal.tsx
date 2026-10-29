@@ -8,18 +8,19 @@ import {
 	DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Videos } from "@/types";
+import { Video } from "@/types";
 import { toast } from "sonner";
 import { useStore } from "@/hooks/useStore";
 
 interface DeleteModalProps {
 	open: boolean;
 	setDeleteModal: (open: boolean) => void;
-	editData: Videos;
+	editData: Video;
 }
 
 export default function DeleteModal({ open, setDeleteModal, editData }: DeleteModalProps) {
-	const { user, setAllVideos, setActiveVideos } = useStore();
+	const user = useStore((s) => s.user);
+	const setAllVideos = useStore((s) => s.setAllVideos);
 
 	function handleDelete(): void {
 		fetch(`${import.meta.env.VITE_API_URL}/videos/${editData.youtubeId}`, {
@@ -36,7 +37,6 @@ export default function DeleteModal({ open, setDeleteModal, editData }: DeleteMo
 			})
 			.then((data) => {
 				setAllVideos(data);
-				setActiveVideos(data);
 			})
 			.catch((error) => {
 				console.error("There was a problem with the fetch operation:\n", error);

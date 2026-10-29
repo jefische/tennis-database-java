@@ -1,35 +1,44 @@
 import { TournamentFilterItem } from "@/types";
-import { useState, useId } from "react";
+import { useState, useId, useCallback } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { ChevronDown } from "lucide-react";
 import { useStore } from "@/hooks/useStore";
+import FilterRow from "./FilterRow";
 
 export default function TournamentFilters({ open }: { open?: boolean }) {
 	// isOpen state is used to manage the accordion dropdown filters in the sidebar
 	const [isOpen, setisOpen] = useState<boolean>(open ?? true);
-	const [selectAll, setSelectAll] = useState(true);
-	const { filterData, dispatchFilter } = useStore();
+
+	const selected = useStore((s) => s.selected);
+	const filterOptions = useStore((s) => s.filterOptions);
+	const dispatchFilter = useStore((s) => s.dispatchFilter);
+	const allTournaments = useStore((s) => s.allTournaments);
 	const uid = useId();
 
 	let numTournaments: number = 0; // for Select All count
-	const tournaments: [string, TournamentFilterItem][] = Object.entries(filterData.tournament).filter(([key, val]) => {
-		numTournaments += val.count;
-		return key;
-	});
+
+	let selectedTournaments: string[] = Object.keys(selected.tournament);
+
+	const tournaments: [string, TournamentFilterItem][] = Object.entries(filterOptions.tournament).filter(
+		([key, val]) => {
+			numTournaments += val.count;
+			return key;
+		},
+	);
 
 	function handleSelectAll(): void {
-		setSelectAll(!selectAll);
-		dispatchFilter({ type: "SELECT_ALL", group: "tournament", include: !selectAll });
+		dispatchFilter({ type: "SELECT_ALL", group: "tournament" });
 	}
 
-	const handleChange = (key: string, checked: boolean): void => {
-		dispatchFilter({ type: "SELECT_ONE", group: "tournament", key: key });
+	const handleChange = useCallback(
+		(key: string, checked: boolean) => {
+			dispatchFilter({ type: "SELECT_ONE", group: "tournament", key, checked });
+		},
+		[filterOptions, dispatchFilter],
+	);
 
-		// If any individual year is unchecked, uncheck the select all input field
-		if (checked === false) setSelectAll(false);
-	};
-
+	console.log(filterOptions);
 	return (
 		<div className="accordion pt-[10px]">
 			<div className="accordion-item">
@@ -49,33 +58,25 @@ export default function TournamentFilters({ open }: { open?: boolean }) {
 								<Checkbox
 									id={`${uid}-selectAllTournaments`}
 									className="size-4"
-									checked={selectAll}
+									checked={allTournaments}
 									onCheckedChange={() => handleSelectAll()}
 								/>
 								<Label htmlFor={`${uid}-selectAllTournaments`} className="ps-[10px] text-base">
-									Select All ({numTournaments})
+									All Tournaments ({numTournaments})
 								</Label>
 							</li>
-							{tournaments.map(([key, val], idx) => {
-								let title = val.title;
-								let count = val.count;
+							{tournaments.map(([key, val]) => {
 								return (
-									<li key={idx} className="flex items-center p-1">
-										<Checkbox
-											id={`${uid}-${key}`}
-											className="size-4"
-											checked={
-												filterData.tournament[key] == undefined
-													? true
-													: filterData.tournament[key].include
-											}
-											onCheckedChange={(checked) => handleChange(key, checked as boolean)}
-										/>
-
-										<Label htmlFor={`${uid}-${key}`} className="ps-[10px] text-base">
-											{title} ({count})
-										</Label>
-									</li>
+									<FilterRow
+										key={key}
+										id={`${uid}-${key}`}
+										filterKey={key}
+										label={val.title}
+										count={val.count}
+										item={val}
+										checked={selectedTournaments.includes(key)}
+										onToggle={handleChange}
+									/>
 								);
 							})}
 						</ul>

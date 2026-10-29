@@ -44,3 +44,5 @@ ca.pem
 node_modules
 .env
 
+# Ignore any file that has an extension ending in _x
+*_x.*

@@ -25,7 +25,7 @@ export default function LoginModal({
 	const [password, setPassword] = useState<string>("");
 	const [error, setError] = useState<string>("");
 	const [isLoading, setLoading] = useState<boolean>(false);
-	const { setUser } = useStore();
+	const setUser = useStore((s) => s.setUser);
 
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();

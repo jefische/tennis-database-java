@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { Fragment, useState } from "react";
+import { Fragment, useState, memo } from "react";
 import SCNEditModal from "./edit/SCNEditModal";
 import DeleteModal from "./delete/DeleteModal";
 import { generateMatchSummary } from "@/utils/matchSummaryAgent";
-import { VideoCards, Videos, AISummary } from "@/types";
+import { VideoCards, Video, AISummary } from "@/types";
 import { Star, Sparkles } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import { Link } from "react-router-dom";
@@ -40,8 +40,8 @@ const emptySummary: AISummary = {
 	status: null,
 };
 
-export default function SCNVideoCard({ id, title, duration, summary, summaryStatus }: VideoCards) {
-	const [editData, setEditData] = useState<Videos>({} as Videos);
+const SCNVideoCard = memo(function SCNVideoCard({ id, title, duration, summary, summaryStatus }: VideoCards) {
+	const [editData, setEditData] = useState<Video>({} as Video);
 	const [editModal, setEditModal] = useState<boolean>(false);
 	const [deleteModal, setDeleteModal] = useState<boolean>(false);
 	const [aiSummary, setAiSummary] = useState<AISummary>(() => {
@@ -57,7 +57,7 @@ export default function SCNVideoCard({ id, title, duration, summary, summaryStat
 	const [summaryError, setSummaryError] = useState<string | null>(null);
 	const [dropdownOpen, setDropdownOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const { user } = useStore();
+	const user = useStore((s) => s.user);
 
 	const openEditModal = (): void => {
 		fetch(`${import.meta.env.VITE_API_URL}/videos/${id}`, {
@@ -183,7 +183,7 @@ export default function SCNVideoCard({ id, title, duration, summary, summaryStat
 				>
 					<DialogHeader>
 						<DialogTitle className="hidden sm:flex items-center justify-center gap-6 text-lg md:text-2xl me-4">
-							{title} ({duration})
+							{title}
 							{user?.role === "ADMIN" && (
 								<Button onClick={handleTranscript}>
 									<Spinner className={cn(loading ? "block" : "hidden")} data-icon="inline-start" />{" "}
@@ -287,4 +287,6 @@ export default function SCNVideoCard({ id, title, duration, summary, summaryStat
 			<DeleteModal open={deleteModal} setDeleteModal={setDeleteModal} editData={editData} />
 		</Fragment>
 	);
-}
+});
+
+export default SCNVideoCard;

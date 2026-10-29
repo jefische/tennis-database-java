@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Videos } from "@/types";
+import { Video } from "@/types";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { useDocumentMeta } from "@/hooks/useDocumentMeta";
 import VideoFullPage from "@/components/VideoFullPage";
@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 
 export default function MatchView() {
 	const { slugAndId } = useParams<{ slugAndId: string }>();
-	const [matchVideo, setMatchVideo] = useState<Videos>();
+	const [matchVideo, setMatchVideo] = useState<Video>();
 	const baseURL: string = import.meta.env.VITE_API_URL;
 
 	/* Note useDocumentMeta hook is to handle the case where direct URL is accessed and <meta>

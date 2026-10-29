@@ -1,18 +1,18 @@
 import { useState, useRef } from "react";
-import { Videos } from "@/types";
+import { Video } from "@/types";
 import { checkThumbnail } from "@/utils/youtube";
 import { pullDuration } from "@/utils/callbacks";
 
 interface useVideoFormProps {
-	initialData: Partial<Omit<Videos, "videoId">>;
+	initialData: Partial<Omit<Video, "videoId">>;
 	HTTPmethod: string;
 	endpoint: string;
-	onFormSubmit: (data: Videos[]) => void;
+	onFormSubmit: (data: Video[]) => void;
 }
 
 export function useVideoForm({ initialData, HTTPmethod, endpoint, onFormSubmit }: useVideoFormProps) {
 	// All shared state
-	const [formData, setFormData] = useState<Partial<Omit<Videos, "videoId">>>(initialData);
+	const [formData, setFormData] = useState<Partial<Omit<Video, "videoId">>>(initialData);
 	const [formValidated, setValidation] = useState<boolean>(false);
 	const formRef = useRef<HTMLFormElement>(null);
 	const youtubeIdElement = useRef<HTMLInputElement>(null);

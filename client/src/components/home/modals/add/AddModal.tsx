@@ -2,9 +2,9 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import VideoForm from "../VideoForm";
 import { Fragment, useState, useEffect } from "react";
-import { setVideosFunction, Videos } from "@/types";
+import { setVideosFunction, Video } from "@/types";
 
-const defaultData: Omit<Videos, "videoId"> = {
+const defaultData: Omit<Video, "videoId"> = {
 	tournament: "US Open",
 	year: 2024,
 	youtubeId: "JFwsha7u1IE",
@@ -33,7 +33,7 @@ export default function AddModal({ setAllVideos, setVideos }: AddVideoTypes) {
 	const openModal = () => setIsOpen(true);
 	const closeModal = () => setIsOpen(false);
 
-	function handleSubmit(data: Videos[]): void {
+	function handleSubmit(data: Video[]): void {
 		setVideos(data);
 		setAllVideos(data);
 		setIsSubmitted(true);
