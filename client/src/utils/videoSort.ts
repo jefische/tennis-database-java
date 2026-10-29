@@ -1,4 +1,4 @@
-import { Videos, SortMode } from "@/types";
+import { Video, SortMode } from "@/types";
 
 const ROUND_ORDER: Record<string, number> = {
 	Finals: 1,
@@ -11,7 +11,7 @@ const ROUND_ORDER: Record<string, number> = {
 	Exhibition: 8,
 };
 
-export function sortVideos(a: Videos, b: Videos): number {
+export function sortVideosByTournament(a: Video, b: Video): number {
 	const nameA: string = a.tournament.toUpperCase();
 	const nameB: string = b.tournament.toUpperCase();
 
@@ -47,16 +47,16 @@ export function sortVideos(a: Videos, b: Videos): number {
  * rows were added. Preferred over createdAt, which is null for all but a handful of rows
  * because the column was added long after most videos were inserted.
  */
-export function sortVideosByNewest(a: Videos, b: Videos): number {
+export function sortVideosByNewest(a: Video, b: Video): number {
 	return b.videoId - a.videoId;
 }
 
-export function sortVideosByOldest(a: Videos, b: Videos): number {
+export function sortVideosByOldest(a: Video, b: Video): number {
 	return a.videoId - b.videoId;
 }
 
-export const VIDEO_SORTS: Record<SortMode, (a: Videos, b: Videos) => number> = {
-	tournament: sortVideos,
+export const VIDEO_SORTS: Record<SortMode, (a: Video, b: Video) => number> = {
+	tournament: sortVideosByTournament,
 	newest: sortVideosByNewest,
 	oldest: sortVideosByOldest,
 };

@@ -1,4 +1,4 @@
-import { Videos } from "@/types";
+import { Video } from "@/types";
 // import Button from "react-bootstrap/Button";
 // import { useVideoForm } from "@/hooks/useVideoForm";
 import { Input } from "@/components/ui/input";
@@ -32,7 +32,7 @@ const schema = z.object({
 });
 
 interface VideoFormProps {
-	initialData: Partial<Omit<Videos, "videoId">>;
+	initialData: Partial<Omit<Video, "videoId">>;
 	HTTPmethod: string;
 	endpoint: string;
 	setOpenModal: (open: boolean) => void;

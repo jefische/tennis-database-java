@@ -9,24 +9,21 @@ export default function TagFilters({ open }: { open?: boolean }) {
 	// isOpen state is used to manage the accordion dropdown filters in the sidebar
 	const [isOpen, setisOpen] = useState<boolean>(open ?? true);
 	const [selectAll, setSelectAll] = useState(true);
-	const { filterData, dispatchFilter } = useStore();
+	const { dispatchFilter } = useStore();
 	const uid = useId();
 
 	let numTournaments: number = 0; // for Select All count
-	const tournaments: [string, TournamentFilterItem][] = Object.entries(filterData.tournament).filter(([key, val]) => {
-		numTournaments += val.count;
-		return key;
-	});
+	const tournaments: [string, TournamentFilterItem][] = [];
 
 	// const select = Object.values(filterData.tournament).every((val) => val.include);
 
 	function handleSelectAll(): void {
 		setSelectAll(!selectAll);
-		dispatchFilter({ type: "SELECT_ALL", group: "tags", include: !selectAll });
+		// dispatchFilter({ type: "SELECT_ALL", group: "tags", include: !selectAll });
 	}
 
 	const handleChange = (key: string, checked: boolean): void => {
-		dispatchFilter({ type: "SELECT_ONE", group: "tags", key: key });
+		// dispatchFilter({ type: "SELECT_ONE", group: "tags", key: key });
 		// If any individual year is unchecked, uncheck the select all input field
 		if (checked === false) setSelectAll(false);
 	};
@@ -65,11 +62,7 @@ export default function TagFilters({ open }: { open?: boolean }) {
 										<Checkbox
 											id={`${uid}-${key}`}
 											className="size-4"
-											checked={
-												filterData.tournament[key] == undefined
-													? true
-													: filterData.tournament[key].include
-											}
+											checked={true}
 											onCheckedChange={(checked) => handleChange(key, checked as boolean)}
 										/>
 

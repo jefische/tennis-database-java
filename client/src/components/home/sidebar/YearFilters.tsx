@@ -1,32 +1,38 @@
 import { YearFilterItem } from "@/types";
-import { useState, useId } from "react";
+import { useState, useId, useCallback } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { ChevronDown } from "lucide-react";
 import { useStore } from "@/hooks/useStore";
+import FilterRow from "./FilterRow";
 
 export default function YearFilters({ open }: { open?: boolean }) {
 	// isOpen state is used to manage the accordion dropdown filters in the sidebar
 	const [isOpen, setisOpen] = useState<boolean>(open ?? false);
-	const [selectAll, setSelectAll] = useState(true);
-	const { filterData, dispatchFilter } = useStore();
+	const selected = useStore((s) => s.selected);
+	const filterOptions = useStore((s) => s.filterOptions);
+	const dispatchFilter = useStore((s) => s.dispatchFilter);
+	const allYears = useStore((s) => s.allYears);
 	const uid = useId();
 
 	let numYears: number = 0; // for Select All count
-	const years: [string, YearFilterItem][] = Object.entries(filterData.year).filter(([key, val]) => {
+	let selectedYears: string[] = Object.keys(selected.year);
+
+	const years: [string, YearFilterItem][] = Object.entries(filterOptions.year).filter(([key, val]) => {
 		numYears += val.count;
 		return key;
 	});
 
 	function handleSelectAll(): void {
-		setSelectAll(!selectAll);
-		dispatchFilter({ type: "SELECT_ALL", group: "year", include: !selectAll });
+		dispatchFilter({ type: "SELECT_ALL", group: "year" });
 	}
 
-	const handleChange = (key: string, checked: boolean): void => {
-		dispatchFilter({ type: "SELECT_ONE", group: "year", key: key });
-		if (checked === false) setSelectAll(false);
-	};
+	const handleChange = useCallback(
+		(key: string, checked: boolean) => {
+			dispatchFilter({ type: "SELECT_ONE", group: "year", key, checked });
+		},
+		[dispatchFilter],
+	);
 
 	return (
 		<div className="accordion pt-[10px]">
@@ -47,7 +53,7 @@ export default function YearFilters({ open }: { open?: boolean }) {
 								<Checkbox
 									id={`${uid}-selectAllYears`}
 									className="size-4"
-									checked={selectAll}
+									checked={allYears}
 									onCheckedChange={() => handleSelectAll()}
 								/>
 								<Label htmlFor={`${uid}-selectAllYears`} className="ps-[10px] text-base">
@@ -55,24 +61,17 @@ export default function YearFilters({ open }: { open?: boolean }) {
 								</Label>
 							</li>
 							{years.map(([key, val]) => {
-								let name = key;
-								let count = val.count;
 								return (
-									<li key={name} className="flex items-center p-1">
-										<Checkbox
-											id={`${uid}-${name}`}
-											className="size-4"
-											checked={
-												filterData.year[name] === undefined
-													? true
-													: filterData.year[name].include
-											}
-											onCheckedChange={(checked) => handleChange(key, checked as boolean)}
-										/>
-										<Label htmlFor={`${uid}-${name}`} className="ps-[10px] text-base">
-											{name} ({count})
-										</Label>
-									</li>
+									<FilterRow
+										key={key}
+										id={`${uid}-${key}`}
+										filterKey={key}
+										label={val.title}
+										count={val.count}
+										item={val}
+										checked={selectedYears.includes(key)}
+										onToggle={handleChange}
+									/>
 								);
 							})}
 						</ul>

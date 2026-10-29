@@ -27,7 +27,8 @@ export default function Navbar({ darkMode, setDarkMode }: NavbarProps) {
 	const [loginOpen, setLoginOpen] = useState<boolean>(false);
 	const [registerOpen, setRegisterOpen] = useState<boolean>(false);
 	const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
-	const { user, setUser } = useStore();
+	const user = useStore((s) => s.user);
+	const setUser = useStore((s) => s.setUser);
 
 	const handleActive = (e: React.MouseEvent<HTMLAnchorElement>) => {
 		const nextLinks = activeLink.map((link) => {

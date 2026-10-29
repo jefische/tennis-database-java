@@ -1,8 +1,6 @@
-import { useState, useEffect, useRef, useMemo } from "react";
-import { Videos } from "@/types";
-import { VIDEO_SORTS } from "@/utils/videoSort";
+import { useState, useEffect, useRef } from "react";
+import { Video } from "@/types";
 import { useStore } from "@/hooks/useStore";
-import { filterByYearAndTournament } from "@/utils/videoFilter";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { useDocumentMeta } from "@/hooks/useDocumentMeta";
 import Sidebar from "@/components/home/sidebar/Sidebar";
@@ -16,30 +14,26 @@ import TournamentFilters from "@/components/home/sidebar/TournamentFilters";
 import YearFilters from "@/components/home/sidebar/YearFilters";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CircleChevronUp, SlidersHorizontal } from "lucide-react";
+import { useVisibleVideos } from "@/hooks/useVisibleVideos";
+import { useShallow } from "zustand/react/shallow";
 
 export default function Home() {
-	const [mobileFilterOpen, setMobileFilterOpen] = useState<boolean>(false);
 	const [isLoading, setLoading] = useState<boolean>(true);
 	const [showScrollTop, setShowScrollTop] = useState(false);
 	const mainRef = useRef<HTMLDivElement>(null);
 
 	const pageLoadingSkeletons = Array.from({ length: 12 });
 
-	const {
-		user,
-		allVideos,
-		setAllVideos,
-		activeVideos,
-		setActiveVideos,
-		filterData,
-		addFilterVideos,
-		resetFilterVideos,
-		sortMode,
-		setSortMode,
-	} = useStore();
+	const { user, allVideos, setAllVideos, setSortMode } = useStore(
+		useShallow((s) => ({
+			user: s.user,
+			allVideos: s.allVideos,
+			setAllVideos: s.setAllVideos,
+			setSortMode: s.setSortMode,
+		})),
+	);
 
-	// Sort a copy: activeVideos is store state, and Array.sort mutates in place.
-	const sortedVideos = useMemo(() => [...activeVideos].sort(VIDEO_SORTS[sortMode]), [activeVideos, sortMode]);
+	const videos = useVisibleVideos();
 
 	// import.meta is a runtime metadata object available in ES modules
 	// Vite injects an env object on import.meta
@@ -49,19 +43,6 @@ export default function Home() {
 	const requestOptions: RequestInit = {
 		method: "GET",
 		mode: "cors",
-	};
-
-	const handleFilterSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
-		e.preventDefault();
-		let filteredVideos: Videos[] = filterByYearAndTournament(allVideos, filterData);
-
-		// newFilterData is for implementing filter sync. Toggling tournaments also toggles to available years
-		// not sure if this is the behavior I want as it introduces odd edge cases.
-
-		resetFilterVideos();
-		addFilterVideos(filteredVideos);
-		setActiveVideos(filteredVideos);
-		setMobileFilterOpen(false);
 	};
 
 	useEffect(() => {
@@ -74,7 +55,7 @@ export default function Home() {
 			.then((response) => response.json())
 			.then((data) => {
 				setAllVideos(
-					data.map((v: Videos) => {
+					data.map((v: Video) => {
 						return { ...v, createdAt: v.createdAt ? new Date(v.createdAt) : null };
 					}),
 				);
@@ -102,7 +83,7 @@ export default function Home() {
 		<>
 			<div className="h-[calc(100%-64px)] mb-4">
 				<section className="flex h-full">
-					<Sidebar handleFilter={handleFilterSubmit} />
+					<Sidebar />
 					<main
 						ref={mainRef}
 						className="w-full lg:w-[calc(100%-245px)] overflow-auto ps-[50px] pe-[50px] pb-[200px] scrollbar-custom"
@@ -130,7 +111,7 @@ export default function Home() {
 									</>
 								)}
 
-								{sortedVideos.map((video: Videos) => {
+								{videos.map((video: Video) => {
 									return (
 										<SCNVideoCard
 											key={video.videoId}
@@ -156,7 +137,7 @@ export default function Home() {
 						</Button>
 					)}
 
-					<Sheet open={mobileFilterOpen} onOpenChange={setMobileFilterOpen}>
+					<Sheet>
 						<SheetTrigger asChild className="lg:hidden">
 							<Button
 								variant="outline"
@@ -170,14 +151,11 @@ export default function Home() {
 							<SheetHeader>
 								<SheetTitle>Filters</SheetTitle>
 							</SheetHeader>
-							<form className="w-auto px-4" onSubmit={handleFilterSubmit}>
+							<div className="w-auto px-4">
 								<h2 className="text-xl">Filter Match Results</h2>
 								<TournamentFilters />
 								<YearFilters />
-								<Button size="lg" className="mt-4 mb-8" type="submit">
-									Apply Filters
-								</Button>
-							</form>
+							</div>
 						</SheetContent>
 					</Sheet>
 				</section>

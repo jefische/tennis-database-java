@@ -5,7 +5,7 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import { Fragment, useState } from "react";
 import EditModal from "./edit/EditModal";
 import { generateMatchSummary } from "@/utils/matchSummaryAgent";
-import { Videos, AISummary, setVideosFunction } from "@/types";
+import { Video, AISummary, setVideosFunction } from "@/types";
 import { Star } from "lucide-react";
 import { useStore } from "@/hooks/useStore";
 
@@ -16,7 +16,7 @@ interface VideoCards {
 	maxWidth?: number;
 	summary?: string | null;
 	summaryStatus: "yes" | "no_transcript" | null;
-	allVideos: Videos[];
+	allVideos: Video[];
 	setAllVideos: setVideosFunction;
 	setActiveVideos: setVideosFunction;
 }
@@ -32,7 +32,7 @@ export default function VideoCard({
 }: VideoCards) {
 	const [modalIsOpen, setIsOpen] = useState<boolean>(false);
 	const [editModal, setEditModal] = useState<boolean>(false);
-	const [editData, setEditData] = useState<Videos>({} as Videos);
+	const [editData, setEditData] = useState<Video>({} as Video);
 	const [aiSummary, setAiSummary] = useState<AISummary | null>(() => {
 		if (!summary) return null;
 		if (summary.startsWith("No transcript")) return null;

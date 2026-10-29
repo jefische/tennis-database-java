@@ -66,7 +66,7 @@ let allVideos = [
 
 import { Dispatch, SetStateAction } from "react";
 
-export interface Videos {
+export interface Video {
 	videoId: number;
 	tournament: string;
 	year: number;
@@ -106,8 +106,9 @@ type Rounds = "1st" | "2nd" | "3rd" | "4th" | "Quarterfinals" | "Semifinals" | "
 // }
 
 type BaseFilterItem = {
+	// title: string | number;
 	count: number;
-	include: boolean;
+	// include: boolean;
 };
 
 export type TournamentFilterItem = BaseFilterItem & {
@@ -130,12 +131,15 @@ export interface VideoFilters {
 	year: {
 		[key: string]: YearFilterItem;
 	};
-	tags: {
+	tag: {
 		[key: string]: TagFilterItem;
 	};
 }
 
-export type setVideosFunction = Dispatch<SetStateAction<Videos[]>>;
+export type Selected = { tournament: Record<string, true>; year: Record<string, true>; tag: Record<string, true> };
+// or { tournament: string[]; year: string[] }
+
+export type setVideosFunction = Dispatch<SetStateAction<Video[]>>;
 export type setFiltersFunction = Dispatch<SetStateAction<VideoFilters>>;
 
 export interface VideoCards {

@@ -28,7 +28,7 @@ function NavbarLayout({ darkMode, setDarkMode }: NavbarProps) {
 	);
 }
 export default function App() {
-	const { setUser } = useStore();
+	const setUser = useStore((s) => s.setUser);
 	const [darkMode, setDarkMode] = useState<boolean>(() => localStorage.getItem("theme") !== "light");
 
 	useEffect(() => {

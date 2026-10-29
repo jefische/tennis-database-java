@@ -8,12 +8,12 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import RHFVideoForm from "../RHFVideoForm";
-import { Videos } from "@/types";
+import { Video } from "@/types";
 
 interface EditModalProps {
 	open: boolean;
 	setEditModal: (open: boolean) => void;
-	editData: Videos;
+	editData: Video;
 }
 
 export default function SCNEditModal({ editData, open, setEditModal }: EditModalProps) {

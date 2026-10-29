@@ -1,6 +1,6 @@
-import { Videos, VideoFilters } from "@/types";
+import { Video, VideoFilters, Selected } from "@/types";
 
-export function initFilterData(acc: VideoFilters, video: Videos): VideoFilters {
+export function initFilterData(acc: VideoFilters, video: Video): VideoFilters {
 	// Add tournament filter
 	// const key: string = video.tournament.replace(/\s/g, "");
 	const key: string = video.tournament;
@@ -9,7 +9,6 @@ export function initFilterData(acc: VideoFilters, video: Videos): VideoFilters {
 			title: video.tournament,
 			year: [video.year],
 			count: 1,
-			include: true,
 		};
 	} else {
 		if (!acc.tournament[key].year?.includes(video.year)) {
@@ -22,7 +21,6 @@ export function initFilterData(acc: VideoFilters, video: Videos): VideoFilters {
 	if (!acc.year[video.year]) {
 		acc.year[video.year] = {
 			title: video.year,
-			include: true,
 			count: 1,
 		};
 	} else {
@@ -34,14 +32,13 @@ export function initFilterData(acc: VideoFilters, video: Videos): VideoFilters {
 		var tagArray = JSON.parse(video.tags);
 
 		tagArray.forEach((tag: string) => {
-			if (!acc.tags[tag]) {
-				acc.tags[tag] = {
+			if (!acc.tag[tag]) {
+				acc.tag[tag] = {
 					title: tag,
-					include: true,
 					count: 1,
 				};
 			} else {
-				acc.tags[tag].count++;
+				acc.tag[tag].count++;
 			}
 		});
 	}
@@ -49,31 +46,22 @@ export function initFilterData(acc: VideoFilters, video: Videos): VideoFilters {
 	return acc;
 }
 
-export function filterByYearAndTournament(allVideos: Videos[], filterData: VideoFilters) {
-	let filteredVideos: Videos[] = [];
-
-	// First extract years to include for filtering
-	const yearsToInclude: number[] = Object.entries(filterData.year)
-		.filter(([key, val]) => {
-			return val.include === true;
-		})
-		.map(([key, value]) => Number(key));
-
-	// Second extract tournaments to include for filtering
-	const tournamentsToInclude: string[] = Object.entries(filterData.tournament)
-		.filter(([key, val]) => {
-			return val.include === true;
-		})
-		.map(([key, value]) => String(key));
-
-	// Finall filter formData to include tournament and years selected from above.
-	const temp: Videos[] = allVideos.filter(
-		(x) => tournamentsToInclude.includes(x.tournament) && yearsToInclude.includes(x.year),
-	);
-
-	if (temp.length > 0) {
-		filteredVideos = filteredVideos.concat(temp);
-	}
+export function filterByYearAndTournamentAndTag(
+	allVideos: Video[],
+	selected: Selected,
+	allTournaments: boolean,
+	allYears: boolean,
+): Video[] {
+	// Filter videos to include tournament, years, and tags.
+	const sTags = Object.keys(selected.tag);
+	const filteredVideos: Video[] = allVideos.filter((v) => {
+		const tags = JSON.parse(v.tags || "[]");
+		return (
+			(allTournaments || v.tournament in selected.tournament) &&
+			(allYears || v.year in selected.year) &&
+			(sTags.length === 0 || tags.some((t: string) => sTags.includes(t.toLowerCase())))
+		);
+	});
 
 	return filteredVideos;
 }
