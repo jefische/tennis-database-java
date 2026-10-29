@@ -3,7 +3,7 @@ import { Fragment, useState, memo } from "react";
 import SCNEditModal from "./edit/SCNEditModal";
 import DeleteModal from "./delete/DeleteModal";
 import { generateMatchSummary } from "@/utils/matchSummaryAgent";
-import { VideoCards, Videos, AISummary } from "@/types";
+import { VideoCards, Video, AISummary } from "@/types";
 import { Star, Sparkles } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import { Link } from "react-router-dom";
@@ -41,7 +41,7 @@ const emptySummary: AISummary = {
 };
 
 const SCNVideoCard = memo(function SCNVideoCard({ id, title, duration, summary, summaryStatus }: VideoCards) {
-	const [editData, setEditData] = useState<Videos>({} as Videos);
+	const [editData, setEditData] = useState<Video>({} as Video);
 	const [editModal, setEditModal] = useState<boolean>(false);
 	const [deleteModal, setDeleteModal] = useState<boolean>(false);
 	const [aiSummary, setAiSummary] = useState<AISummary>(() => {
