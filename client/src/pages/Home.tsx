@@ -112,16 +112,7 @@ export default function Home() {
 								)}
 
 								{videos.map((video: Video) => {
-									return (
-										<SCNVideoCard
-											key={video.videoId}
-											id={video.youtubeId}
-											title={video.title}
-											duration={video.duration}
-											summary={video.summary}
-											summaryStatus={video.summaryStatus}
-										/>
-									);
+									return <SCNVideoCard key={video.videoId} video={video} />;
 								})}
 							</div>
 						</div>

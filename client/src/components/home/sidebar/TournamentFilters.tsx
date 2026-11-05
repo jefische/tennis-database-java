@@ -5,10 +5,12 @@ import { Label } from "@/components/ui/label";
 import { ChevronDown } from "lucide-react";
 import { useStore } from "@/hooks/useStore";
 import FilterRow from "./FilterRow";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 export default function TournamentFilters({ open }: { open?: boolean }) {
 	// isOpen state is used to manage the accordion dropdown filters in the sidebar
 	const [isOpen, setisOpen] = useState<boolean>(open ?? true);
+	const [showMoreTournaments, setShowMoreTournaments] = useState("");
 
 	const selected = useStore((s) => s.selected);
 	const filterOptions = useStore((s) => s.filterOptions);
@@ -38,7 +40,7 @@ export default function TournamentFilters({ open }: { open?: boolean }) {
 		[filterOptions, dispatchFilter],
 	);
 
-	console.log(filterOptions);
+	console.log(tournaments);
 	return (
 		<div className="accordion pt-[10px]">
 			<div className="accordion-item">
@@ -65,7 +67,7 @@ export default function TournamentFilters({ open }: { open?: boolean }) {
 									All Tournaments ({numTournaments})
 								</Label>
 							</li>
-							{tournaments.map(([key, val]) => {
+							{tournaments.slice(0, 12).map(([key, val]) => {
 								return (
 									<FilterRow
 										key={key}
@@ -79,6 +81,38 @@ export default function TournamentFilters({ open }: { open?: boolean }) {
 									/>
 								);
 							})}
+							<li>
+								<Accordion
+									type="single"
+									collapsible
+									value={showMoreTournaments}
+									onValueChange={setShowMoreTournaments}
+								>
+									<AccordionItem value="remaining-tournaments">
+										<AccordionContent>
+											{tournaments.slice(12).map(([key, val]) => {
+												return (
+													<FilterRow
+														key={key}
+														id={`${uid}-${key}`}
+														filterKey={key}
+														label={val.title}
+														count={val.count}
+														item={val}
+														checked={selectedTournaments.includes(key)}
+														onToggle={handleChange}
+													/>
+												);
+											})}
+										</AccordionContent>
+										<AccordionTrigger className="justify-around hover:cursor-pointer mt-2">
+											{showMoreTournaments === "remaining-tournaments"
+												? "Show less"
+												: "Show more"}
+										</AccordionTrigger>
+									</AccordionItem>
+								</Accordion>
+							</li>
 						</ul>
 					</div>
 				</div>

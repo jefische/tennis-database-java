@@ -3,7 +3,7 @@ import { Fragment, useState, memo } from "react";
 import SCNEditModal from "./edit/SCNEditModal";
 import DeleteModal from "./delete/DeleteModal";
 import { generateMatchSummary } from "@/utils/matchSummaryAgent";
-import { VideoCards, Video, AISummary } from "@/types";
+import { Video, AISummary } from "@/types";
 import { Star, Sparkles } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import { Link } from "react-router-dom";
@@ -40,15 +40,15 @@ const emptySummary: AISummary = {
 	status: null,
 };
 
-const SCNVideoCard = memo(function SCNVideoCard({ id, title, duration, summary, summaryStatus }: VideoCards) {
+const SCNVideoCard = memo(function SCNVideoCard({ video }: { video: Video }) {
 	const [editData, setEditData] = useState<Video>({} as Video);
 	const [editModal, setEditModal] = useState<boolean>(false);
 	const [deleteModal, setDeleteModal] = useState<boolean>(false);
 	const [aiSummary, setAiSummary] = useState<AISummary>(() => {
-		if (!summary) return emptySummary;
+		if (!video.summary) return emptySummary;
 		try {
-			const parsed = JSON.parse(summary);
-			parsed.status = summaryStatus ?? "default";
+			const parsed = JSON.parse(video.summary);
+			parsed.status = video.summaryStatus ?? "default";
 			return parsed;
 		} catch {
 			return emptySummary;
@@ -60,7 +60,7 @@ const SCNVideoCard = memo(function SCNVideoCard({ id, title, duration, summary, 
 	const user = useStore((s) => s.user);
 
 	const openEditModal = (): void => {
-		fetch(`${import.meta.env.VITE_API_URL}/videos/${id}`, {
+		fetch(`${import.meta.env.VITE_API_URL}/videos/${video.youtubeId}`, {
 			method: "GET",
 		})
 			.then((res) => {
@@ -79,7 +79,7 @@ const SCNVideoCard = memo(function SCNVideoCard({ id, title, duration, summary, 
 	};
 
 	const openDeleteModal = (): void => {
-		fetch(`${import.meta.env.VITE_API_URL}/videos/${id}`, {
+		fetch(`${import.meta.env.VITE_API_URL}/videos/${video.youtubeId}`, {
 			method: "GET",
 		})
 			.then((res) => {
@@ -100,7 +100,7 @@ const SCNVideoCard = memo(function SCNVideoCard({ id, title, duration, summary, 
 	async function handleTranscript(): Promise<void> {
 		setLoading(true);
 		try {
-			const summary: AISummary = await generateMatchSummary(id, user);
+			const summary: AISummary = await generateMatchSummary(video.youtubeId, user);
 			setAiSummary(summary);
 		} catch (error) {
 			const message = error instanceof Error ? error.message : "Unknown error";
@@ -123,9 +123,9 @@ const SCNVideoCard = memo(function SCNVideoCard({ id, title, duration, summary, 
 						)}
 					>
 						<div
-							className={cn("relative h-[235px] max-w-[370px] w-full bg-center bg-cover rounded-[10px]")}
+							className={cn("relative h-[250px] max-w-[370px] w-full bg-center bg-cover rounded-[10px]")}
 							style={{
-								backgroundImage: `url(http://img.youtube.com/vi/${id}/0.jpg)`,
+								backgroundImage: `url(http://img.youtube.com/vi/${video.youtubeId}/0.jpg)`,
 							}}
 						>
 							{user?.role === "ADMIN" && (
@@ -167,14 +167,18 @@ const SCNVideoCard = memo(function SCNVideoCard({ id, title, duration, summary, 
 									</DropdownMenu>
 								</>
 							)}
+							<span className="absolute bottom-16 right-2 justify-self-end mt-1 inline-block rounded-full bg-muted px-2 py-0.5 text-xs text-secondary-foreground font-semibold">
+								{video.duration && formatHrMin(video.duration)}
+							</span>
+							<div className="flex flex-col justify-end w-full bottom-0 absolute p-2 bg-card rounded-b-[10px] border border-border">
+								<span className="mt-1 inline-block rounded-full px-2 text-sm text-secondary-foreground font-semibold">
+									{video.player1} vs. {video.player2}
+								</span>
+								<span className="mt-1 inline-block rounded-full px-2 text-xs text-muted-foreground font-semibold">
+									{video.tournament} {video.year} {video.round}
+								</span>
+							</div>
 						</div>
-						<p className="hidden sm:block mt-2 ms-1 font-semibold text-foreground">
-							{title} ({duration && formatHrMin(duration)})
-						</p>
-						<p className="block sm:hidden mt-2 ms-1 font-semibold text-foreground">{title}</p>
-						<span className="block sm:hidden ms-1 font-semibold text-foreground">
-							{duration && formatHrMin(duration)}
-						</span>
 					</div>
 				</DialogTrigger>
 				<DialogContent
@@ -183,7 +187,7 @@ const SCNVideoCard = memo(function SCNVideoCard({ id, title, duration, summary, 
 				>
 					<DialogHeader>
 						<DialogTitle className="hidden sm:flex items-center justify-center gap-6 text-lg md:text-2xl me-4">
-							{title}
+							{video.title}
 							{user?.role === "ADMIN" && (
 								<Button onClick={handleTranscript}>
 									<Spinner className={cn(loading ? "block" : "hidden")} data-icon="inline-start" />{" "}
@@ -198,8 +202,8 @@ const SCNVideoCard = memo(function SCNVideoCard({ id, title, duration, summary, 
 							<iframe
 								height="100%"
 								width="100%"
-								src={`https://www.youtube.com/embed/${id}?enablejsapi=1&origin=https://thetennisarchive.com`}
-								title={title}
+								src={`https://www.youtube.com/embed/${video.youtubeId}?enablejsapi=1&origin=https://thetennisarchive.com`}
+								title={video.title}
 								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 								referrerPolicy="strict-origin-when-cross-origin"
 								allowFullScreen
@@ -275,7 +279,7 @@ const SCNVideoCard = memo(function SCNVideoCard({ id, title, duration, summary, 
 
 					<DialogFooter>
 						<Button variant="default">
-							<Link to={`/matches/${id}`}>Full Page View</Link>
+							<Link to={`/matches/${video.youtubeId}`}>Full Page View</Link>
 						</Button>
 						<DialogClose asChild>
 							<Button>Close</Button>
