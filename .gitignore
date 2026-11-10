@@ -35,6 +35,7 @@ Thumbs.db
 /client/.env.production
 /client/.env.development
 /client/stats.html
+*.tsbuildinfo
 
 # Server side files
 /server/.env
@@ -46,3 +47,6 @@ node_modules
 
 # Ignore any file that has an extension ending in _x
 *_x.*
+
+# Ignore images in the root directory
+/*.png

@@ -112,6 +112,7 @@ body,
 	--color-sidebar-border: var(--sidebar-border);
 	--color-sidebar-ring: var(--sidebar-ring);
 	--color-filters: var(--filters);
+	--color-checkbox: var(--checkbox);
 	--font-sans: var(--font-sans);
 	--font-heading: var(--font-heading);
 	--font-mono: var(--font-mono);
@@ -145,6 +146,8 @@ body,
 
 	--muted: oklch(0.97 0.005 277);
 	--muted-foreground: oklch(0.52 0.046 277);
+
+	--checkbox: oklch(0.97 0.005 277);
 
 	--filters: oklch(79.953% 0.01442 258.438);
 	--accent: oklch(0.965 0.007 277);
@@ -201,9 +204,11 @@ body,
 
 	--primary: oklch(0.511 0.23 277);
 	--primary-foreground: oklch(1 0 0);
+	/* --primary-foreground: oklch(0.19 0.035 252); */
 
 	--secondary: oklch(0.591 0.23 277 / 0.25);
-	--secondary-foreground: oklch(0.9 0.23 277);
+	--secondary-foreground: oklch(0.94 0.012 250);
+	/* --secondary-foreground: oklch(0.9 0.23 277); */
 	/* --secondary: oklch(0.955 0.023 277); */
 	/* --secondary-foreground: oklch(0.25 0.115 277); */
 
@@ -211,6 +216,8 @@ body,
 	--muted-foreground: oklch(0.82 0.025 277);
 	/* --muted: oklch(0.97 0.005 277); */
 	/* --muted-foreground: oklch(0.52 0.046 277); */
+
+	--checkbox: oklch(0.19 0.035 252);
 
 	--filters: oklch(62.082% 0.00762 277.042);
 	--accent: oklch(0.38 0.023 277);
