@@ -15,11 +15,13 @@ A comprehensive tennis database management system built with modern web technolo
 
 ## Features
 
-- Player management and statistics
-- Match recording and tracking
-- Tournament organization
-- Real-time data updates
-- Responsive web interface
+- **Match archive**: browse full-match tennis videos, filtered by tournament, year and tag, with search and sorting
+- **Match pages**: each match has its own page (`/matches/{slug}-{id}`), rendered on the server for SEO, plus a generated sitemap
+- **AI match summaries**: winner, score, rating, highlights and tags generated from the video transcript
+- **Player techniques**: player pages with shot and technique videos
+- **Accounts**: register and log in with JWT auth; admins can add, edit and delete videos
+- **Contact form** and **light/dark theme**
+
 
 ## Getting Started
 
