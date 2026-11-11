@@ -1,6 +1,6 @@
 import os
 import time
-from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api import YouTubeTranscriptApi, NoTranscriptFound, TranscriptsDisabled
 from langchain_community.document_loaders import YoutubeLoader
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
@@ -56,12 +56,16 @@ def _fetch_once(video_id: str):
     """Single fetch attempt: English first, then any available language."""
     try:
         return ytt_api.fetch(video_id, languages=['en'])
-    except Exception as e:
-        if _is_transient(e):
-            raise
+    except TranscriptsDisabled as e:
+        raise TranscriptUnavailable(str(e)) from e
+    except NoTranscriptFound as e:
         print(f"[TRANSCRIPT] English transcript failed: {e}")
         print(f"[TRANSCRIPT] Trying any available language...")
         return ytt_api.fetch(video_id)
+    except Exception as e:
+        if _is_transient(e):
+            raise
+        raise TranscriptUnavailable(str(e)) from e
 
 
 def fetch_transcript(video_id: str, attempts: int = 3) -> str:

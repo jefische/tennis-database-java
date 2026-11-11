@@ -3,30 +3,30 @@ import subprocess
 import sys
 
 
-def get_playlist_urls(playlist_url: str) -> list[str]:
-    """Extract all video URLs from a YouTube playlist using yt-dlp."""
-    result = subprocess.run(
-        ["yt-dlp", "--flat-playlist", "--print", "url", playlist_url],
-        capture_output=True,
-        text=True,
-    )
-    if result.returncode != 0:
-        print(f"Error: {result.stderr}", file=sys.stderr)
-        return []
-    return [url for url in result.stdout.strip().split("\n") if url]
+# def get_playlist_urls(playlist_url: str) -> list[str]:
+#     """Extract all video URLs from a YouTube playlist using yt-dlp."""
+#     result = subprocess.run(
+#         ["yt-dlp", "--flat-playlist", "--print", "url", playlist_url],
+#         capture_output=True,
+#         text=True,
+#     )
+#     if result.returncode != 0:
+#         print(f"Error: {result.stderr}", file=sys.stderr)
+#         return []
+#     return [url for url in result.stdout.strip().split("\n") if url]
 
 
-def get_playlist_youtube_ids(playlist_url: str) -> list[str]:
-    """Extract all video IDs from a YouTube playlist using yt-dlp."""
-    result = subprocess.run(
-        ["yt-dlp", "--flat-playlist", "--print", "id", playlist_url],
-        capture_output=True,
-        text=True,
-    )
-    if result.returncode != 0:
-        print(f"Error: {result.stderr}", file=sys.stderr)
-        return []
-    return [vid for vid in result.stdout.strip().split("\n") if vid]
+# def get_playlist_youtube_ids(playlist_url: str) -> list[str]:
+#     """Extract all video IDs from a YouTube playlist using yt-dlp."""
+#     result = subprocess.run(
+#         ["yt-dlp", "--flat-playlist", "--print", "id", playlist_url],
+#         capture_output=True,
+#         text=True,
+#     )
+#     if result.returncode != 0:
+#         print(f"Error: {result.stderr}", file=sys.stderr)
+#         return []
+#     return [vid for vid in result.stdout.strip().split("\n") if vid]
 
 
 def get_playlist_videos(playlist_url: str) -> list[dict]:
@@ -72,3 +72,10 @@ if __name__ == "__main__":
 
 # 53 Roland Garros matches
 # https://www.youtube.com/playlist?list=PLUK9NdagG_CfzOU3sX5WENGpCFb4W4ZJA
+
+# 149 US Open matches (2025) - finished 10/10 but skipped many AI summaries
+# https://www.youtube.com/playlist?list=PL_2A0MxHOgdYNA0GLetzrLWZIp-8kWP_v
+
+
+# WTA matches
+# https://www.youtube.com/playlist?list=PLhQBpwasxUpnHlsx6FU8jcHJXR5k_HNRt

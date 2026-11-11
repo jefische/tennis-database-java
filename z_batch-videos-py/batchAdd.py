@@ -2,9 +2,11 @@ import json
 import re
 import sys
 import time
-import requests
+import requests, os
+from dotenv import load_dotenv
+load_dotenv()
 
-BASE_URL = "http://localhost:8080"
+BASE_URL = os.getenv("TENNIS_API_URL", "http://localhost:8080")
 API_URL = f"{BASE_URL}/videos/add"
 SUMMARY_URL = f"{BASE_URL}/api/summary"
 VIDEO_URL = f"{BASE_URL}/videos"

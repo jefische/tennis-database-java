@@ -1,13 +1,16 @@
 import sys
 import time
-import requests
+import requests, os
+from dotenv import load_dotenv
+load_dotenv()
 
-BASE_URL = "http://localhost:8080"
+BASE_URL = os.getenv("TENNIS_API_URL", "http://localhost:8080")
 SUMMARY_URL = f"{BASE_URL}/api/summary"
 VIDEO_URL = f"{BASE_URL}/videos"
 
 NO_TRANSCRIPT_MSG = "No transcript available for this video"
-
+# Auth headers (set via --token flag)
+HEADERS = {}
 
 def needs_summary(video: dict) -> bool:
     """Check if a video needs a summary generated."""
@@ -18,7 +21,7 @@ def needs_summary(video: dict) -> bool:
 def generate_summary(youtube_id: str) -> bool:
     """Call the summary API for a video. Returns True if summary was generated."""
     try:
-        resp = requests.post(f"{SUMMARY_URL}/{youtube_id}", timeout=120)
+        resp = requests.post(f"{SUMMARY_URL}/{youtube_id}", headers=HEADERS, timeout=120)
         if resp.status_code == 200:
             return True
         else:
@@ -39,14 +42,17 @@ def get_all_videos() -> list[dict]:
 if __name__ == "__main__":
     dry_run = "--dry-run" in sys.argv
 
-    # Parse --min-id=N and --max-id=N options
+    # Parse --min-id=N and --max-id=N options, Parse --token flag
     min_id = None
     max_id = None
     for arg in sys.argv:
+        if arg.startswith("--token="):
+            HEADERS["Authorization"] = f"Bearer {arg.split('=', 1)[1]}"
+
         if arg.startswith("--min-id="):
             min_id = int(arg.split("=", 1)[1])
         elif arg.startswith("--max-id="):
-            max_id = int(arg.split("=", 1)[1])
+            max_id = int(arg.split("=", 1)[1])  
 
     if dry_run:
         print("=== DRY RUN MODE (no API calls) ===\n")
@@ -112,4 +118,4 @@ if __name__ == "__main__":
 # python batchSummary.py --min-id=20 --max-id=80
 
 # Combine with dry run
-# python batchSummary.py --dry-run --min-id=100
+# python batchSummary.py --dry-run --min-id=100 --token=

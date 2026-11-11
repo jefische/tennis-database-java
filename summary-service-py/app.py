@@ -43,7 +43,7 @@ def summary():
     try:
         summary_text = generate_match_summary(youtube_url, video_info)
         return jsonify({"summary": summary_text})
-    
+
     except ValueError as e:
         print(f"Invalid input: {e}")
         return jsonify({"error": str(e)}), 400
