@@ -50,3 +50,6 @@ node_modules
 
 # Ignore images in the root directory
 /*.png
+
+# Ignore youtube_id json files
+z_batch-videos-py/*.json
