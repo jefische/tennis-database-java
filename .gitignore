@@ -39,6 +39,7 @@ Thumbs.db
 
 # Server side files
 /server/.env
+/server/classpath.txt
 ca.pem
 
 # Summary-service files

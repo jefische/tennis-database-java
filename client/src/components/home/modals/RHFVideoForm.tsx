@@ -114,16 +114,16 @@ export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, setOpe
 
 		let rounds: string = rawRound;
 		switch (rawRound) {
-			case "1st":
+			case "1":
 				rounds = "Round 1";
 				break;
-			case "2nd":
+			case "2":
 				rounds = "Round 2";
 				break;
-			case "3rd":
+			case "3":
 				rounds = "Round 3";
 				break;
-			case "4th":
+			case "4":
 				rounds = "Round 4";
 				break;
 			default:
