@@ -54,7 +54,8 @@ public class VideoServiceTest {
 			"['Epic']",
 			"no_transcript",
 			1350,
-			Instant.now()
+			Instant.now(),
+			"ACTIVE"
 		);
 		Video video2 = new Video(
 			2,
@@ -69,7 +70,8 @@ public class VideoServiceTest {
 			"['Epic']",
 			"no_transcript",
 			1350,
-			Instant.now()
+			Instant.now(),
+			"ACTIVE"
 		);
 		List<Video> expectedVideos = Arrays.asList(video1, video2);
 
@@ -111,7 +113,8 @@ public class VideoServiceTest {
 				"['Epic']",
 				"no_transcript",
 				1450,
-				Instant.now()
+				Instant.now(),
+				"ACTIVE"
 			));
 		when(videoRepository.findByYoutubeId(youtubeId)).thenReturn(video1);
 
@@ -135,7 +138,8 @@ public class VideoServiceTest {
 			"['Epic']",
 			"no_transcript",
 			3210,
-			Instant.now()
+			Instant.now(),
+			"ACTIVE"
 		);
 
 		when(videoRepository.save(video1)).thenReturn(video1);
