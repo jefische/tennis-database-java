@@ -41,7 +41,7 @@ export default function SCNAddModal() {
 							tournament: "Monte Carlo",
 							year: 2022,
 							youtubeId: "jb18sKSCH2w",
-							round: "2nd",
+							round: "2",
 							player1: "Carlos Alcaraz",
 							player2: "Sebastian Korda",
 							title: "Carlos Alcaraz vs. Sebastian Korda | Monte Carlo 2022 Round 2",

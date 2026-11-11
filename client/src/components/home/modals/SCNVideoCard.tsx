@@ -123,7 +123,7 @@ const SCNVideoCard = memo(function SCNVideoCard({ video }: { video: Video }) {
 						)}
 					>
 						<div
-							className={cn("relative h-[250px] max-w-[370px] w-full bg-center bg-cover rounded-[10px]")}
+							className={cn("relative h-[250px] max-w-[370px] w-full bg-bottom bg-cover rounded-[10px]")}
 							style={{
 								backgroundImage: `url(http://img.youtube.com/vi/${video.youtubeId}/0.jpg)`,
 							}}
@@ -175,7 +175,10 @@ const SCNVideoCard = memo(function SCNVideoCard({ video }: { video: Video }) {
 									{video.player1} vs. {video.player2}
 								</span>
 								<span className="mt-1 inline-block rounded-full px-2 text-xs text-muted-foreground font-semibold">
-									{video.tournament} {video.year} {video.round}
+									{video.tournament} {video.year}{" "}
+									{["Final", "Semifinal", "Quarterfinal"].includes(video.round)
+										? video.round
+										: `Round ${video.round}`}
 								</span>
 							</div>
 						</div>

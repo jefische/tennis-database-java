@@ -66,6 +66,8 @@ let allVideos = [
 
 import { Dispatch, SetStateAction } from "react";
 
+type Rounds = "1" | "2" | "3" | "4" | "Quarterfinal" | "Semifinal" | "Final" | "Exhibition";
+
 export interface Video {
 	videoId: number;
 	tournament: string;
@@ -88,7 +90,6 @@ export type SortMode = "tournament" | "newest" | "oldest";
 
 // export type Videos = Video | null;
 
-type Rounds = "1st" | "2nd" | "3rd" | "4th" | "Quarterfinals" | "Semifinals" | "Finals" | "Exhibition";
 // export interface VideoFilters {
 //     [key: string]: { // index signatures for unknown property names
 //         title: string,

@@ -243,13 +243,13 @@ export default function RHFVideoForm({ initialData, HTTPmethod, endpoint, setOpe
 								<SelectContent>
 									<SelectGroup>
 										<SelectLabel>Choose...</SelectLabel>
-										<SelectItem value="1st">1st</SelectItem>
-										<SelectItem value="2nd">2nd</SelectItem>
-										<SelectItem value="3rd">3rd</SelectItem>
-										<SelectItem value="4th">4th</SelectItem>
-										<SelectItem value="Quarterfinals">Quarterfinals</SelectItem>
-										<SelectItem value="Semifinals">Semifinals</SelectItem>
-										<SelectItem value="Finals">Finals</SelectItem>
+										<SelectItem value="1">1st</SelectItem>
+										<SelectItem value="2">2nd</SelectItem>
+										<SelectItem value="3">3rd</SelectItem>
+										<SelectItem value="4">4th</SelectItem>
+										<SelectItem value="Quarterfinal">Quarterfinal</SelectItem>
+										<SelectItem value="Semifinal">Semifinal</SelectItem>
+										<SelectItem value="Final">Final</SelectItem>
 										<SelectItem value="Exhibition">Exhibition</SelectItem>
 									</SelectGroup>
 								</SelectContent>

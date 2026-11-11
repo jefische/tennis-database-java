@@ -1,13 +1,13 @@
 import { Video, SortMode } from "@/types";
 
 const ROUND_ORDER: Record<string, number> = {
-	Finals: 1,
-	Semifinals: 2,
-	Quarterfinals: 3,
-	"4th": 4,
-	"3rd": 5,
-	"2nd": 6,
-	"1st": 7,
+	Final: 1,
+	Semifinal: 2,
+	Quarterfinal: 3,
+	"4": 4,
+	"3": 5,
+	"2": 6,
+	"1": 7,
 	Exhibition: 8,
 };
 
