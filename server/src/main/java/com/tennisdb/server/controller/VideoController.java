@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -117,7 +118,8 @@ public class VideoController {
 			} catch (RestClientException e) {
 				System.err.println("YouTube API call failed for youtubeId=" + video.getYoutubeId() + ": " + e.getMessage());
 			}
-			
+
+			video.setStatus("ACTIVE");
 			videoService.addNewVideo(video);
 
 			// Return the complete updated list of videos
@@ -171,7 +173,7 @@ public class VideoController {
 
 			return ResponseEntity.ok(Map.of("summary", result.get("summary"), "status", result.get("status"), "tags", result.get("tags")));
 
-		} catch (org.springframework.web.client.HttpClientErrorException e) {
+		} catch (HttpClientErrorException e) {
 			return ResponseEntity.status(e.getStatusCode())
 				.body(new ErrorResponse(e.getStatusCode().value(), "Gemini rate limit exceeded. Please try again later."));
 		} catch (Exception e) {

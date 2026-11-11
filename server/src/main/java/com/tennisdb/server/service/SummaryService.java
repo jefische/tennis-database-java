@@ -9,6 +9,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.ResourceAccessException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -90,12 +93,11 @@ public class SummaryService {
                 }
 
                 return result;
-
             }
 
             throw new RuntimeException("No summary returned from service");
 
-        } catch (org.springframework.web.client.HttpClientErrorException e) {
+        } catch (HttpClientErrorException e) { // catches 4xx errors, unchecked exception
 
             // Rate limits are rethrown so the controller can report 429 specifically.
             if (e.getStatusCode().value() == 429) {
@@ -133,14 +135,14 @@ public class SummaryService {
             result.put("status", "no_transcript");
             result.put("tags", "[]");
             return result;
-        } catch (org.springframework.web.client.HttpServerErrorException e) {
+        } catch (HttpServerErrorException e) { // unchecked exception
             // Any 5xx from the Python service: Gemini failure, killed worker, unhandled bug.
             // The body is not reliably JSON here (a killed gunicorn worker returns
             // Werkzeug's HTML error page), so log it rather than parse it.
             System.out.println("Python service error " + e.getStatusCode() + ": " + e.getResponseBodyAsString());
             throw new RuntimeException("Summary service failed to generate a summary. Please try again.", e);
 
-        } catch (org.springframework.web.client.ResourceAccessException e) {
+        } catch (ResourceAccessException e) { // unchecked exception
             // No HTTP response at all: read timed out, or the connection was dropped
             // (what a gunicorn worker kill looks like once its --timeout is hit).
             System.out.println("Python service unreachable or timed out: " + e.getMessage());

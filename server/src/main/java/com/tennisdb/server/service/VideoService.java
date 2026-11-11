@@ -58,7 +58,9 @@ public class VideoService {
 	}
 
 	public List<Video> getVideos() {
-		return videoRepository.findAll();
+		List<Video> activeVideos = videoRepository.findAll();
+		activeVideos.removeIf(v -> "INACTIVE".equals(v.getStatus()));
+		return activeVideos;
 	}
 
 	public Optional<Video> getVideoByYoutubeId(String id) {

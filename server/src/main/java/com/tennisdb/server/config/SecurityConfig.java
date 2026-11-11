@@ -54,8 +54,8 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
             .exceptionHandling(ex -> ex
-                .authenticationEntryPoint((req, res, e) -> {
-                    res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                .authenticationEntryPoint((req, res, e) -> { // runs later in the chain, called by ExceptionTranslationFilter. ExpiredJwtException is thrown upstream.
+                    res.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // throwing 401
                     res.setContentType("application/json");
                     res.getWriter().write("{\"error\":\"Unauthorized\"}");
                 })
