@@ -12,7 +12,7 @@ export default function TagFilters({ open }: { open?: boolean }) {
 	const { dispatchFilter } = useStore();
 	const uid = useId();
 
-	let numTournaments: number = 0; // for Select All count
+	const numTournaments: number = 0; // for Select All count
 	const tournaments: [string, TournamentFilterItem][] = [];
 
 	// const select = Object.values(filterData.tournament).every((val) => val.include);
@@ -55,8 +55,8 @@ export default function TagFilters({ open }: { open?: boolean }) {
 								</Label>
 							</li>
 							{tournaments.map(([key, val], idx) => {
-								let title = val.title;
-								let count = val.count;
+								const title = val.title;
+								const count = val.count;
 								return (
 									<li key={idx} className="flex items-center p-1">
 										<Checkbox
