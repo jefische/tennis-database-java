@@ -8,9 +8,11 @@ export default defineConfig([
   { files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"], plugins: { js }, extends: ["js/recommended"], languageOptions: { globals: globals.node } },
   tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
+  pluginReact.configs.flat["jsx-runtime"],
   {
+    settings: { react: { version: "detect" } },
     rules: {
-      "no-unused-vars": "warn",
-    }
-  }
+      "@typescript-eslint/no-unused-vars": "warn",
+    },
+  },
 ]);

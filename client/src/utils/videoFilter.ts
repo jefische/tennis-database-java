@@ -29,7 +29,7 @@ export function initFilterData(acc: VideoFilters, video: Video): VideoFilters {
 
 	// Add tag filter
 	if (video.tags) {
-		var tagArray = JSON.parse(video.tags);
+		const tagArray = JSON.parse(video.tags);
 
 		tagArray.forEach((tag: string) => {
 			if (!acc.tag[tag]) {

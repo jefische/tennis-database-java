@@ -16,7 +16,7 @@ export default function YearFilters({ open }: { open?: boolean }) {
 	const uid = useId();
 
 	let numYears: number = 0; // for Select All count
-	let selectedYears: string[] = Object.keys(selected.year);
+	const selectedYears: string[] = Object.keys(selected.year);
 
 	const years: [string, YearFilterItem][] = Object.entries(filterOptions.year).filter(([key, val]) => {
 		numYears += val.count;

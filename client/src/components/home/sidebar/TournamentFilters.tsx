@@ -20,7 +20,7 @@ export default function TournamentFilters({ open }: { open?: boolean }) {
 
 	let numTournaments: number = 0; // for Select All count
 
-	let selectedTournaments: string[] = Object.keys(selected.tournament);
+	const selectedTournaments: string[] = Object.keys(selected.tournament);
 
 	const tournaments: [string, TournamentFilterItem][] = Object.entries(filterOptions.tournament).filter(
 		([key, val]) => {

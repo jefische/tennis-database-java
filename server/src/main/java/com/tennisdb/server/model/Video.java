@@ -12,6 +12,8 @@ import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name="videos")
@@ -60,8 +62,13 @@ public class Video {
 	@Column(name="duration_seconds")
 	private Integer duration;
 
-	@Column(name = "created_at", insertable = false, updatable = false)
+	@CreationTimestamp
+	@Column(name = "created_at", updatable = false)
 	private Instant createdAt;
+
+	@UpdateTimestamp
+	@Column(name="last_edited")
+	private Instant lastEdited;
 
 	@Column
 	private String status = "ACTIVE";
