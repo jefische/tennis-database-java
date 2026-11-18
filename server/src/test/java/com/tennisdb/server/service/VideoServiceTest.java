@@ -55,6 +55,7 @@ public class VideoServiceTest {
 			"no_transcript",
 			1350,
 			Instant.now(),
+			Instant.now(),
 			"ACTIVE"
 		);
 		Video video2 = new Video(
@@ -70,6 +71,7 @@ public class VideoServiceTest {
 			"['Epic']",
 			"no_transcript",
 			1350,
+			Instant.now(),
 			Instant.now(),
 			"ACTIVE"
 		);
@@ -114,6 +116,7 @@ public class VideoServiceTest {
 				"no_transcript",
 				1450,
 				Instant.now(),
+				Instant.now(),
 				"ACTIVE"
 			));
 		when(videoRepository.findByYoutubeId(youtubeId)).thenReturn(video1);
@@ -138,6 +141,7 @@ public class VideoServiceTest {
 			"['Epic']",
 			"no_transcript",
 			3210,
+			Instant.now(),
 			Instant.now(),
 			"ACTIVE"
 		);
