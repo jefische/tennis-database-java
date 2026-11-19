@@ -1,10 +1,10 @@
 import { YearFilterItem } from "@/types";
 import { useState, useId, useCallback } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox.tsx";
+import { Label } from "@/components/ui/label.tsx";
 import { ChevronDown } from "lucide-react";
-import { useStore } from "@/hooks/useStore";
-import FilterRow from "./FilterRow";
+import { useStore } from "@/hooks/useStore.ts";
+import FilterRow from "./FilterRow.tsx";
 
 export default function YearFilters({ open }: { open?: boolean }) {
 	// isOpen state is used to manage the accordion dropdown filters in the sidebar

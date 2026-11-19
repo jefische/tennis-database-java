@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Fragment, useState, memo } from "react";
+import { Fragment, useState, useMemo, memo } from "react";
 import SCNEditModal from "./edit/SCNEditModal";
 import DeleteModal from "./delete/DeleteModal";
 import { generateMatchSummary } from "@/utils/matchSummaryAgent";
@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import { useStore } from "@/hooks/useStore";
 import { cn } from "@/lib/utils";
 import { formatHrMin } from "@/utils/format";
+import { parseTags, roundLabel, thumb, tournamentColor } from "@/utils/matchDisplay";
 
 import {
 	DropdownMenu,
@@ -58,6 +59,7 @@ const SCNVideoCard = memo(function SCNVideoCard({ video }: { video: Video }) {
 	const [dropdownOpen, setDropdownOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const user = useStore((s) => s.user);
+	const tags = useMemo(() => parseTags(video.tags), [video.tags]);
 
 	const openEditModal = (): void => {
 		fetch(`${import.meta.env.VITE_API_URL}/videos/${video.youtubeId}`, {
@@ -118,23 +120,52 @@ const SCNVideoCard = memo(function SCNVideoCard({ video }: { video: Video }) {
 						role="button"
 						tabIndex={0}
 						className={cn(
-							"cursor-pointer hover:scale-105 transition-all duration-500 ease-in-out",
-							dropdownOpen && "scale-105",
+							"group relative w-full max-w-[370px] cursor-pointer overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+							dropdownOpen && "-translate-y-1 shadow-xl",
 						)}
 					>
-						<div
-							className={cn("relative h-[250px] max-w-[370px] w-full bg-bottom bg-cover rounded-[10px]")}
-							style={{
-								backgroundImage: `url(http://img.youtube.com/vi/${video.youtubeId}/0.jpg)`,
-							}}
-						>
+						<div className="relative aspect-video bg-muted">
+							<img
+								src={thumb(video.youtubeId)}
+								alt=""
+								loading="lazy"
+								className="absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-105"
+							/>
+							<div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
+
+							{/* Hover detail: tags only, so the card never spoils the result. */}
+							{tags.length > 0 && (
+								<div className="absolute inset-0 flex items-end bg-black/80 p-3 text-xs text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
+									<div className="flex flex-wrap gap-1.5">
+										{tags.slice(0, 4).map((t) => (
+											<span key={t} className="rounded-full bg-white/15 px-2 py-0.5 capitalize">
+												{t}
+											</span>
+										))}
+									</div>
+								</div>
+							)}
+
+							{aiSummary.status === "yes" && aiSummary.matchRating > 0 && (
+								<span className="absolute top-2 left-2 flex items-center gap-1 rounded-full bg-black/70 px-2 py-0.5 text-[11px] font-semibold text-yellow-300 backdrop-blur">
+									<Star className="size-3 fill-yellow-300" />
+									{aiSummary.matchRating.toFixed(1)}
+								</span>
+							)}
+							{video.duration > 0 && (
+								<span className="absolute bottom-2 right-2 rounded-full bg-black/70 px-2 py-0.5 text-[11px] font-semibold text-white backdrop-blur">
+									{formatHrMin(video.duration)}
+								</span>
+							)}
+
 							{user?.role === "ADMIN" && (
 								<>
 									<DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
 										<DropdownMenuTrigger asChild>
 											<Button
 												variant="default"
-												className="absolute top-[10px] right-[10px] cursor-pointer"
+												size="sm"
+												className="absolute top-2 right-2 z-10 cursor-pointer"
 												onClick={(e) => e.stopPropagation()}
 											>
 												Actions
@@ -167,20 +198,17 @@ const SCNVideoCard = memo(function SCNVideoCard({ video }: { video: Video }) {
 									</DropdownMenu>
 								</>
 							)}
-							<span className="absolute bottom-16 right-2 justify-self-end mt-1 inline-block rounded-full bg-muted px-2 py-0.5 text-xs text-secondary-foreground font-semibold">
-								{video.duration && formatHrMin(video.duration)}
-							</span>
-							<div className="flex flex-col justify-end w-full bottom-0 absolute p-2 bg-card rounded-b-[10px] border border-border">
-								<span className="mt-1 inline-block rounded-full px-2 text-sm text-secondary-foreground font-semibold">
-									{video.player1} vs. {video.player2}
-								</span>
-								<span className="mt-1 inline-block rounded-full px-2 text-xs text-muted-foreground font-semibold">
-									{video.tournament} {video.year}{" "}
-									{["Final", "Semifinal", "Quarterfinal"].includes(video.round)
-										? video.round
-										: `Round ${video.round}`}
-								</span>
-							</div>
+						</div>
+
+						<div className="h-1" style={{ backgroundColor: tournamentColor(video.tournament) }} />
+
+						<div className="p-3">
+							<p className="truncate text-sm font-semibold text-foreground">
+								{video.player1} vs. {video.player2}
+							</p>
+							<p className="truncate text-xs text-muted-foreground">
+								{video.tournament} {video.year} · {roundLabel(video.round)}
+							</p>
 						</div>
 					</div>
 				</DialogTrigger>

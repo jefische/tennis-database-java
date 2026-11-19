@@ -1,9 +1,9 @@
 import { TournamentFilterItem } from "@/types";
 import { useState, useId } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox.tsx";
+import { Label } from "@/components/ui/label.tsx";
 import { ChevronDown } from "lucide-react";
-import { useStore } from "@/hooks/useStore";
+import { useStore } from "@/hooks/useStore.ts";
 
 export default function TagFilters({ open }: { open?: boolean }) {
 	// isOpen state is used to manage the accordion dropdown filters in the sidebar

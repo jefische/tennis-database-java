@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
-import Landing from "./pages/Landing";
-import Home from "./pages/Home";
+import Landing from "./pages/Landing.tsx";
+import Home from "./pages/Home.tsx";
+import Archive from "./pages/Archive";
 import Players from "./pages/Players";
 import PlayerShotDetail from "./pages/PlayerShotDetail";
 import PlayerDetail from "./pages/PlayerDetail";
@@ -51,6 +52,7 @@ export default function App() {
 					<Route path="/" element={<Landing />} />
 					<Route element={<NavbarLayout darkMode={darkMode} setDarkMode={setDarkMode} />}>
 						<Route path="/home" element={<Home />} />
+						<Route path="/archive" element={<Archive />} />
 						<Route path="/players" element={<Players />} />
 						<Route path="/players/:slug/:videoId" element={<PlayerShotDetail />} />
 						<Route path="/players/:slug" element={<PlayerDetail />} />
