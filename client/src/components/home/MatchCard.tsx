@@ -1,4 +1,4 @@
-// PROTOTYPE — enriched match card for /landing-v2 and /home-v2. Safe to delete.
+// Enriched match card for /landing and /home
 import { Link } from "react-router-dom";
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils.ts";
