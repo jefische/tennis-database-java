@@ -1,6 +1,6 @@
 import { memo } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox.tsx";
+import { Label } from "@/components/ui/label.tsx";
 import { TournamentFilterItem, YearFilterItem } from "@/types";
 
 type FilterRowProps = {

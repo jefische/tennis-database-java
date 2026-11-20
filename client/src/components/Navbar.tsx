@@ -4,14 +4,15 @@ import { Bars3Icon, SunIcon, MoonIcon, UserCircleIcon } from "@heroicons/react/2
 import { NavLink, Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import LoginModal from "./home/modals/login/LoginModal";
-import RegisterModal from "./home/modals/register/RegisterModal";
+import LoginModal from "./archive/modals/login/LoginModal";
+import RegisterModal from "./archive/modals/register/RegisterModal";
 import { Button } from "./ui/button";
 import { NavbarProps } from "@/types";
 import { useStore } from "@/hooks/useStore";
 
 const navigation = [
-	{ name: "Full Matches", href: "/home", current: true },
+	{ name: "Home", href: "/home", current: true },
+	{ name: "Full Match Archive", href: "/archive", current: false },
 	{ name: "Player Shots", href: "/players", current: false },
 	{ name: "FAQ", href: "/faq", current: false },
 	// { name: "Profile", href: "/profile", current: false },

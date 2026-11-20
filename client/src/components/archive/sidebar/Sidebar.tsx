@@ -1,5 +1,5 @@
-import TournamentFilters from "./TournamentFilters";
-import YearFilters from "./YearFilters";
+import TournamentFilters from "./TournamentFilters.tsx";
+import YearFilters from "./YearFilters.tsx";
 
 export default function Sidebar() {
 	return (
